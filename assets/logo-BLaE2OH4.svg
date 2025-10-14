@@ -1,0 +1,40 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+>
+    <!-- Hintergrund + Rand -->
+    <rect
+            x="0"
+            y="0"
+            width="20"
+            height="20"
+            rx="3"
+            fill="#000000"
+            stroke="#ff0078"
+            stroke-width="2"
+    />
+
+    <!-- Text -->
+    <text
+            x="3"
+            y="10"
+            fill="#ffffff"
+            font-family="'JetBrains Mono', monospace"
+            font-weight="700"
+            font-size="12"
+            letter-spacing="1"
+    >
+        YK
+    </text>
+
+    <!-- Unterstrich -->
+    <rect
+            x="4"
+            y="15"
+            width="8"
+            height="2"
+            fill="#ffffff"
+            rx="1"
+    />
+</svg>
