@@ -1,5 +1,5 @@
 import './App.css'
-import { ArrowLeft, ArrowRight, Search, Settings, Tally4 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Folder, Search, Settings, Tally4 } from "lucide-react";
 import { HoverButton } from "./components/hover-button.tsx";
 import logo from './assets/logo.svg'
 import { ProjectIcon } from "./components/project-icon.tsx";
@@ -43,13 +43,16 @@ function App() {
     }
 
     return (
-        <>
+        <div className="app-root">
+            <div className="sidebar">
+                <HoverButton><Folder className="icon" /></HoverButton>
+            </div>
             <div className="header gap-2">
                 <div className="flex items-center gap-2">
-                    <img src={logo} height="80%" />
-                    <HoverButton><Tally4 size={20} className="rotate-90 aspect-square" /></HoverButton>
-                    <HoverButton><ArrowLeft size={20} className="aspect-square" /></HoverButton>
-                    <HoverButton><ArrowRight size={20} className="aspect-square" /></HoverButton>
+                    <img src={logo} height="70%" />
+                    <HoverButton><Tally4 className="rotate-90 icon" /></HoverButton>
+                    <HoverButton><ArrowLeft className="icon" /></HoverButton>
+                    <HoverButton><ArrowRight className="icon" /></HoverButton>
 
                     <HoverButton className="flex items-center gap-2">
                         <ProjectIcon />
@@ -67,11 +70,13 @@ function App() {
                         onStop={handleStop}
                     />
                     <div className="p-3"></div>
-                    <HoverButton><Settings /></HoverButton>
-                    <HoverButton><Search /></HoverButton>
+                    <HoverButton><Search className="icon" /></HoverButton>
+                    <HoverButton><Settings className="icon" /></HoverButton>
                 </div>
             </div>
-        </>
+            {/* Main content area spacing under header and right of sidebar */}
+            <div className="content"></div>
+        </div>
     )
 }
 

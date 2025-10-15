@@ -30,3 +30,63 @@
 .menu {
     background: #2B2D30
 }
+
+/* Left sidebar same style as header */
+.sidebar {
+  position: fixed;
+  top: 38px; /* below header */
+  left: 0;
+  width: 38px; /* same as header height */
+  bottom: 0;
+  background: #2B2D30;
+  border-right: 1px solid #1E1F22;
+  z-index: 900;
+}
+
+/* Content area offset for header and sidebar */
+.content {
+  margin-top: 38px;
+  margin-left: 38px;
+}
+
+/* Global typography overrides for uniform 13px across the app */
+html, body {
+  font-size: 13px;
+}
+
+/* Ensure Tailwind's text-sm also renders at 13px for consistency */
+.text-sm {
+  font-size: 13px !important;
+}
+
+
+/* Design tokens and global utilities */
+:root {
+  --app-bg: #262626;
+  --panel-bg: #2B2D30;
+  --panel-border: #1E1F22;
+  --text: #A5A7AC;
+  --header-height: 44px;
+  --sidebar-width: 44px; /* equals header height */
+  --icon-size: 18px; /* unified icon size */
+  --radius: 6px;
+  --pad-x: 8px; /* horizontal padding - reduced to shrink HoverButton area */
+  --pad-y: 6px;  /* vertical padding - reduced for smaller button height */
+}
+
+/* Unified icon size */
+.icon { width: var(--icon-size); height: var(--icon-size); }
+
+
+/* Overrides to unify header/sidebar using tokens */
+.header { height: var(--header-height); background: var(--panel-bg); padding: 0 var(--pad-x); border: 1px solid var(--panel-border); }
+.sidebar { top: var(--header-height); width: var(--sidebar-width); background: var(--panel-bg); border-right: 1px solid var(--panel-border); display: flex; flex-direction: column; align-items: center; padding-top: 8px; gap: 8px; }
+.content { margin-top: var(--header-height); margin-left: var(--sidebar-width); }
+
+/* Menu helpers */
+.menu-panel { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius); padding-left: 8px; padding-right: 8px; }
+.menu-section { padding-top: 4px; padding-bottom: 4px; }
+.menu-separator { border-top: 1px solid #3a3c3f; margin: 4px 0; }
+.menu-item { padding: 8px 12px; margin: 4px 0; border-radius: var(--radius); font-size: 13px; color: #e5e7eb; }
+.menu-item:hover { background: #1d4ed8; color: white; }
+.menu-item.disabled { color: #6b7280; cursor: not-allowed; }

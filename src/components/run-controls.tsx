@@ -35,7 +35,8 @@ export function RunControls({
 
     const mainConfigs = configs.filter((c) => c.type !== "special");
     const specialConfigs = configs.filter((c) => c.type === "special");
-    const canRun = !!(selected?.url || currentFileUrl);
+    const canRun = !!(selected?.url ?? (selected?.name === "Current File" ? currentFileUrl : undefined));
+    const canDebug = !!(selected?.debugUrl ?? selected?.url ?? (selected?.name === "Current File" ? currentFileUrl : undefined));
 
     function handleSelect(cfg: RunConfig) {
         setSelected(cfg);
@@ -61,36 +62,37 @@ export function RunControls({
           <span className="text-sm text-zinc-100 truncate">
             {selected?.name ?? "Select"}
           </span>
-                    <ChevronDown size={14}/>
+                    <ChevronDown className="icon"/>
                 </HoverButton>
 
                 {dropdownOpen && (
                     <div
-                        className="absolute left-0 z-50 mt-1 w-56  rounded-lg shadow-lg overflow-hidden"
+                        className="absolute left-0 z-50 mt-1 w-56 rounded-lg shadow-lg overflow-hidden menu-panel"
                         role="menu"
                     >
                         {/* Main configs */}
-                        <div className="py-1">
+                        <div className="menu-section">
                             {mainConfigs.map((cfg) => (
                                 <div
                                     key={cfg.name}
                                     onClick={() => handleSelect(cfg)}
-                                    className={`px-3 py-1.5 cursor-pointer text-sm hover:bg-zinc-700 `}
+                                    className={`menu-item cursor-pointer hover:bg-blue-700 hover:text-white transition-colors`}
                                 >
                                     {cfg.name}
                                 </div>
                             ))}
                         </div>
 
-                        <div className="border-t border-zinc-700 my-1"/>
+                        <div className="menu-separator"/>
 
                         {/* Current File */}
                         <div
-                            onClick={handleCurrentFileSelect}
-                            className={`px-3 py-1.5 text-sm cursor-pointer ${
+                            onClick={currentFileUrl ? handleCurrentFileSelect : undefined}
+                            title={currentFileUrl ? undefined : "Aktuell keine Projektdatei ausgewählt"}
+                            className={`menu-item ${
                                 currentFileUrl
-                                    ? "text-zinc-200 hover:bg-zinc-700"
-                                    : "text-zinc-600 cursor-not-allowed"
+                                    ? "cursor-pointer hover:bg-blue-700 hover:text-white"
+                                    : "disabled"
                             }`}
                         >
                             Current File
@@ -103,7 +105,7 @@ export function RunControls({
                                 <div
                                     key={cfg.name}
                                     onClick={() => handleSelect(cfg)}
-                                    className="px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-700 cursor-pointer"
+                                    className="menu-item cursor-pointer hover:bg-blue-700 hover:text-white transition-colors"
                                 >
                                     {cfg.name}
                                 </div>
@@ -117,18 +119,18 @@ export function RunControls({
                 disabled={!canRun}
                 onClick={() => canRun && onRun?.(selected!)}
                 className={`p-1.5 ${!canRun ? "opacity-50 cursor-not-allowed" : ""}`}
-                title="Run"
+                title={!canRun ? "Diese Datei ist nicht runnable" : "Run"}
             >
-                <Play size={20}/>
+                <Play className={`icon ${!canRun ? "" : "text-green-500"}`} />
             </HoverButton>
 
             <HoverButton
-                disabled={!canRun}
-                onClick={() => canRun && onDebug?.(selected!)}
-                className={`p-1.5 ${!canRun ? "opacity-50 cursor-not-allowed" : ""}`}
-                title="Debug"
+                disabled={!canDebug}
+                onClick={() => canDebug && onDebug?.(selected!)}
+                className={`p-1.5 ${!canDebug ? "opacity-50 cursor-not-allowed" : ""}`}
+                title={!canDebug ? "Diese Datei ist nicht debuggable" : "Debug"}
             >
-                <Bug size={20}/>
+                <Bug className={`icon ${!canDebug ? "" : "text-green-500"}`} />
             </HoverButton>
 
             {/* Stop — aktuell versteckt */}
@@ -137,7 +139,7 @@ export function RunControls({
                 className="p-1.5 hidden"
                 title="Stop"
             >
-                <Square size={20}/>
+                <Square className="icon"/>
             </HoverButton>
         </div>
     );
