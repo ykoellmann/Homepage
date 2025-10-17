@@ -9,9 +9,9 @@ function App() {
 
     const runConfigs: RunConfig[] = [
         {
-            name: "debug-protocol",
-            url: "https://jy-studios.github.io/debug-protocol/",
-            debugUrl: "https://github.com/JY-Studios/debug-protocol",
+            name: "cryptborne",
+            url: "https://jy-studios.github.io/cryptborne/",
+            debugUrl: "https://github.com/JY-Studios/cryptborne",
         },
         {
             name: "SatTrak",
@@ -25,7 +25,7 @@ function App() {
     ];
 
     // Simulierter Zustand für "current file"
-    const currentFileUrl = "https://jy-studios.github.io/debug-protocol/";
+    const currentFileUrl = "https://jy-studios.github.io/cryptborne/";
 
     function handleRun(cfg: RunConfig) {
         const target = cfg?.url || currentFileUrl;
@@ -63,7 +63,7 @@ function App() {
                 <div className="flex items-center gap-2">
                     <RunControls
                         configs={runConfigs}
-                        currentConfig="debug-protocol"
+                        currentConfig="cryptborne"
                         currentFileUrl={currentFileUrl}
                         onRun={handleRun}
                         onDebug={handleDebug}
