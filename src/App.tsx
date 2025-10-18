@@ -4,8 +4,35 @@ import { HoverButton } from "./components/hover-button.tsx";
 import logo from './assets/logo.svg'
 import { ProjectIcon } from "./components/project-icon.tsx";
 import {type RunConfig, RunControls} from './components/run-controls.tsx';
+import {FileExplorer, type FileNode} from './components/file-explorer.tsx';
+import {useEffect, useRef, useState} from 'react';
+import {BreadcrumbFooter} from "./components/breadcrumb-footer.tsx";
 
 function App() {
+
+    const [showExplorer, setShowExplorer] = useState(true);
+    const [explorerWidth, setExplorerWidth] = useState<number>(260);
+    const resizingRef = useRef(false);
+
+    function onResizeStart(e: React.MouseEvent) {
+        resizingRef.current = true;
+        const startX = e.clientX;
+        const startWidth = explorerWidth;
+        const onMove = (ev: MouseEvent) => {
+            if (!resizingRef.current) return;
+            const dx = ev.clientX - startX;
+            const next = Math.min(520, Math.max(180, startWidth + dx));
+            setExplorerWidth(next);
+        };
+        const onUp = () => {
+            resizingRef.current = false;
+            window.removeEventListener('mousemove', onMove);
+            window.removeEventListener('mouseup', onUp);
+        };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+        e.preventDefault();
+    }
 
     const runConfigs: RunConfig[] = [
         {
@@ -27,6 +54,49 @@ function App() {
     // Simulierter Zustand für "current file"
     const currentFileUrl = "https://jy-studios.github.io/cryptborne/";
 
+    // Simple client-side routing to support subpages like /about
+    const [routePath, setRoutePath] = useState<string>(window.location.pathname);
+    useEffect(() => {
+        const onPop = () => setRoutePath(window.location.pathname);
+        window.addEventListener('popstate', onPop);
+        return () => window.removeEventListener('popstate', onPop);
+    }, []);
+
+    function navigateTo(path: string) {
+        const fullPath = `/homepage${path.startsWith('/') ? path : '/' + path}`;
+        if (window.location.pathname !== fullPath) {
+            window.history.pushState({}, '', fullPath);
+            setRoutePath(fullPath);
+        }
+    }
+
+    // Project tree state loaded from JSON
+    const [projectTree, setProjectTree] = useState<FileNode[]>([]);
+
+    useEffect(() => {
+        fetch('/files.json')
+            .then(r => r.ok ? r.json() : Promise.reject(r.statusText))
+            .then((data: FileNode[]) => setProjectTree(data))
+            .catch(() => {
+                // Fallback sample if fetch fails (e.g., local file not served)
+                setProjectTree([
+                    {
+                        name: "homepage",
+                        type: "folder",
+                        children: [
+                            { name: "index.html", type: "file", path: "/index.html" },
+                            { name: "README.md", type: "file", path: "/README.md" },
+                            { name: "src", type: "folder", children: [
+                                { name: "App.tsx", type: "file", path: "/src/App.tsx" },
+                                { name: "index.css", type: "file", path: "/src/index.css" },
+                                { name: "App.css", type: "file", path: "/src/App.css" },
+                            ]}
+                        ]
+                    }
+                ]);
+            });
+    }, []);
+
     function handleRun(cfg: RunConfig) {
         const target = cfg?.url || currentFileUrl;
         if (target) window.open(target, "_blank");
@@ -44,9 +114,6 @@ function App() {
 
     return (
         <div className="app-root">
-            <div className="sidebar">
-                <HoverButton><Folder className="icon" /></HoverButton>
-            </div>
             <div className="header gap-2">
                 <div className="flex items-center gap-2">
                     <img src={logo} height="70%" />
@@ -57,6 +124,11 @@ function App() {
                     <HoverButton className="flex items-center gap-2">
                         <ProjectIcon />
                         Homepage
+                    </HoverButton>
+                </div>
+                <div className="sidebar">
+                    <HoverButton active title="Project" onClick={() => setShowExplorer(v => !v)}>
+                        <Folder className="icon" />
                     </HoverButton>
                 </div>
 
@@ -74,8 +146,56 @@ function App() {
                     <HoverButton><Settings className="icon" /></HoverButton>
                 </div>
             </div>
-            {/* Main content area spacing under header and right of sidebar */}
-            <div className="content"></div>
+            <BreadcrumbFooter
+                path={routePath}
+                tree={projectTree}
+                onNavigate={(p) => navigateTo(p)}
+            />
+            <div className="main">
+                {showExplorer && (
+                    <div
+                        className="explorer"
+                        style={{ width: explorerWidth }}
+                    >
+                        <div className="explorer-content">
+                            <FileExplorer
+                                data={projectTree}
+                                onOpenFile={(node) => {
+                                    const isTxt = node.name.toLowerCase().endsWith('.txt');
+                                    if (node.path) {
+                                        const path = node.path.replace(/\.(txt|md|html|tsx|ts|js)$/i, '').replace(/^\/+/, '');
+                                        navigateTo(`/${path}`);
+                                        return;
+                                    }
+                                    if (isTxt) {
+                                        const base = node.name.replace(/\.[^.]+$/, '');
+                                        navigateTo(`/${base}`);
+                                        return;
+                                    }
+                                    const target = currentFileUrl;
+                                    if (target) window.open(target, "_blank");
+                                }}
+                            />
+                        </div>
+                        <div
+                            onMouseDown={onResizeStart}
+                            className="resize-handle"
+                            title="Resize"
+                        />
+                    </div>
+                )}
+                <div className="content">
+                    {routePath === '/' ? (
+                        <div className="text-[#c2c3c7]">Wähle eine Datei im Explorer aus…</div>
+                    ) : (
+                        <div>
+                            <div className="text-[#9aa0a6] mb-2">Page</div>
+                            <div className="text-[#e5e7eb] font-mono">{routePath}</div>
+                            <div className="mt-4 text-[#c2c3c7]">Diese Seite wurde dynamisch über den Dateinamen geöffnet. Füge neue Dateien zur files.json hinzu, um neue Routen zu bekommen.</div>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }
