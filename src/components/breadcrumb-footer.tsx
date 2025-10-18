@@ -4,16 +4,17 @@ import type { FileNode } from "./file-explorer.tsx";
 
 interface BreadcrumbFooterProps {
     path: string;
-    onNavigate?: (newPath: string) => void;
+    onNavigate?: (newPath: string) => void;       // Öffentliche Navigation (nur für Dateien)
+    onOpenFolder?: (newPath: string) => void;     // Breadcrumb-Update ohne Navigation (für Ordner)
     tree?: FileNode[];
 }
 
-export function BreadcrumbFooter({ path, onNavigate, tree }: BreadcrumbFooterProps) {
-    const parts = path.replace(/^\/+/, "").split("/").filter(Boolean);
+export function BreadcrumbFooter({ path, onNavigate, onOpenFolder, tree }: BreadcrumbFooterProps) {
+    const pathParts = path.replace(/^\/+/, "").split("/").filter(Boolean);
+    const parts = ["homepage", ...pathParts];
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);
 
-    // Klick außerhalb schließt Dropdown
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (footerRef.current && !footerRef.current.contains(event.target as Node)) {
@@ -24,19 +25,25 @@ export function BreadcrumbFooter({ path, onNavigate, tree }: BreadcrumbFooterPro
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    // Pfad → FileNode ermitteln
     function getNode(pathParts: string[]): FileNode | null {
         if (!tree || tree.length === 0) return null;
+
+        // Ignore "homepage" beim Suchen
+        const relevantParts = pathParts[0] === "homepage" ? pathParts.slice(1) : pathParts;
+
         let currentLevel = tree;
         let currentNode: FileNode | null = null;
 
-        for (const part of pathParts) {
+        for (const part of relevantParts) {
             currentNode = currentLevel.find((n) => n.name === part) || null;
             if (!currentNode) return null;
             currentLevel = currentNode.children || [];
         }
-        return currentNode;
+
+        // Wenn keine Teile übrig sind, geben wir das Root-Objekt zurück (für Homepage-Dropdown)
+        return currentNode ?? { name: "homepage", type: "folder", children: tree };
     }
+
 
     return (
         <div className="footer-breadcrumb" ref={footerRef}>
@@ -44,7 +51,6 @@ export function BreadcrumbFooter({ path, onNavigate, tree }: BreadcrumbFooterPro
                 const currentPath = "/" + parts.slice(0, i + 1).join("/");
                 const node = getNode(parts.slice(0, i + 1));
                 const entries = node?.children || [];
-
                 const hasChildren = entries.length > 0;
 
                 return (
@@ -54,11 +60,10 @@ export function BreadcrumbFooter({ path, onNavigate, tree }: BreadcrumbFooterPro
                                 className="footer-breadcrumb-item clickable"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    // Wenn Ordner mit Inhalten → Dropdown toggeln
                                     if (hasChildren) {
                                         setOpenIndex(openIndex === i ? null : i);
                                     } else {
-                                        // sonst einfach navigieren
+                                        // Nur bei Datei: echte Navigation
                                         onNavigate?.(currentPath);
                                     }
                                 }}
@@ -66,7 +71,6 @@ export function BreadcrumbFooter({ path, onNavigate, tree }: BreadcrumbFooterPro
                                 {part}
                             </span>
 
-                            {/* Dropdown öffnen */}
                             {openIndex === i && hasChildren && (
                                 <div className="breadcrumb-dropdown">
                                     {entries.map((entry) => (
@@ -75,13 +79,18 @@ export function BreadcrumbFooter({ path, onNavigate, tree }: BreadcrumbFooterPro
                                             className="breadcrumb-dropdown-item"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                const newPath = currentPath + "/" + entry.name;
-                                                onNavigate?.(newPath);
+
+                                                // neuer Pfad (ohne "homepage" am Anfang)
+                                                const newPath = "/" + [...parts.slice(1, i + 1), entry.name].join("/");
+
                                                 if (entry.type === "folder") {
-                                                    // Ordner offen lassen
-                                                    setOpenIndex(i);
+                                                    // KEINE Navigation! Nur Breadcrumb aktualisieren und neues Dropdown öffnen
+                                                    onOpenFolder?.(newPath);
+                                                    // openIndex auf die neue Ebene setzen, damit neues Dropdown sich öffnet
+                                                    setOpenIndex(i + 1);
                                                 } else {
-                                                    // Bei Datei schließen
+                                                    // Datei -> echte Navigation und Dropdown schließen
+                                                    onNavigate?.(newPath);
                                                     setOpenIndex(null);
                                                 }
                                             }}
@@ -98,9 +107,7 @@ export function BreadcrumbFooter({ path, onNavigate, tree }: BreadcrumbFooterPro
                             )}
                         </div>
 
-                        {i < parts.length - 1 && (
-                            <ChevronRight size={14} className="footer-chevron" />
-                        )}
+                        {i < parts.length - 1 && <ChevronRight size={14} className="footer-chevron" />}
                     </React.Fragment>
                 );
             })}

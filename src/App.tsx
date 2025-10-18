@@ -4,15 +4,22 @@ import { HoverButton } from "./components/hover-button.tsx";
 import logo from './assets/logo.svg'
 import { ProjectIcon } from "./components/project-icon.tsx";
 import {type RunConfig, RunControls} from './components/run-controls.tsx';
-import {FileExplorer, type FileNode} from './components/file-explorer.tsx';
+import {FileExplorer} from './components/file-explorer.tsx';
 import {useEffect, useRef, useState} from 'react';
 import {BreadcrumbFooter} from "./components/breadcrumb-footer.tsx";
+import {buildFileTreeFromGlob, type PageEntry} from "./lib/buildFileTree.ts";
 
 function App() {
 
     const [showExplorer, setShowExplorer] = useState(true);
     const [explorerWidth, setExplorerWidth] = useState<number>(260);
     const resizingRef = useRef(false);
+    const { tree, pages } = buildFileTreeFromGlob();
+    const runConfigs = Object.values(pages)
+        .map(p => p.meta?.runConfig)
+        .filter(Boolean);
+    const [currentPage, setCurrentPage] = useState<PageEntry | null>(null);
+    const [currentPath, setCurrentPath] = useState<PageEntry | null>(null);
 
     function onResizeStart(e: React.MouseEvent) {
         resizingRef.current = true;
@@ -34,26 +41,6 @@ function App() {
         e.preventDefault();
     }
 
-    const runConfigs: RunConfig[] = [
-        {
-            name: "cryptborne",
-            url: "https://jy-studios.github.io/cryptborne/",
-            debugUrl: "https://github.com/JY-Studios/cryptborne",
-        },
-        {
-            name: "SatTrak",
-            debugUrl: "https://github.com/JanVogt06/SatTrak-SatelliteVisualization",
-        },
-        {
-            name: "cteXecutor",
-            url: "https://plugins.jetbrains.com/plugin/27835-ctexecutor/",
-            debugUrl: "https://github.com/ykoellmann/cteXecutor",
-        }
-    ];
-
-    // Simulierter Zustand für "current file"
-    const currentFileUrl = "https://jy-studios.github.io/cryptborne/";
-
     // Simple client-side routing to support subpages like /about
     const [routePath, setRoutePath] = useState<string>(window.location.pathname);
     useEffect(() => {
@@ -63,47 +50,33 @@ function App() {
     }, []);
 
     function navigateTo(path: string) {
-        const fullPath = `/homepage${path.startsWith('/') ? path : '/' + path}`;
+        let fullPath = `${path.startsWith('/') ? path : '/' + path}`;
+        fullPath = fullPath.replace(/^\/homepage/, '');
+        console.log(`Navigate to ${fullPath}`);
         if (window.location.pathname !== fullPath) {
             window.history.pushState({}, '', fullPath);
             setRoutePath(fullPath);
+
+            const cleanedPath = fullPath.replace(/^\/+/, '').replace(/\/+$/, '');
+            setCurrentPath(pages[cleanedPath]);
+            console.log("pages",pages);
+            if (pages[cleanedPath]) {
+                setCurrentPage(pages[cleanedPath]);
+            }
         }
     }
-
-    // Project tree state loaded from JSON
-    const [projectTree, setProjectTree] = useState<FileNode[]>([]);
-
-    useEffect(() => {
-        fetch('/files.json')
-            .then(r => r.ok ? r.json() : Promise.reject(r.statusText))
-            .then((data: FileNode[]) => setProjectTree(data))
-            .catch(() => {
-                // Fallback sample if fetch fails (e.g., local file not served)
-                setProjectTree([
-                    {
-                        name: "homepage",
-                        type: "folder",
-                        children: [
-                            { name: "index.html", type: "file", path: "/index.html" },
-                            { name: "README.md", type: "file", path: "/README.md" },
-                            { name: "src", type: "folder", children: [
-                                { name: "App.tsx", type: "file", path: "/src/App.tsx" },
-                                { name: "index.css", type: "file", path: "/src/index.css" },
-                                { name: "App.css", type: "file", path: "/src/App.css" },
-                            ]}
-                        ]
-                    }
-                ]);
-            });
-    }, []);
+    const handleOpenFolder = (newPath: string) => {
+        setRoutePath(newPath);
+        // NICHT router.push
+    };
 
     function handleRun(cfg: RunConfig) {
-        const target = cfg?.url || currentFileUrl;
+        const target = cfg?.url || currentPage?.meta?.runConfig?.url;
         if (target) window.open(target, "_blank");
     }
 
     function handleDebug(cfg: RunConfig) {
-        const target = cfg?.debugUrl || cfg?.url || currentFileUrl;
+        const target = cfg?.debugUrl || cfg?.url || currentPage?.meta?.runConfig?.debugUrl;
         if (target) window.open(target, "_blank");
     }
 
@@ -136,7 +109,7 @@ function App() {
                     <RunControls
                         configs={runConfigs}
                         currentConfig="cryptborne"
-                        currentFileUrl={currentFileUrl}
+                        currentPage={currentPage}
                         onRun={handleRun}
                         onDebug={handleDebug}
                         onStop={handleStop}
@@ -148,8 +121,9 @@ function App() {
             </div>
             <BreadcrumbFooter
                 path={routePath}
-                tree={projectTree}
                 onNavigate={(p) => navigateTo(p)}
+                onOpenFolder={handleOpenFolder}
+                tree={tree}
             />
             <div className="main">
                 {showExplorer && (
@@ -159,7 +133,7 @@ function App() {
                     >
                         <div className="explorer-content">
                             <FileExplorer
-                                data={projectTree}
+                                data={tree}
                                 onOpenFile={(node) => {
                                     const isTxt = node.name.toLowerCase().endsWith('.txt');
                                     if (node.path) {
@@ -172,8 +146,6 @@ function App() {
                                         navigateTo(`/${base}`);
                                         return;
                                     }
-                                    const target = currentFileUrl;
-                                    if (target) window.open(target, "_blank");
                                 }}
                             />
                         </div>
@@ -185,15 +157,16 @@ function App() {
                     </div>
                 )}
                 <div className="content">
-                    {routePath === '/' ? (
-                        <div className="text-[#c2c3c7]">Wähle eine Datei im Explorer aus…</div>
-                    ) : (
-                        <div>
-                            <div className="text-[#9aa0a6] mb-2">Page</div>
-                            <div className="text-[#e5e7eb] font-mono">{routePath}</div>
-                            <div className="mt-4 text-[#c2c3c7]">Diese Seite wurde dynamisch über den Dateinamen geöffnet. Füge neue Dateien zur files.json hinzu, um neue Routen zu bekommen.</div>
-                        </div>
-                    )}
+                    {(() => {
+                        let cleanPath = routePath.replace(/^\/+/, '').replace(/\/+$/, '');
+
+                        if (!currentPage) {
+                            return <div className="text-[#f87171]">Seite nicht gefunden: {cleanPath}</div>;
+                        }
+
+                        const Component = currentPage.component;
+                        return <Component />;
+                    })()}
                 </div>
             </div>
         </div>

@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {HoverButton} from "./hover-button";
 import {ChevronDown, Play, Bug, Square} from "lucide-react";
+import type { PageEntry } from "../lib/buildFileTree";
 
 export type RunConfig = {
     name: string;
@@ -12,7 +13,7 @@ export type RunConfig = {
 interface RunControlsProps {
     configs: RunConfig[];
     currentConfig?: string;
-    currentFileUrl?: string | null;
+    currentPage?: PageEntry | undefined | null;
     onSelect?: (cfg: RunConfig) => void;
     onRun?: (cfg: RunConfig) => void;
     onDebug?: (cfg: RunConfig) => void;
@@ -22,7 +23,7 @@ interface RunControlsProps {
 export function RunControls({
                                 configs,
                                 currentConfig,
-                                currentFileUrl = null,
+                                currentPage = null,
                                 onSelect,
                                 onRun,
                                 onDebug,
@@ -35,8 +36,8 @@ export function RunControls({
 
     const mainConfigs = configs.filter((c) => c.type !== "special");
     const specialConfigs = configs.filter((c) => c.type === "special");
-    const canRun = !!(selected?.url ?? (selected?.name === "Current File" ? currentFileUrl : undefined));
-    const canDebug = !!(selected?.debugUrl ?? selected?.url ?? (selected?.name === "Current File" ? currentFileUrl : undefined));
+    const canRun = !!(selected?.url ?? (selected?.name === "Current File" ? currentPage?.meta?.runConfig?.url : undefined));
+    const canDebug = !!(selected?.debugUrl ?? selected?.url ?? (selected?.name === "Current File" ? currentPage?.meta?.runConfig?.debugUrl : undefined));
 
     function handleSelect(cfg: RunConfig) {
         setSelected(cfg);
@@ -45,7 +46,7 @@ export function RunControls({
     }
 
     function handleCurrentFileSelect() {
-        const cfg: RunConfig = {name: "Current File", url: currentFileUrl || undefined, type: "special"};
+        const cfg: RunConfig = {name: "Current File", url: currentPage?.meta?.runConfig?.url || undefined, debugUrl: currentPage?.meta?.runConfig?.debugUrl || undefined, type: "special"};
         setSelected(cfg);
         setDropdownOpen(false);
         onSelect?.(cfg);
@@ -87,10 +88,10 @@ export function RunControls({
 
                         {/* Current File */}
                         <div
-                            onClick={currentFileUrl ? handleCurrentFileSelect : undefined}
-                            title={currentFileUrl ? undefined : "Aktuell keine Projektdatei ausgewählt"}
+                            onClick={currentPage ? handleCurrentFileSelect : undefined}
+                            title={currentPage?.meta?.title ? undefined : "Aktuell keine Projektdatei ausgewählt"}
                             className={`menu-item ${
-                                currentFileUrl
+                                currentPage
                                     ? "cursor-pointer hover:bg-blue-700 hover:text-white"
                                     : "disabled"
                             }`}
