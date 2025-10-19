@@ -8,18 +8,21 @@ import {FileExplorer} from './components/file-explorer.tsx';
 import {useEffect, useRef, useState} from 'react';
 import {BreadcrumbFooter} from "./components/breadcrumb-footer.tsx";
 import {buildFileTreeFromGlob, type PageEntry} from "./lib/buildFileTree.ts";
+import TabSystem, {type Tab, type TabSystemRef} from "./components/tab-system.tsx";
 
 function App() {
-
     const [showExplorer, setShowExplorer] = useState(true);
     const [explorerWidth, setExplorerWidth] = useState<number>(260);
     const resizingRef = useRef(false);
     const { tree, pages } = buildFileTreeFromGlob();
     const runConfigs = Object.values(pages)
         .map(p => p.meta?.runConfig)
-        .filter(Boolean);
+        .filter((cfg): cfg is RunConfig => cfg !== undefined);
     const [currentPage, setCurrentPage] = useState<PageEntry | null>(null);
     const [currentPath, setCurrentPath] = useState<PageEntry | null>(null);
+
+    // Tab system reference
+    const tabSystemRef = useRef<TabSystemRef>(null);
 
     function onResizeStart(e: React.MouseEvent) {
         resizingRef.current = true;
@@ -43,31 +46,93 @@ function App() {
 
     // Simple client-side routing to support subpages like /about
     const [routePath, setRoutePath] = useState<string>(window.location.pathname);
+
     useEffect(() => {
-        const onPop = () => setRoutePath(window.location.pathname);
+        const onPop = () => {
+            const newPath = window.location.pathname;
+            setRoutePath(newPath);
+
+            // Aktiviere den Tab für diese Route, falls vorhanden
+            const tabs = tabSystemRef.current?.getAllTabs() || [];
+            const existingTab = tabs.find((t: Tab) => t.path === newPath);
+
+            if (existingTab) {
+                // Tab existiert bereits, aktiviere ihn
+                tabSystemRef.current?.activateTabByPath(newPath);
+            } else {
+                // Tab existiert nicht, öffne ihn
+                const cleanedPath = newPath.replace(/^\/+/, '').replace(/\/+$/, '');
+                const pageEntry = pages[cleanedPath];
+                if (pageEntry) {
+                    navigateTo(newPath, false); // false = don't update history
+                }
+            }
+        };
+
         window.addEventListener('popstate', onPop);
         return () => window.removeEventListener('popstate', onPop);
-    }, []);
+    }, [pages]);
 
-    function navigateTo(path: string) {
+    function navigateTo(path: string, updateHistory: boolean = true) {
         let fullPath = `${path.startsWith('/') ? path : '/' + path}`;
         fullPath = fullPath.replace(/^\/homepage/, '');
         console.log(`Navigate to ${fullPath}`);
-        if (window.location.pathname !== fullPath) {
+
+        // Browser History aktualisieren (nur wenn gewünscht)
+        if (updateHistory && window.location.pathname !== fullPath) {
             window.history.pushState({}, '', fullPath);
             setRoutePath(fullPath);
+        } else if (!updateHistory) {
+            setRoutePath(fullPath);
+        }
 
-            const cleanedPath = fullPath.replace(/^\/+/, '').replace(/\/+$/, '');
-            setCurrentPath(pages[cleanedPath]);
-            console.log("pages",pages);
-            if (pages[cleanedPath]) {
-                setCurrentPage(pages[cleanedPath]);
-            }
+        const cleanedPath = fullPath.replace(/^\/+/, '').replace(/\/+$/, '');
+        const pageEntry = pages[cleanedPath];
+
+        if (pageEntry) {
+            setCurrentPage(pageEntry);
+            setCurrentPath(pageEntry);
+
+            // Tab öffnen über Ref
+            const tab: Tab = {
+                id: cleanedPath || 'home',
+                title: getTabTitle(cleanedPath, pageEntry),
+                path: fullPath,
+                component: pageEntry.component,
+                scrollPosition: 0
+            };
+
+            // Verwende die ref um Tab zu öffnen
+            tabSystemRef.current?.openTab(tab);
+        } else {
+            console.warn('Page not found:', cleanedPath);
         }
     }
+
+    // Hilfsfunktion um einen schönen Tab-Titel zu erstellen
+    function getTabTitle(path: string, entry: PageEntry): string {
+        if (!path) return 'Home';
+
+        // Nimm den letzten Teil des Pfads
+        const parts = path.split('/').filter(Boolean);
+        const lastName = parts[parts.length - 1];
+
+        // Formatiere: "some-page" -> "Some Page"
+        const formatted = lastName
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+
+        // Füge passende Dateierweiterung hinzu
+        if (entry.component) {
+            return `${formatted}.tsx`;
+        }
+
+        return formatted;
+    }
+
     const handleOpenFolder = (newPath: string) => {
         setRoutePath(newPath);
-        // NICHT router.push
     };
 
     function handleRun(cfg: RunConfig) {
@@ -82,8 +147,76 @@ function App() {
 
     function handleStop() {
         console.log("Stop clicked");
-        // später: Lauf abbrechen, Simulation stoppen, o.ä.
     }
+
+    // Lade initiale Seite beim Start
+    useEffect(() => {
+        // Warte bis TabSystem gemounted ist
+        const timer = setTimeout(() => {
+            const currentPath = window.location.pathname;
+            const cleanedPath = currentPath.replace(/^\/+/, '').replace(/\/+$/, '');
+
+            // Lade gespeicherte Tabs aus sessionStorage
+            const stored = sessionStorage.getItem('tabs_state');
+            if (stored) {
+                try {
+                    const { tabs: savedTabs, activeTabId } = JSON.parse(stored);
+
+                    // Öffne alle gespeicherten Tabs
+                    for (const savedTab of savedTabs) {
+                        const pageEntry = pages[savedTab.id];
+                        if (pageEntry) {
+                            const tab: Tab = {
+                                id: savedTab.id,
+                                title: savedTab.title,
+                                path: savedTab.path,
+                                component: pageEntry.component,
+                                scrollPosition: savedTab.scrollPosition
+                            };
+                            tabSystemRef.current?.openTab(tab);
+                        }
+                    }
+
+                    // Wenn aktuelle Route einen Tab hat, aktiviere ihn
+                    const currentTab = savedTabs.find((t: any) => t.path === currentPath);
+                    if (currentTab) {
+                        tabSystemRef.current?.activateTabByPath(currentPath);
+                        const pageEntry = pages[currentTab.id];
+                        if (pageEntry) {
+                            setCurrentPage(pageEntry);
+                        }
+                    } else if (cleanedPath && pages[cleanedPath]) {
+                        // Route hat keinen gespeicherten Tab, öffne ihn
+                        navigateTo(currentPath, false);
+                    } else {
+                        // Aktiviere den zuletzt aktiven Tab
+                        const activeTab = savedTabs.find((t: any) => t.id === activeTabId);
+                        if (activeTab) {
+                            window.history.replaceState({}, '', activeTab.path);
+                            tabSystemRef.current?.activateTabByPath(activeTab.path);
+                            const pageEntry = pages[activeTab.id];
+                            if (pageEntry) {
+                                setCurrentPage(pageEntry);
+                            }
+                        }
+                    }
+
+                    return;
+                } catch (e) {
+                    console.warn('Failed to restore tabs:', e);
+                }
+            }
+
+            // Keine gespeicherten Tabs: öffne aktuelle Route oder Home
+            if (pages[cleanedPath]) {
+                navigateTo(currentPath, false);
+            } else if (pages['']) {
+                navigateTo('/', false);
+            }
+        }, 10);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     return (
         <div className="app-root">
@@ -156,17 +289,19 @@ function App() {
                         />
                     </div>
                 )}
+
+                {/* Tab System ersetzt den alten Content-Bereich */}
                 <div className="content">
-                    {(() => {
-                        let cleanPath = routePath.replace(/^\/+/, '').replace(/\/+$/, '');
-
-                        if (!currentPage) {
-                            return <div className="text-[#f87171]">Seite nicht gefunden: {cleanPath}</div>;
-                        }
-
-                        const Component = currentPage.component;
-                        return <Component />;
-                    })()}
+                    <TabSystem
+                        ref={tabSystemRef}
+                        onTabChange={(tab) => {
+                            if (tab) {
+                                setCurrentPage(pages[tab.id] || null);
+                                // Update route path state (history is already updated in TabSystem)
+                                setRoutePath(tab.path);
+                            }
+                        }}
+                    />
                 </div>
             </div>
         </div>
