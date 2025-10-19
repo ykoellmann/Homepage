@@ -101,7 +101,6 @@ function App() {
     }
 
     function handleStop() {
-        console.log("Stop clicked");
     }
 
     function handleFileOpen(path: string) {

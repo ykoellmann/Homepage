@@ -18,7 +18,6 @@ export function useNavigation({
 
     function navigateTo(path: string, updateHistory: boolean = true) {
         const fullPath = normalizePath(path);
-        console.log(`Navigate to ${fullPath}`);
 
         if (updateHistory && window.location.pathname !== fullPath) {
             window.history.pushState({}, '', fullPath);

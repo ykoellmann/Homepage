@@ -27,7 +27,6 @@ export function buildFileTreeFromGlob(basePrefix = "../pages/") {
       component: (pageModules[path] as any).default,
     };
   }
-  console.log(pages);
 
   // 2️⃣ Meta-Dateien einlesen
   for (const path in metaModules) {
