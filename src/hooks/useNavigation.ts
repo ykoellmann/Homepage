@@ -1,6 +1,7 @@
 import {type RefObject} from 'react';
 import {type TabSystemRef, type Tab} from '../components/tabs/TabSystem.tsx';
 import {type PageEntry} from '../lib/buildFileTree';
+import { useNavigate } from 'react-router-dom';
 
 interface UseNavigationProps {
     pages: Record<string, PageEntry>;
@@ -15,12 +16,14 @@ export function useNavigation({
                                   setCurrentPage,
                                   setRoutePath
                               }: UseNavigationProps) {
+    const navigate = useNavigate();
+
 
     function navigateTo(path: string, updateHistory: boolean = true) {
         const fullPath = normalizePath(path);
 
         if (updateHistory && window.location.pathname !== fullPath) {
-            window.history.pushState({}, '', fullPath);
+            navigate(fullPath);
             setRoutePath(fullPath);
         } else if (!updateHistory) {
             setRoutePath(fullPath);

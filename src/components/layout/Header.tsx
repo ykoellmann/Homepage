@@ -4,6 +4,7 @@ import {ProjectIcon} from "../project-icon";
 import {type PageEntry} from "../../lib/buildFileTree";
 import logo from '../../assets/logo.svg';
 import {type RunConfig, RunControls} from "../run-controls/RunControls.tsx";
+import {useHistoryStatus} from "../../hooks/useHistoryStatus.ts";
 
 interface HeaderProps {
     runConfigs: RunConfig[];
@@ -20,6 +21,8 @@ export function Header({
                            onDebug,
                            onStop
                        }: HeaderProps) {
+    const {canGoBack, canGoForward} = useHistoryStatus();
+
     return (
         <div className="header gap-2">
             <div className="flex items-center gap-2">
@@ -27,11 +30,12 @@ export function Header({
                 <HoverButton>
                     <Tally4 className="rotate-90 icon"/>
                 </HoverButton>
-                <HoverButton>
-                    <ArrowLeft className="icon"/>
+                <HoverButton disabled={!canGoBack} onClick={() => window.history.back()}>
+                    <ArrowLeft className={`icon ${!canGoBack ? 'opacity-30' : ''}`} />
                 </HoverButton>
-                <HoverButton>
-                    <ArrowRight className="icon"/>
+
+                <HoverButton disabled={!canGoForward} onClick={() => window.history.forward()}>
+                    <ArrowRight className={`icon ${!canGoForward ? 'opacity-30' : ''}`} />
                 </HoverButton>
 
                 <HoverButton className="flex items-center gap-2">
