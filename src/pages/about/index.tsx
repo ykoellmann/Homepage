@@ -1,4 +1,4 @@
-import { runConfig } from "./meta.ts";
+import {runConfig} from "./meta.ts";
 
 export default function AboutPage() {
     return (
