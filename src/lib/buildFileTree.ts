@@ -1,4 +1,4 @@
-import type { RunConfig } from "../components/run-controls";
+import type { RunConfig } from "../components/run-controls/RunControls.tsx";
 import type {FileNode} from "../components/file-explorer.tsx";
 
 export interface PageEntry {
