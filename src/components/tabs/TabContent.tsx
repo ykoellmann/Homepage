@@ -1,4 +1,4 @@
-import {InteractiveBackground} from "../InteractiveBackground.tsx";
+import {InteractiveBackground} from "../layout/InteractiveBackground.tsx";
 
 interface TabContentProps {
     activeComponent: React.ComponentType | null | undefined;
