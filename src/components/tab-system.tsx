@@ -31,7 +31,6 @@ export interface TabSystemRef {
     getActiveTab: () => Tab | null;
     activateTabByPath: (path: string) => void;
     getAllTabs: () => Tab[];
-    loadFromStorage: () => { tabs: any[]; activeTabId: string | null } | null;
 }
 
 interface TabSystemProps {
@@ -48,17 +47,6 @@ function saveToStorage(tabs: { id: string; title: string; path: string; scrollPo
     } catch (e) {
         console.warn('Failed to save tabs to storage:', e);
     }
-}
-
-function loadFromStorage(): { tabs: any[]; activeTabId: string | null } | null {
-    try {
-        const stored = sessionStorage.getItem(STORAGE_KEY);
-        console.log("load", stored);
-        if (stored) return JSON.parse(stored);
-    } catch (e) {
-        console.warn('Failed to load tabs from storage:', e);
-    }
-    return null;
 }
 
 const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({ onTabChange }, ref) => {
@@ -80,16 +68,14 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({ onTabChange }, ref
 
     // Save to storage whenever layout changes
     useEffect(() => {
-        if (layout.group) {
-            saveToStorage(
-                layout.group.tabs.map(t => ({
-                    id: t.path, // <-- path statt id
-                    title: t.title,
-                    path: t.path,
-                    scrollPosition: t.scrollPosition
-                })),
-                layout.group.activeTabId
-            );
+        if (layout.group && layout.group.tabs.length > 0) {
+            const simplifiedTabs = layout.group.tabs.map(t => ({
+                id: t.id,
+                title: t.title,
+                path: t.path,
+                scrollPosition: t.scrollPosition
+            }));
+            saveToStorage(simplifiedTabs, layout.group.activeTabId);
         }
     }, [layout]);
 
@@ -213,26 +199,50 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({ onTabChange }, ref
     }
 
     function moveTab(tab: Tab, fromGroupId: string, toGroupId: string, position: number) {
+        // Speichere den Tab vor der Änderung
+        const tabToMove: Tab = { ...tab };
+        let wasActiveInFromGroup = false;
+
         setLayout(prev => {
             const newLayout = { ...prev };
 
+            // Entferne Tab aus der Quellgruppe
             updateGroup(newLayout, fromGroupId, (group) => {
-                const index = group.tabs.findIndex(t => t.id === tab.id);
+                const index = group.tabs.findIndex(t => t.id === tabToMove.id);
                 if (index >= 0) {
+                    wasActiveInFromGroup = group.activeTabId === tabToMove.id;
                     group.tabs.splice(index, 1);
-                    if (group.activeTabId === tab.id) {
-                        group.activeTabId = group.tabs[0]?.id || null;
+
+                    // Wenn der aktive Tab entfernt wird, wähle einen neuen aktiven Tab
+                    if (wasActiveInFromGroup && fromGroupId !== toGroupId) {
+                        const newActiveTab = group.tabs[0] || null;
+                        group.activeTabId = newActiveTab?.id || null;
+
+                        if (newActiveTab && onTabChange) {
+                            onTabChange(newActiveTab);
+                        }
                     }
                 }
             });
 
+            // Füge Tab in die Zielgruppe ein
             updateGroup(newLayout, toGroupId, (group) => {
-                group.tabs.splice(position, 0, tab);
-                group.activeTabId = tab.id;
+                group.tabs.splice(position, 0, tabToMove);
+
+                // Tab behält seinen aktiven Status nur innerhalb derselben Gruppe
+                if (fromGroupId === toGroupId && wasActiveInFromGroup) {
+                    group.activeTabId = tabToMove.id;
+                }
+                // Bei unterschiedlichen Gruppen: Tab wird NICHT aktiviert
             });
 
             return newLayout;
         });
+
+        // Route nur aktualisieren wenn der Tab aktiv war und in derselben Gruppe bleibt
+        if (wasActiveInFromGroup && fromGroupId === toGroupId) {
+            window.history.pushState({}, '', tabToMove.path);
+        }
     }
 
     // Expose methods via ref
@@ -241,8 +251,7 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({ onTabChange }, ref
         closeTab,
         getActiveTab,
         activateTabByPath,
-        getAllTabs,
-        loadFromStorage
+        getAllTabs
     }));
 
     function renderLayout(node: LayoutNode): React.ReactElement {

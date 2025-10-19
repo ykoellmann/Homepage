@@ -1,8 +1,8 @@
 import './App.css'
-import { ArrowLeft, ArrowRight, Folder, Search, Settings, Tally4 } from "lucide-react";
-import { HoverButton } from "./components/hover-button.tsx";
+import {ArrowLeft, ArrowRight, Folder, Search, Settings, Tally4} from "lucide-react";
+import {HoverButton} from "./components/hover-button.tsx";
 import logo from './assets/logo.svg'
-import { ProjectIcon } from "./components/project-icon.tsx";
+import {ProjectIcon} from "./components/project-icon.tsx";
 import {type RunConfig, RunControls} from './components/run-controls.tsx';
 import {FileExplorer} from './components/file-explorer.tsx';
 import {useEffect, useRef, useState} from 'react';
@@ -14,10 +14,12 @@ function App() {
     const [showExplorer, setShowExplorer] = useState(true);
     const [explorerWidth, setExplorerWidth] = useState<number>(260);
     const resizingRef = useRef(false);
-    const { tree, pages } = buildFileTreeFromGlob();
+    const {tree, pages} = buildFileTreeFromGlob();
     const runConfigs = Object.values(pages)
         .map(p => p.meta?.runConfig)
-        .filter((cfg): cfg is RunConfig => cfg !== undefined);
+        .filter((cfg): cfg is RunConfig => cfg !== undefined
+            && (cfg.url !== undefined
+                || cfg?.debugUrl !== undefined));
     const [currentPage, setCurrentPage] = useState<PageEntry | null>(null);
     const [, setCurrentPath] = useState<PageEntry | null>(null);
 
@@ -151,43 +153,68 @@ function App() {
 
     // Lade initiale Seite beim Start
     useEffect(() => {
+        // Warte bis TabSystem gemounted ist
         const timer = setTimeout(() => {
-            const stored = tabSystemRef?.current?.loadFromStorage();
-            console.log("stored",stored);
-            if (stored && stored.tabs.length > 0) {
-                console.log("stored",stored.tabs);
-                for (const savedTab of stored.tabs) {
-                    const cleanedPath = savedTab.path.replace(/^\/+/, '').replace(/\/+$/, '');
-                    const pageEntry = pages[cleanedPath];
-                    if (!pageEntry) continue;
+            const currentPath = window.location.pathname;
+            const cleanedPath = currentPath.replace(/^\/+/, '').replace(/\/+$/, '');
 
-                    const tab: Tab = {
-                        id: cleanedPath,
-                        title: savedTab.title,
-                        path: savedTab.path,
-                        component: pageEntry.component,
-                        scrollPosition: savedTab.scrollPosition
-                    };
-                    tabSystemRef.current?.openTab(tab);
+            // Lade gespeicherte Tabs aus sessionStorage
+            const stored = sessionStorage.getItem('tabs_state');
+            if (stored) {
+                try {
+                    const {tabs: savedTabs, activeTabId} = JSON.parse(stored);
+
+                    // Öffne alle gespeicherten Tabs
+                    for (const savedTab of savedTabs) {
+                        const pageEntry = pages[savedTab.id];
+                        if (pageEntry) {
+                            const tab: Tab = {
+                                id: savedTab.id,
+                                title: savedTab.title,
+                                path: savedTab.path,
+                                component: pageEntry.component,
+                                scrollPosition: savedTab.scrollPosition
+                            };
+                            tabSystemRef.current?.openTab(tab);
+                        }
+                    }
+
+                    // Wenn aktuelle Route einen Tab hat, aktiviere ihn
+                    const currentTab = savedTabs.find((t: any) => t.path === currentPath);
+                    if (currentTab) {
+                        tabSystemRef.current?.activateTabByPath(currentPath);
+                        const pageEntry = pages[currentTab.id];
+                        if (pageEntry) {
+                            setCurrentPage(pageEntry);
+                        }
+                    } else if (cleanedPath && pages[cleanedPath]) {
+                        // Route hat keinen gespeicherten Tab, öffne ihn
+                        navigateTo(currentPath, false);
+                    } else {
+                        // Aktiviere den zuletzt aktiven Tab
+                        const activeTab = savedTabs.find((t: any) => t.id === activeTabId);
+                        if (activeTab) {
+                            window.history.replaceState({}, '', activeTab.path);
+                            tabSystemRef.current?.activateTabByPath(activeTab.path);
+                            const pageEntry = pages[activeTab.id];
+                            if (pageEntry) {
+                                setCurrentPage(pageEntry);
+                            }
+                        }
+                    }
+
+                    return;
+                } catch (e) {
+                    console.warn('Failed to restore tabs:', e);
                 }
-
-                // Aktiviere letzten aktiven Tab
-                const active = stored.tabs.find((t: { path: any; }) => t.path === stored.activeTabId)
-                    || stored.tabs.find((t: { path: string; }) => t.path === window.location.pathname);
-
-                if (active) {
-                    tabSystemRef.current?.activateTabByPath(active.path);
-                    const cleanedPath = active.path.replace(/^\/+/, '').replace(/\/+$/, '');
-                    setCurrentPage(pages[cleanedPath] || null);
-                }
-
-                return;
             }
 
             // Keine gespeicherten Tabs: öffne aktuelle Route oder Home
-            const cleanedPath = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
-            if (pages[cleanedPath]) navigateTo(window.location.pathname, false);
-            else if (pages['']) navigateTo('/', false);
+            if (pages[cleanedPath]) {
+                navigateTo(currentPath, false);
+            } else if (pages['']) {
+                navigateTo('/', false);
+            }
         }, 10);
 
         return () => clearTimeout(timer);
@@ -197,19 +224,19 @@ function App() {
         <div className="app-root">
             <div className="header gap-2">
                 <div className="flex items-center gap-2">
-                    <img src={logo} height="70%" />
-                    <HoverButton><Tally4 className="rotate-90 icon" /></HoverButton>
-                    <HoverButton><ArrowLeft className="icon" /></HoverButton>
-                    <HoverButton><ArrowRight className="icon" /></HoverButton>
+                    <img src={logo} height="70%"/>
+                    <HoverButton><Tally4 className="rotate-90 icon"/></HoverButton>
+                    <HoverButton><ArrowLeft className="icon"/></HoverButton>
+                    <HoverButton><ArrowRight className="icon"/></HoverButton>
 
                     <HoverButton className="flex items-center gap-2">
-                        <ProjectIcon />
+                        <ProjectIcon/>
                         Homepage
                     </HoverButton>
                 </div>
                 <div className="sidebar">
                     <HoverButton active title="Project" onClick={() => setShowExplorer(v => !v)}>
-                        <Folder className="icon" />
+                        <Folder className="icon"/>
                     </HoverButton>
                 </div>
 
@@ -223,8 +250,8 @@ function App() {
                         onStop={handleStop}
                     />
                     <div className="p-3"></div>
-                    <HoverButton><Search className="icon" /></HoverButton>
-                    <HoverButton><Settings className="icon" /></HoverButton>
+                    <HoverButton><Search className="icon"/></HoverButton>
+                    <HoverButton><Settings className="icon"/></HoverButton>
                 </div>
             </div>
             <BreadcrumbFooter
@@ -237,7 +264,7 @@ function App() {
                 {showExplorer && (
                     <div
                         className="explorer"
-                        style={{ width: explorerWidth }}
+                        style={{width: explorerWidth}}
                     >
                         <div className="explorer-content">
                             <FileExplorer
