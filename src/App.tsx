@@ -19,7 +19,7 @@ function App() {
         .map(p => p.meta?.runConfig)
         .filter((cfg): cfg is RunConfig => cfg !== undefined);
     const [currentPage, setCurrentPage] = useState<PageEntry | null>(null);
-    const [currentPath, setCurrentPath] = useState<PageEntry | null>(null);
+    const [, setCurrentPath] = useState<PageEntry | null>(null);
 
     // Tab system reference
     const tabSystemRef = useRef<TabSystemRef>(null);
@@ -151,68 +151,43 @@ function App() {
 
     // Lade initiale Seite beim Start
     useEffect(() => {
-        // Warte bis TabSystem gemounted ist
         const timer = setTimeout(() => {
-            const currentPath = window.location.pathname;
-            const cleanedPath = currentPath.replace(/^\/+/, '').replace(/\/+$/, '');
+            const stored = tabSystemRef?.current?.loadFromStorage();
+            console.log("stored",stored);
+            if (stored && stored.tabs.length > 0) {
+                console.log("stored",stored.tabs);
+                for (const savedTab of stored.tabs) {
+                    const cleanedPath = savedTab.path.replace(/^\/+/, '').replace(/\/+$/, '');
+                    const pageEntry = pages[cleanedPath];
+                    if (!pageEntry) continue;
 
-            // Lade gespeicherte Tabs aus sessionStorage
-            const stored = sessionStorage.getItem('tabs_state');
-            if (stored) {
-                try {
-                    const { tabs: savedTabs, activeTabId } = JSON.parse(stored);
-
-                    // Öffne alle gespeicherten Tabs
-                    for (const savedTab of savedTabs) {
-                        const pageEntry = pages[savedTab.id];
-                        if (pageEntry) {
-                            const tab: Tab = {
-                                id: savedTab.id,
-                                title: savedTab.title,
-                                path: savedTab.path,
-                                component: pageEntry.component,
-                                scrollPosition: savedTab.scrollPosition
-                            };
-                            tabSystemRef.current?.openTab(tab);
-                        }
-                    }
-
-                    // Wenn aktuelle Route einen Tab hat, aktiviere ihn
-                    const currentTab = savedTabs.find((t: any) => t.path === currentPath);
-                    if (currentTab) {
-                        tabSystemRef.current?.activateTabByPath(currentPath);
-                        const pageEntry = pages[currentTab.id];
-                        if (pageEntry) {
-                            setCurrentPage(pageEntry);
-                        }
-                    } else if (cleanedPath && pages[cleanedPath]) {
-                        // Route hat keinen gespeicherten Tab, öffne ihn
-                        navigateTo(currentPath, false);
-                    } else {
-                        // Aktiviere den zuletzt aktiven Tab
-                        const activeTab = savedTabs.find((t: any) => t.id === activeTabId);
-                        if (activeTab) {
-                            window.history.replaceState({}, '', activeTab.path);
-                            tabSystemRef.current?.activateTabByPath(activeTab.path);
-                            const pageEntry = pages[activeTab.id];
-                            if (pageEntry) {
-                                setCurrentPage(pageEntry);
-                            }
-                        }
-                    }
-
-                    return;
-                } catch (e) {
-                    console.warn('Failed to restore tabs:', e);
+                    const tab: Tab = {
+                        id: cleanedPath,
+                        title: savedTab.title,
+                        path: savedTab.path,
+                        component: pageEntry.component,
+                        scrollPosition: savedTab.scrollPosition
+                    };
+                    tabSystemRef.current?.openTab(tab);
                 }
+
+                // Aktiviere letzten aktiven Tab
+                const active = stored.tabs.find((t: { path: any; }) => t.path === stored.activeTabId)
+                    || stored.tabs.find((t: { path: string; }) => t.path === window.location.pathname);
+
+                if (active) {
+                    tabSystemRef.current?.activateTabByPath(active.path);
+                    const cleanedPath = active.path.replace(/^\/+/, '').replace(/\/+$/, '');
+                    setCurrentPage(pages[cleanedPath] || null);
+                }
+
+                return;
             }
 
             // Keine gespeicherten Tabs: öffne aktuelle Route oder Home
-            if (pages[cleanedPath]) {
-                navigateTo(currentPath, false);
-            } else if (pages['']) {
-                navigateTo('/', false);
-            }
+            const cleanedPath = window.location.pathname.replace(/^\/+/, '').replace(/\/+$/, '');
+            if (pages[cleanedPath]) navigateTo(window.location.pathname, false);
+            else if (pages['']) navigateTo('/', false);
         }, 10);
 
         return () => clearTimeout(timer);

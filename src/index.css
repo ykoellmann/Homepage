@@ -136,7 +136,6 @@ html, body, #root {
   flex: 1;
   background: #262626;
   overflow: auto;
-  padding: 16px;
   color: #c2c3c7;
 }
 

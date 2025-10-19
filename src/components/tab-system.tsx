@@ -31,6 +31,7 @@ export interface TabSystemRef {
     getActiveTab: () => Tab | null;
     activateTabByPath: (path: string) => void;
     getAllTabs: () => Tab[];
+    loadFromStorage: () => { tabs: any[]; activeTabId: string | null } | null;
 }
 
 interface TabSystemProps {
@@ -52,6 +53,7 @@ function saveToStorage(tabs: { id: string; title: string; path: string; scrollPo
 function loadFromStorage(): { tabs: any[]; activeTabId: string | null } | null {
     try {
         const stored = sessionStorage.getItem(STORAGE_KEY);
+        console.log("load", stored);
         if (stored) return JSON.parse(stored);
     } catch (e) {
         console.warn('Failed to load tabs from storage:', e);
@@ -79,13 +81,15 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({ onTabChange }, ref
     // Save to storage whenever layout changes
     useEffect(() => {
         if (layout.group) {
-            const simplifiedTabs = layout.group.tabs.map(t => ({
-                id: t.id,
-                title: t.title,
-                path: t.path,
-                scrollPosition: t.scrollPosition
-            }));
-            saveToStorage(simplifiedTabs, layout.group.activeTabId);
+            saveToStorage(
+                layout.group.tabs.map(t => ({
+                    id: t.path, // <-- path statt id
+                    title: t.title,
+                    path: t.path,
+                    scrollPosition: t.scrollPosition
+                })),
+                layout.group.activeTabId
+            );
         }
     }, [layout]);
 
@@ -237,7 +241,8 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({ onTabChange }, ref
         closeTab,
         getActiveTab,
         activateTabByPath,
-        getAllTabs
+        getAllTabs,
+        loadFromStorage
     }));
 
     function renderLayout(node: LayoutNode): React.ReactElement {
