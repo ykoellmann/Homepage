@@ -1,33 +1,67 @@
 import {useEffect, useState} from "react";
 
-const HISTORY_STATE_KEY = 'navigation_history';
-
 interface HistoryState {
-    index: number;
-    maxIndex: number;
+    navigationId: string;
 }
 
-function getHistoryState(): HistoryState {
-    // Check if current history state has our data
-    if (window.history.state && typeof window.history.state.index === 'number') {
-        return {
-            index: window.history.state.index,
-            maxIndex: window.history.state.maxIndex || window.history.state.index
-        };
-    }
+// Global state for history tracking
+const STORAGE_KEY = 'navigation_history_stack';
 
-    // Try to get from sessionStorage as fallback
-    const stored = sessionStorage.getItem(HISTORY_STATE_KEY);
-    if (stored) {
-        return JSON.parse(stored);
-    }
+let navigationCounter = 0;
+let historyStack: string[] = [];
+let currentIndex = 0;
+let initialized = false;
 
-    // Default state
-    return {index: 0, maxIndex: 0};
+function saveStack() {
+    try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+            stack: historyStack,
+            counter: navigationCounter
+        }));
+    } catch (e) {
+        console.warn('Failed to save history stack:', e);
+    }
 }
 
-function saveHistoryState(state: HistoryState) {
-    sessionStorage.setItem(HISTORY_STATE_KEY, JSON.stringify(state));
+function loadStack() {
+    try {
+        const stored = sessionStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            const data = JSON.parse(stored);
+            historyStack = data.stack || [];
+            navigationCounter = data.counter || 0;
+        }
+    } catch (e) {
+        console.warn('Failed to load history stack:', e);
+    }
+}
+
+function initializeHistory() {
+    if (initialized) return;
+    initialized = true;
+
+    // Load from storage first
+    loadStack();
+
+    if (!window.history.state?.navigationId) {
+        const initialId = `nav-${navigationCounter++}`;
+        window.history.replaceState({navigationId: initialId}, '', window.location.pathname);
+        historyStack = [initialId];
+        currentIndex = 0;
+        saveStack();
+    } else {
+        const currentId = window.history.state.navigationId;
+        const index = historyStack.indexOf(currentId);
+
+        if (index !== -1) {
+            currentIndex = index;
+        } else {
+            // Unknown navigation ID, rebuild stack from current position
+            historyStack = [currentId];
+            currentIndex = 0;
+            saveStack();
+        }
+    }
 }
 
 export function useHistoryStatus() {
@@ -35,28 +69,27 @@ export function useHistoryStatus() {
     const [canGoForward, setCanGoForward] = useState(false);
 
     const updateStatus = () => {
-        const state = getHistoryState();
-        setCanGoBack(state.index > 0);
-        setCanGoForward(state.index < state.maxIndex);
+        setCanGoBack(currentIndex > 0);
+        setCanGoForward(currentIndex < historyStack.length - 1);
     };
 
     useEffect(() => {
-        // Initialize history state if not present
-        const currentState = getHistoryState();
-        if (!window.history.state || typeof window.history.state.index !== 'number') {
-            window.history.replaceState(currentState, '', window.location.pathname);
-            saveHistoryState(currentState);
-        }
-
-        // Initial check
+        initializeHistory();
         updateStatus();
 
         // Listen for popstate events (browser back/forward)
         const handlePopState = () => {
+            const currentId = window.history.state?.navigationId;
+            if (currentId) {
+                const index = historyStack.indexOf(currentId);
+                if (index !== -1) {
+                    currentIndex = index;
+                }
+            }
             updateStatus();
         };
 
-        // Listen for pushstate/replacestate (custom event we'll dispatch)
+        // Listen for custom history change events
         const handleHistoryChange = () => {
             updateStatus();
         };
@@ -73,23 +106,26 @@ export function useHistoryStatus() {
     return {canGoBack, canGoForward};
 }
 
-// Helper function to push state with proper index tracking
+// Helper function to push state with proper tracking
 export function pushHistoryState(path: string) {
-    const currentState = getHistoryState();
-    const newState: HistoryState = {
-        index: currentState.index + 1,
-        maxIndex: currentState.index + 1
-    };
+    const navigationId = `nav-${navigationCounter++}`;
+    const newState: HistoryState = {navigationId};
+
+    // Remove any forward history when navigating to a new page
+    historyStack = historyStack.slice(0, currentIndex + 1);
+    historyStack.push(navigationId);
+    currentIndex = historyStack.length - 1;
 
     window.history.pushState(newState, '', path);
-    saveHistoryState(newState);
+    saveStack();
 
-    // Dispatch custom event to notify listeners
-    window.dispatchEvent(new Event('historychange'));
+    // Dispatch custom event asynchronously to avoid setState during render
+    queueMicrotask(() => {
+        window.dispatchEvent(new Event('historychange'));
+    });
 }
 
 // Helper function to handle popstate and update our tracking
 export function handlePopState() {
-    const state = getHistoryState();
-    saveHistoryState(state);
+    // This is now handled in the useEffect hook
 }

@@ -1,57 +1,54 @@
-import type {BasePageMeta, Searchable} from "../../lib/basePage.ts";
+import type {BasePageMeta} from "../../lib/basePage.ts";
 
-// Contact information ist durchsuchbar
-export interface ContactInfo extends Searchable {
-    _searchableId: string;
-    _searchWeight?: number;
-
-    type: 'email' | 'phone' | 'social' | 'website';
+export interface ContactMethod {
+    id: string;
+    icon: string;
     label: string;
     value: string;
-    url?: string;
-    icon?: string;
+    href: string;
+    color: string;
 }
 
-// Contact Page Meta - erweitert BasePageMeta
 export interface ContactPageMeta extends BasePageMeta {
-    // Durchsuchbare Kontakt-Infos
-    contactInfo?: ContactInfo[];
+    contactMethods: ContactMethod[];
 }
 
 export const contactPageMeta: ContactPageMeta = {
-    // BasePageMeta Pflichtfelder
     name: "Contact",
     slug: "contact",
-    description: "Kontaktiere mich",
-    keywords: ["Kontakt", "Email", "Social Media"],
+    description: "Lass uns in Kontakt treten",
+    keywords: ["Contact", "Email", "GitHub", "LinkedIn"],
     category: "Contact",
-    icon: "📧",
+    icon: "📬",
 
-    // Kontakt-Informationen (optional - können später hinzugefügt werden)
-    contactInfo: [
-        // Beispiele:
-        // {
-        //     _searchableId: 'contact-email',
-        //     _searchWeight: 10,
-        //     type: 'email',
-        //     label: 'Email',
-        //     value: 'deine-email@example.com',
-        //     url: 'mailto:deine-email@example.com',
-        //     icon: '📧',
-        // },
-        // {
-        //     _searchableId: 'contact-github',
-        //     _searchWeight: 8,
-        //     type: 'social',
-        //     label: 'GitHub',
-        //     value: 'github.com/username',
-        //     url: 'https://github.com/username',
-        //     icon: '💻',
-        // },
+    contactMethods: [
+        {
+            id: 'email',
+            icon: '📧',
+            label: 'Email',
+            value: 'ykoellmann@icloud.com',
+            href: 'mailto:ykoellmann@icloud.com',
+            color: 'blue',
+        },
+        {
+            id: 'github',
+            icon: '🐙',
+            label: 'GitHub',
+            value: '@ykoellmann',
+            href: 'https://github.com/ykoellmann',
+            color: 'gray',
+        },
+        {
+            id: 'linkedin',
+            icon: '💼',
+            label: 'LinkedIn',
+            value: 'Yannik Köllmann',
+            href: 'https://linkedin.com/in/yannikkoellmann',
+            color: 'indigo',
+        },
     ],
 };
 
-// Export for backward compatibility with existing runConfig usage
 export const runConfig = {
     name: contactPageMeta.name,
     slug: contactPageMeta.slug,

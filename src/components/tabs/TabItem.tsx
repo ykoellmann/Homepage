@@ -44,10 +44,7 @@ export function TabItem({
         onDrop();
     }
 
-    const baseClasses = "flex items-center gap-2 px-4 py-2 min-w-[120px] max-w-[200px] cursor-pointer border-r border-[#2b2b2b] select-none relative";
-    const activeClasses = isActive
-        ? "bg-[#2b2b2b] text-white"
-        : "bg-[#3c3f41] text-gray-400 hover:bg-[#4c4f51]";
+    const baseClasses = "flex items-center gap-2 px-4 py-2 min-w-[120px] max-w-[200px] cursor-pointer border-r border-[#2b2b2b] select-none relative bg-[#1e1f22] text-white hover:bg-[#2b2d30]";
 
     return (
         <div className="relative group">
@@ -62,16 +59,19 @@ export function TabItem({
                 onDrop={handleDrop}
                 onClick={onClick}
                 onMouseDown={handleMouseDown}
-                className={`${baseClasses} ${activeClasses}`}
+                className={baseClasses}
             >
                 <span className="truncate flex-1 text-sm">{tab.title}</span>
                 <button
                     onClick={onClose}
-                    className="opacity-0 group-hover:opacity-100 hover:bg-[#515456] rounded p-0.5 transition-opacity"
+                    className="opacity-0 group-hover:opacity-100 hover:bg-[#3a3d41] rounded p-0.5 transition-opacity"
                     onMouseDown={(e) => e.stopPropagation()}
                 >
                     <X size={14}/>
                 </button>
+                {isActive && (
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#4a9eff] rounded-t-sm"/>
+                )}
             </div>
         </div>
     );

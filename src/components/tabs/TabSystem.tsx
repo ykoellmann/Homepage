@@ -79,13 +79,17 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
             return newLayout;
         });
 
-        onTabChange?.(tab);
+        // Call onTabChange after state update
+        queueMicrotask(() => {
+            onTabChange?.(tab);
+        });
     }
 
     function closeTab(tabId: string, groupId: string = 'group-1') {
+        const result = { newActiveTab: null as Tab | null };
+
         setLayout(prev => {
             const newLayout = {...prev};
-            let newActiveTab: Tab | null = null;
 
             updateGroup(newLayout, groupId, (group) => {
                 const index = group.tabs.findIndex(t => t.id === tabId);
@@ -99,36 +103,49 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
                     });
 
                     if (group.activeTabId === tabId) {
-                        newActiveTab = group.tabs[Math.max(0, index - 1)] || null;
-                        group.activeTabId = newActiveTab?.id || null;
+                        result.newActiveTab = group.tabs[Math.max(0, index - 1)] || null;
+                        group.activeTabId = result.newActiveTab?.id || null;
 
-                        if (newActiveTab?.path) {
-                            pushHistoryState(newActiveTab.path);
+                        if (result.newActiveTab?.path) {
+                            pushHistoryState(result.newActiveTab.path);
                         }
                     }
                 }
             });
 
-            onTabChange?.(newActiveTab);
             return newLayout;
+        });
+
+        // Call onTabChange after state update
+        queueMicrotask(() => {
+            onTabChange?.(result.newActiveTab);
         });
     }
 
     function setActiveTab(tabId: string, groupId: string = 'group-1', updateHistory: boolean = false) {
+        const result = { changedTab: null as Tab | null };
+
         setLayout(prev => {
             const newLayout = {...prev};
             updateGroup(newLayout, groupId, (group) => {
                 group.activeTabId = tabId;
                 const tab = group.tabs.find(t => t.id === tabId);
                 if (tab) {
+                    result.changedTab = tab;
                     if (updateHistory && tab.path && window.location.pathname !== tab.path) {
                         pushHistoryState(tab.path);
                     }
-                    onTabChange?.(tab);
                 }
             });
             return newLayout;
         });
+
+        // Call onTabChange after state update
+        if (result.changedTab) {
+            queueMicrotask(() => {
+                onTabChange?.(result.changedTab);
+            });
+        }
     }
 
     function getActiveTab(): Tab | null {
@@ -162,7 +179,7 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
 
     function moveTab(tab: Tab, fromGroupId: string, toGroupId: string, position: number) {
         const tabToMove: Tab = {...tab};
-        let wasActiveInFromGroup = false;
+        const result = { wasActiveInFromGroup: false, newActiveTab: null as Tab | null };
 
         setLayout(prev => {
             const newLayout = {...prev};
@@ -170,16 +187,12 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
             updateGroup(newLayout, fromGroupId, (group) => {
                 const index = group.tabs.findIndex(t => t.id === tabToMove.id);
                 if (index >= 0) {
-                    wasActiveInFromGroup = group.activeTabId === tabToMove.id;
+                    result.wasActiveInFromGroup = group.activeTabId === tabToMove.id;
                     group.tabs.splice(index, 1);
 
-                    if (wasActiveInFromGroup && fromGroupId !== toGroupId) {
-                        const newActiveTab = group.tabs[0] || null;
-                        group.activeTabId = newActiveTab?.id || null;
-
-                        if (newActiveTab) {
-                            onTabChange?.(newActiveTab);
-                        }
+                    if (result.wasActiveInFromGroup && fromGroupId !== toGroupId) {
+                        result.newActiveTab = group.tabs[0] || null;
+                        group.activeTabId = result.newActiveTab?.id || null;
                     }
                 }
             });
@@ -187,7 +200,7 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
             updateGroup(newLayout, toGroupId, (group) => {
                 group.tabs.splice(position, 0, tabToMove);
 
-                if (fromGroupId === toGroupId && wasActiveInFromGroup) {
+                if (fromGroupId === toGroupId && result.wasActiveInFromGroup) {
                     group.activeTabId = tabToMove.id;
                 }
             });
@@ -195,8 +208,15 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
             return newLayout;
         });
 
-        if (wasActiveInFromGroup && fromGroupId === toGroupId) {
+        if (result.wasActiveInFromGroup && fromGroupId === toGroupId) {
             pushHistoryState(tabToMove.path);
+        }
+
+        // Call onTabChange after state update
+        if (result.newActiveTab) {
+            queueMicrotask(() => {
+                onTabChange?.(result.newActiveTab);
+            });
         }
     }
 

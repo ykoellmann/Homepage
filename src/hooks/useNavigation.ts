@@ -67,7 +67,7 @@ export function useNavigation({
             .join(' ');
 
         if (entry.component) {
-            return `${formatted}.tsx`;
+            return `${formatted}`;
         }
 
         return formatted;
