@@ -1,6 +1,7 @@
 import {useState, useEffect, useImperativeHandle, forwardRef} from 'react';
 import {type Tab, type LayoutNode, type TabGroup as TabGroupType} from './types';
 import {TabGroup} from "./TabGroup.tsx";
+import {pushHistoryState} from '../../hooks/useHistoryStatus';
 
 export type {Tab, TabGroup as TabGroupType} from './types';
 
@@ -102,7 +103,7 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
                         group.activeTabId = newActiveTab?.id || null;
 
                         if (newActiveTab?.path) {
-                            window.history.pushState({}, '', newActiveTab.path);
+                            pushHistoryState(newActiveTab.path);
                         }
                     }
                 }
@@ -121,7 +122,7 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
                 const tab = group.tabs.find(t => t.id === tabId);
                 if (tab) {
                     if (updateHistory && tab.path && window.location.pathname !== tab.path) {
-                        window.history.pushState({}, '', tab.path);
+                        pushHistoryState(tab.path);
                     }
                     onTabChange?.(tab);
                 }
@@ -195,7 +196,7 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
         });
 
         if (wasActiveInFromGroup && fromGroupId === toGroupId) {
-            window.history.pushState({}, '', tabToMove.path);
+            pushHistoryState(tabToMove.path);
         }
     }
 

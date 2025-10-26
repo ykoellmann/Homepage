@@ -9,6 +9,7 @@ import {buildFileTreeFromGlob, type PageEntry} from './lib/buildFileTree';
 import {type RunConfig} from './components/run-controls/RunControls.tsx';
 import {useNavigation} from './hooks/useNavigation';
 import {useTabPersistence} from './hooks/useTabPersistance.ts';
+import {handlePopState as syncHistoryState} from './hooks/useHistoryStatus';
 import {searchService} from './lib/searchService.ts';
 import {aboutPageMeta} from './pages/about/meta.ts';
 import {cryptbornePageMeta} from './pages/src/cryptborne/meta.ts';
@@ -55,6 +56,9 @@ function App() {
     // Browser back/forward navigation
     useEffect(() => {
         const onPopState = () => {
+            // Sync our history tracking state
+            syncHistoryState();
+
             const newPath = window.location.pathname;
             setRoutePath(newPath);
 

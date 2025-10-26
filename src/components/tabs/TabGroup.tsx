@@ -6,7 +6,7 @@ interface TabGroupProps {
     group: TabGroupType;
     componentMap: Map<string, React.ComponentType>;
     onClose: (tabId: string, groupId: string) => void;
-    onSetActive: (tabId: string, groupId: string) => void;
+    onSetActive: (tabId: string, groupId: string, updateHistory?: boolean) => void;
     onDragStart: (tab: Tab) => void;
     onDragEnd: () => void;
     onDrop: (position: number) => void;
@@ -29,10 +29,8 @@ export function TabGroup({
     const ActiveComponent = activeTab ? componentMap.get(activeTab.id) : null;
 
     function handleTabClick(tab: Tab) {
-        onSetActive(tab.id, group.id);
-        if (tab.path && window.location.pathname !== tab.path) {
-            window.history.pushState({}, '', tab.path);
-        }
+        // When user clicks a tab, we should update history
+        onSetActive(tab.id, group.id, true);
     }
 
     function handleTabClose(tab: Tab, e: React.MouseEvent) {

@@ -1,7 +1,7 @@
 import {type RefObject} from 'react';
 import {type TabSystemRef, type Tab} from '../components/tabs/TabSystem.tsx';
 import {type PageEntry} from '../lib/buildFileTree';
-import { useNavigate } from 'react-router-dom';
+import {pushHistoryState} from './useHistoryStatus';
 
 interface UseNavigationProps {
     pages: Record<string, PageEntry>;
@@ -16,14 +16,15 @@ export function useNavigation({
                                   setCurrentPage,
                                   setRoutePath
                               }: UseNavigationProps) {
-    const navigate = useNavigate();
 
 
     function navigateTo(path: string, updateHistory: boolean = true) {
         const fullPath = normalizePath(path);
 
         if (updateHistory && window.location.pathname !== fullPath) {
-            navigate(fullPath);
+            // Use our custom pushHistoryState instead of navigate
+            // This way we control the history state tracking
+            pushHistoryState(fullPath);
             setRoutePath(fullPath);
         } else if (!updateHistory) {
             setRoutePath(fullPath);
