@@ -7,6 +7,7 @@ import logo from '../../assets/logo.svg';
 import {type RunConfig, RunControls} from "../run-controls/RunControls.tsx";
 import {useHistoryStatus} from "../../hooks/useHistoryStatus.ts";
 import {SearchEverywhere} from "../SearchEverywhere.tsx";
+import {SettingsDialog} from "../SettingsDialog.tsx";
 
 interface HeaderProps {
     runConfigs: RunConfig[];
@@ -25,6 +26,7 @@ export function Header({
                        }: HeaderProps) {
     const {canGoBack, canGoForward} = useHistoryStatus();
     const [searchOpen, setSearchOpen] = React.useState(false);
+    const [settingsOpen, setSettingsOpen] = React.useState(false);
 
     // Global keyboard shortcut for search
     React.useEffect(() => {
@@ -73,10 +75,11 @@ export function Header({
                 <HoverButton onClick={() => setSearchOpen(true)} title="Search Everywhere (⇧⌘A)">
                     <Search className="icon"/>
                 </HoverButton>
-                <HoverButton>
+                <HoverButton onClick={() => setSettingsOpen(true)} title="Settings">
                     <Settings className="icon"/>
                 </HoverButton>
                 <SearchEverywhere isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+                <SettingsDialog isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
             </div>
         </div>
     );

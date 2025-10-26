@@ -1,0 +1,228 @@
+{
+  "cryptborne": {
+    "name": "Cryptborne",
+    "description": "Top-down Dungeon Crawler im mittelalterlichen Fantasy-Setting - Kämpfe dich durch prozedural generierte Dungeons mit einzigartigen Waffen",
+    "keywords": ["Unity", "Dungeon Crawler", "Roguelike", "Top-Down", "Fantasy", "Procedural Generation", "Game Development"],
+    "about": {
+      "title": "📖 Über das Spiel",
+      "paragraph1": "Cryptborne ist ein Top-Down Dungeon Crawler im mittelalterlichen Fantasy-Setting, entwickelt mit Unity 6. Erkunde prozedural generierte Dungeons voller Feinde und Herausforderungen.",
+      "paragraph2": "Kämpfe dich durch Wellen von Gegnern mit verschiedenen Waffen, die jeweils einzigartige Schussmuster und Spielstile bieten. Das Spiel bietet flüssige Charakterbewegung, responsive Combat-Mechaniken und modulare Dungeon-Layouts, die sicherstellen, dass jeder Durchlauf anders ist."
+    },
+    "features": {
+      "title": "✨ Features",
+      "proceduralDungeons": {
+        "title": "Prozedural generierte Dungeons",
+        "description": "Jedes Spiel bietet neue, zufällig generierte Dungeon-Layouts für endlosen Wiederspielwert"
+      },
+      "weaponVariety": {
+        "title": "Vielfältige Waffensysteme",
+        "description": "Verschiedene Waffen mit einzigartigen Schussmustern und Spielstilen"
+      },
+      "enemyAi": {
+        "title": "Dynamische Gegner-KI",
+        "description": "Intelligente Feinde mit anpassungsfähigem Verhalten und verschiedenen Angriffsmustern"
+      },
+      "inventory": {
+        "title": "Waffen-Hotbar & Inventar",
+        "description": "Intuitives Inventarsystem mit schnellem Waffenwechsel über Hotbar"
+      },
+      "smoothMovement": {
+        "title": "Flüssige Charaktersteuerung",
+        "description": "Responsive Bewegungsmechaniken und präzises Combat-System"
+      },
+      "medievalAesthetic": {
+        "title": "Medieval Fantasy Ästhetik",
+        "description": "Kohärente visuelle Gestaltung mit KayKit Assets im Low-Poly-Stil"
+      }
+    },
+    "gameplayHighlights": {
+      "title": "🎮 Gameplay Highlights",
+      "modularDungeons": {
+        "title": "Modulare Dungeons",
+        "description": "Jeder Dungeon wird prozedural aus modularen Räumen generiert. Entdecke neue Layouts, Fallen und Geheimnisse bei jedem Durchlauf."
+      },
+      "weaponVariety": {
+        "title": "Waffenvielfalt",
+        "description": "Verschiedene Waffen mit einzigartigen Eigenschaften - von schnellen Dolchen bis zu mächtigen Bögen mit speziellen Schussmustern."
+      },
+      "combatSystem": {
+        "title": "Combat System",
+        "description": "Präzise Steuerung trifft auf dynamisches Combat. Weiche Angriffen aus, positioniere dich clever und nutze die Stärken deiner Waffen."
+      },
+      "lowPolyAesthetic": {
+        "title": "Low-Poly Aesthetic",
+        "description": "Stilvolle mittelalterliche Fantasy-Welt im charmanten Low-Poly-Look mit kohärentem Art-Style durch KayKit Assets."
+      }
+    },
+    "techStack": {
+      "title": "🛠️ Tech Stack",
+      "unity6": "Unity 6",
+      "csharp": "C#",
+      "kaykit": "KayKit Assets",
+      "proceduralGen": "Procedural Generation"
+    }
+  },
+  "sattrack": {
+    "name": "SatTrak",
+    "description": "Interaktive 3D-Satelliten-Visualisierung mit Unity und Cesium - Verfolge über 5000 Satelliten in Echtzeit auf einem virtuellen Globus",
+    "keywords": ["Unity", "Cesium", "Satelliten", "3D", "Visualisierung", "Echtzeit", "GPS", "Orbit", "Space"],
+    "about": {
+      "title": "📝 Über das Projekt",
+      "paragraph1": "SatTrak ist ein interaktives 3D-Satelliten-Visualisierungsprojekt, das im Rahmen eines Universitätsprojekts an der FSU Jena entwickelt wurde. Mit Unity und Cesium for Unity ermöglicht es die Echtzeit-Verfolgung von über 5000 aktiven Satelliten auf einem virtuellen Globus.",
+      "paragraph2": "Das Projekt nutzt TLE-Daten von CelesTrak und den SGP4-Algorithmus zur präzisen Orbit-Berechnung. Benutzer können zwischen einer Weltraumansicht und einer First-Person-Erdansicht wechseln, Satelliten-Orbits visualisieren, und die Satellitendichte über eine GPU-basierte Heatmap darstellen.",
+      "badges": {
+        "satellites": "5000+ Satelliten",
+        "realtime": "Echtzeit-Tracking",
+        "unity": "Unity 2022 LTS",
+        "university": "Universitätsprojekt"
+      }
+    },
+    "features": {
+      "title": "✨ Features",
+      "realtimeTracking": {
+        "title": "Echtzeit-Satellitenverfolgung",
+        "description": "Visualisierung von über 5000 aktiven Satelliten mit TLE-Daten von Celestrak"
+      },
+      "interactiveCamera": {
+        "title": "Interaktive Kamerasteuerung",
+        "description": "Nahtloser Übergang zwischen Weltraum- und Erdansicht mit Zoom-Slider"
+      },
+      "famousSatellites": {
+        "title": "Famous Satellites",
+        "description": "Spezielle 3D-Modelle für berühmte Satelliten wie ISS, Hubble Teleskop"
+      },
+      "orbitVisualization": {
+        "title": "Orbit-Visualisierung",
+        "description": "Darstellung von Satelliten-Orbits mit verschiedenen Farben (bis zu 9 gleichzeitig)"
+      },
+      "heatmap": {
+        "title": "Heatmap-Visualisierung",
+        "description": "GPU-basierte Darstellung der Satellitendichte auf der Erdoberfläche"
+      },
+      "dayNight": {
+        "title": "Tag/Nacht-System",
+        "description": "Realistische Beleuchtung mit dynamischem Tag/Nacht-Zyklus"
+      },
+      "locationSearch": {
+        "title": "Ortssuche",
+        "description": "Schnelle Navigation zu über 1000 Städten weltweit mit GeoNames-Datenbank"
+      },
+      "timeControl": {
+        "title": "Zeitsteuerung",
+        "description": "Zeitraffer (0x - 1000x) mit Zeit-Slider und Zoom-Funktion"
+      },
+      "performance": {
+        "title": "Performance-optimiert",
+        "description": "GPU-Instancing und Unity Job-System für flüssige Darstellung"
+      }
+    },
+    "team": {
+      "title": "👥 Team",
+      "description": "Entwickelt von Jan Vogt, Yannik Köllmann, Leon Erdhütter und Niklas Maximilian Becker-Klöster",
+      "university": "FSU Jena • Universitätsprojekt"
+    },
+    "techStack": {
+      "title": "🛠️ Tech Stack"
+    }
+  },
+  "ctexecutor": {
+    "name": "cteXecutor",
+    "description": "Execute and manage Common Table Expressions (CTEs) with ease in DataGrip and IntelliJ-based IDEs",
+    "keywords": ["CTE", "SQL", "DataGrip", "IntelliJ", "Plugin", "Database", "Query", "Productivity"],
+    "features": {
+      "cteManagement": {
+        "title": "🎯 CTE Management",
+        "cteDetection": {
+          "title": "Automatische CTE-Erkennung",
+          "description": "Erkennt alle CTEs in deiner SQL WITH-Klausel automatisch und zeigt sie in einem interaktiven Popup an."
+        },
+        "visualHighlighting": {
+          "title": "Visuelle Hervorhebung",
+          "description": "Hebt ausgewählte CTEs im Editor visuell hervor für bessere Übersichtlichkeit beim Arbeiten."
+        },
+        "smartExecution": {
+          "title": "Intelligente Ausführung",
+          "description": "Führt die gewählte SQL-Query direkt in der Datenbank-Konsole aus mit automatischer Bereinigung."
+        },
+        "copyClipboard": {
+          "title": "In Zwischenablage kopieren",
+          "description": "Kopiere jede CTE-Query schnell in die Zwischenablage zur Verwendung an anderer Stelle."
+        }
+      },
+      "executeFromHere": {
+        "title": "🚀 Execute from Here",
+        "badge": "(v2.0.0)",
+        "executeFromHere": {
+          "title": "Execute from Here (NEU!)",
+          "description": "Führe SQL von überall aus - nicht nur CTEs! Funktioniert mit jedem Subselect in deinem SQL."
+        },
+        "dependencyResolution": {
+          "title": "Automatische Abhängigkeitsauflösung",
+          "description": "Inkludiert automatisch alle benötigten CTEs - erkennt Abhängigkeiten in CTEs, Subqueries und SELECT-Statements."
+        },
+        "smartDetection": {
+          "title": "Intelligente Erkennung",
+          "description": "Findet Abhängigkeiten automatisch in CTEs, Subqueries und finalen SELECT-Statements."
+        }
+      },
+      "productivity": {
+        "title": "⚡ Developer Productivity",
+        "keyboardShortcuts": {
+          "title": "Keyboard Shortcuts",
+          "description": "Blitzschneller Workflow mit praktischen Tastenkombinationen für alle wichtigen Funktionen."
+        },
+        "minimalUi": {
+          "title": "Minimales UI",
+          "description": "Bleibt aus dem Weg - stört nicht beim Arbeiten und integriert sich nahtlos in deine IDE."
+        },
+        "autoCleanup": {
+          "title": "Automatische Bereinigung",
+          "description": "Eingefügtes SQL wird nach der Ausführung automatisch entfernt - kein manuelles Aufräumen nötig."
+        },
+        "lightweight": {
+          "title": "Leichtgewichtig",
+          "description": "Keine Performance-Einbußen - das Plugin läuft effizient im Hintergrund ohne die IDE zu verlangsamen."
+        }
+      }
+    },
+    "shortcuts": {
+      "title": "⌨️ Keyboard Shortcuts",
+      "runCtQuery": {
+        "action": "Run CT-Query",
+        "keys": "Ctrl+# → Space",
+        "description": "CTE auswählen und ausführen"
+      },
+      "executeFromHere": {
+        "action": "Execute from Here",
+        "keys": "Ctrl+# → Enter",
+        "description": "Von aktueller Position aus mit Abhängigkeiten ausführen"
+      },
+      "copySql": {
+        "action": "Copy CT-Query SQL",
+        "keys": "Ctrl+# → C",
+        "description": "SQL in Zwischenablage kopieren"
+      },
+      "editAndRun": {
+        "action": "Edit and Run SQL",
+        "keys": "Ctrl+# → W",
+        "description": "Query bearbeiten und ausführen (z.B. WHERE-Klauseln hinzufügen)"
+      }
+    },
+    "installation": {
+      "title": "📦 Installation",
+      "step1": "Öffne IntelliJ IDEA / DataGrip",
+      "step2": "Gehe zu Settings → Plugins → Marketplace",
+      "step3": "Suche nach \"cteXecutor\"",
+      "step4": "Klicke auf Install",
+      "step5": "Starte deine IDE neu"
+    },
+    "support": {
+      "title": "❤️ Support",
+      "intro": "Wenn dir dieses Plugin hilft, freue ich mich über:",
+      "githubStar": "Einen Stern auf GitHub",
+      "marketplaceReview": "Eine Review im JetBrains Marketplace",
+      "bugReports": "Bug-Reports zur Verbesserung",
+      "featureIdeas": "Ideen für neue Features"
+    }
+  }
+}

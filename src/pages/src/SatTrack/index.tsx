@@ -1,62 +1,63 @@
-import { satTrackPageMeta } from "./meta.ts";
+import { useTranslation } from 'react-i18next';
+import { getSatTrackMeta } from "../../../lib/i18nMetaHelpers.ts";
 import { ProjectHero } from "../../../components/layout/ProjectHero.tsx";
 import { FeaturesSection } from "../../../components/layout/FeaturesSection.tsx";
 import { TechStackGrid } from "../../../components/layout/TechStackGrid.tsx";
 import { InfoSection } from "../../../components/layout/InfoSection.tsx";
 
 export default function SatTrackPage() {
+    const { t } = useTranslation();
+    const meta = getSatTrackMeta(t);
+
     return (
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
             {/* Hero Section */}
             <ProjectHero
-                name={satTrackPageMeta.name}
-                icon={satTrackPageMeta.icon}
-                description={satTrackPageMeta.description}
-                githubUrl={satTrackPageMeta.debugUrl || undefined}
+                name={meta.name}
+                icon={meta.icon}
+                description={meta.description}
+                githubUrl={meta.debugUrl}
             />
 
             {/* Features */}
             <FeaturesSection
-                title="✨ Features"
-                features={satTrackPageMeta.features}
+                title={t('projects:sattrack.features.title')}
+                features={meta.features}
                 columns={{ default: 'grid-cols-1', md: 'md:grid-cols-2', xl: 'xl:grid-cols-3' }}
             />
 
             {/* Tech Stack */}
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    🛠️ Tech Stack
+                    {t('projects:sattrack.techStack.title')}
                 </h2>
                 <TechStackGrid
-                    items={satTrackPageMeta.techStack}
+                    items={meta.techStack}
                     columns={{ default: 'grid-cols-2', md: 'md:grid-cols-3', lg: 'lg:grid-cols-4' }}
                     hoverColor="blue"
                 />
             </section>
 
             {/* Project Info */}
-            <InfoSection title="📝 Über das Projekt" gradient="blue">
+            <InfoSection title={t('projects:sattrack.about.title')} gradient="blue">
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    SatTrak ist ein interaktives 3D-Satelliten-Visualisierungsprojekt, das im Rahmen eines Universitätsprojekts an der FSU Jena entwickelt wurde.
-                    Mit Unity und Cesium for Unity ermöglicht es die Echtzeit-Verfolgung von über 5000 aktiven Satelliten auf einem virtuellen Globus.
+                    {t('projects:sattrack.about.paragraph1')}
                 </p>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    Das Projekt nutzt TLE-Daten von CelesTrak und den SGP4-Algorithmus zur präzisen Orbit-Berechnung.
-                    Benutzer können zwischen einer Weltraumansicht und einer First-Person-Erdansicht wechseln, Satelliten-Orbits visualisieren,
-                    und die Satellitendichte über eine GPU-basierte Heatmap darstellen.
+                    {t('projects:sattrack.about.paragraph2')}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-4">
                     <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
-                        5000+ Satelliten
+                        {t('projects:sattrack.about.badges.satellites')}
                     </span>
                     <span className="px-3 py-1 bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 rounded-full text-sm font-medium">
-                        Echtzeit-Tracking
+                        {t('projects:sattrack.about.badges.realtime')}
                     </span>
                     <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium">
-                        Unity 2022 LTS
+                        {t('projects:sattrack.about.badges.unity')}
                     </span>
                     <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 rounded-full text-sm font-medium">
-                        Universitätsprojekt
+                        {t('projects:sattrack.about.badges.university')}
                     </span>
                 </div>
             </InfoSection>
@@ -64,15 +65,14 @@ export default function SatTrackPage() {
             {/* Team */}
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    👥 Team
+                    {t('projects:sattrack.team.title')}
                 </h2>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
                     <p className="text-gray-700 dark:text-gray-300">
-                        Entwickelt von <span className="font-semibold">Jan Vogt</span>, <span className="font-semibold">Yannik Köllmann</span>,
-                        <span className="font-semibold"> Leon Erdhütter</span> und <span className="font-semibold">Niklas Maximilian Becker-Klöster</span>
+                        {t('projects:sattrack.team.description')}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                        FSU Jena • Universitätsprojekt
+                        {t('projects:sattrack.team.university')}
                     </p>
                 </div>
             </section>

@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "about": "About Me",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "sections": {
+    "features": "Features",
+    "techStack": "Tech Stack",
+    "about": "About the Project",
+    "aboutGame": "About the Game",
+    "gameplayHighlights": "Gameplay Highlights",
+    "team": "Team",
+    "installation": "Installation",
+    "support": "Support",
+    "keyboardShortcuts": "Keyboard Shortcuts"
+  },
+  "buttons": {
+    "githubRepository": "GitHub Repository",
+    "github": "GitHub",
+    "marketplace": "JetBrains Marketplace"
+  },
+  "languages": {
+    "de": "Deutsch",
+    "en": "English"
+  }
+}

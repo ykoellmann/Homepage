@@ -1,0 +1,228 @@
+{
+  "cryptborne": {
+    "name": "Cryptborne",
+    "description": "Top-down dungeon crawler in a medieval fantasy setting - Fight your way through procedurally generated dungeons with unique weapons",
+    "keywords": ["Unity", "Dungeon Crawler", "Roguelike", "Top-Down", "Fantasy", "Procedural Generation", "Game Development"],
+    "about": {
+      "title": "📖 About the Game",
+      "paragraph1": "Cryptborne is a top-down dungeon crawler set in a medieval fantasy world, developed with Unity 6. Explore procedurally generated dungeons full of enemies and challenges.",
+      "paragraph2": "Fight your way through waves of enemies with different weapons, each offering unique firing patterns and playstyles. The game features fluid character movement, responsive combat mechanics, and modular dungeon layouts that ensure every playthrough is different."
+    },
+    "features": {
+      "title": "✨ Features",
+      "proceduralDungeons": {
+        "title": "Procedurally Generated Dungeons",
+        "description": "Each game offers new, randomly generated dungeon layouts for endless replayability"
+      },
+      "weaponVariety": {
+        "title": "Diverse Weapon Systems",
+        "description": "Various weapons with unique firing patterns and playstyles"
+      },
+      "enemyAi": {
+        "title": "Dynamic Enemy AI",
+        "description": "Intelligent enemies with adaptive behavior and different attack patterns"
+      },
+      "inventory": {
+        "title": "Weapon Hotbar & Inventory",
+        "description": "Intuitive inventory system with quick weapon switching via hotbar"
+      },
+      "smoothMovement": {
+        "title": "Fluid Character Control",
+        "description": "Responsive movement mechanics and precise combat system"
+      },
+      "medievalAesthetic": {
+        "title": "Medieval Fantasy Aesthetic",
+        "description": "Coherent visual design with KayKit Assets in charming low-poly style"
+      }
+    },
+    "gameplayHighlights": {
+      "title": "🎮 Gameplay Highlights",
+      "modularDungeons": {
+        "title": "Modular Dungeons",
+        "description": "Each dungeon is procedurally generated from modular rooms. Discover new layouts, traps, and secrets with every playthrough."
+      },
+      "weaponVariety": {
+        "title": "Weapon Variety",
+        "description": "Different weapons with unique characteristics - from fast daggers to powerful bows with special firing patterns."
+      },
+      "combatSystem": {
+        "title": "Combat System",
+        "description": "Precise control meets dynamic combat. Dodge attacks, position yourself cleverly, and use your weapons' strengths."
+      },
+      "lowPolyAesthetic": {
+        "title": "Low-Poly Aesthetic",
+        "description": "Stylish medieval fantasy world in charming low-poly look with coherent art style through KayKit Assets."
+      }
+    },
+    "techStack": {
+      "title": "🛠️ Tech Stack",
+      "unity6": "Unity 6",
+      "csharp": "C#",
+      "kaykit": "KayKit Assets",
+      "proceduralGen": "Procedural Generation"
+    }
+  },
+  "sattrack": {
+    "name": "SatTrak",
+    "description": "Interactive 3D satellite visualization with Unity and Cesium - Track over 5000 satellites in real-time on a virtual globe",
+    "keywords": ["Unity", "Cesium", "Satellites", "3D", "Visualization", "Real-time", "GPS", "Orbit", "Space"],
+    "about": {
+      "title": "📝 About the Project",
+      "paragraph1": "SatTrak is an interactive 3D satellite visualization project developed as part of a university project at FSU Jena. With Unity and Cesium for Unity, it enables real-time tracking of over 5000 active satellites on a virtual globe.",
+      "paragraph2": "The project uses TLE data from CelesTrak and the SGP4 algorithm for precise orbit calculation. Users can switch between a space view and a first-person Earth view, visualize satellite orbits, and display satellite density through a GPU-based heatmap.",
+      "badges": {
+        "satellites": "5000+ Satellites",
+        "realtime": "Real-time Tracking",
+        "unity": "Unity 2022 LTS",
+        "university": "University Project"
+      }
+    },
+    "features": {
+      "title": "✨ Features",
+      "realtimeTracking": {
+        "title": "Real-time Satellite Tracking",
+        "description": "Visualization of over 5000 active satellites with TLE data from Celestrak"
+      },
+      "interactiveCamera": {
+        "title": "Interactive Camera Control",
+        "description": "Seamless transition between space and Earth view with zoom slider"
+      },
+      "famousSatellites": {
+        "title": "Famous Satellites",
+        "description": "Special 3D models for famous satellites like ISS, Hubble Telescope"
+      },
+      "orbitVisualization": {
+        "title": "Orbit Visualization",
+        "description": "Display of satellite orbits with different colors (up to 9 simultaneously)"
+      },
+      "heatmap": {
+        "title": "Heatmap Visualization",
+        "description": "GPU-based display of satellite density on Earth's surface"
+      },
+      "dayNight": {
+        "title": "Day/Night System",
+        "description": "Realistic lighting with dynamic day/night cycle"
+      },
+      "locationSearch": {
+        "title": "Location Search",
+        "description": "Quick navigation to over 1000 cities worldwide with GeoNames database"
+      },
+      "timeControl": {
+        "title": "Time Control",
+        "description": "Time-lapse (0x - 1000x) with time slider and zoom function"
+      },
+      "performance": {
+        "title": "Performance-optimized",
+        "description": "GPU instancing and Unity Job System for smooth rendering"
+      }
+    },
+    "team": {
+      "title": "👥 Team",
+      "description": "Developed by Jan Vogt, Yannik Köllmann, Leon Erdhütter and Niklas Maximilian Becker-Klöster",
+      "university": "FSU Jena • University Project"
+    },
+    "techStack": {
+      "title": "🛠️ Tech Stack"
+    }
+  },
+  "ctexecutor": {
+    "name": "cteXecutor",
+    "description": "Execute and manage Common Table Expressions (CTEs) with ease in DataGrip and IntelliJ-based IDEs",
+    "keywords": ["CTE", "SQL", "DataGrip", "IntelliJ", "Plugin", "Database", "Query", "Productivity"],
+    "features": {
+      "cteManagement": {
+        "title": "🎯 CTE Management",
+        "cteDetection": {
+          "title": "Automatic CTE Detection",
+          "description": "Automatically detects all CTEs in your SQL WITH clause and displays them in an interactive popup."
+        },
+        "visualHighlighting": {
+          "title": "Visual Highlighting",
+          "description": "Visually highlights selected CTEs in the editor for better overview while working."
+        },
+        "smartExecution": {
+          "title": "Smart Execution",
+          "description": "Executes the selected SQL query directly in the database console with automatic cleanup."
+        },
+        "copyClipboard": {
+          "title": "Copy to Clipboard",
+          "description": "Quickly copy any CTE query to the clipboard for use elsewhere."
+        }
+      },
+      "executeFromHere": {
+        "title": "🚀 Execute from Here",
+        "badge": "(v2.0.0)",
+        "executeFromHere": {
+          "title": "Execute from Here (NEW!)",
+          "description": "Execute SQL from anywhere - not just CTEs! Works with any subselect in your SQL."
+        },
+        "dependencyResolution": {
+          "title": "Automatic Dependency Resolution",
+          "description": "Automatically includes all required CTEs - detects dependencies in CTEs, subqueries, and SELECT statements."
+        },
+        "smartDetection": {
+          "title": "Smart Detection",
+          "description": "Automatically finds dependencies in CTEs, subqueries, and final SELECT statements."
+        }
+      },
+      "productivity": {
+        "title": "⚡ Developer Productivity",
+        "keyboardShortcuts": {
+          "title": "Keyboard Shortcuts",
+          "description": "Lightning-fast workflow with convenient keyboard shortcuts for all important functions."
+        },
+        "minimalUi": {
+          "title": "Minimal UI",
+          "description": "Stays out of the way - doesn't interfere with your work and integrates seamlessly into your IDE."
+        },
+        "autoCleanup": {
+          "title": "Automatic Cleanup",
+          "description": "Inserted SQL is automatically removed after execution - no manual cleanup needed."
+        },
+        "lightweight": {
+          "title": "Lightweight",
+          "description": "No performance impact - the plugin runs efficiently in the background without slowing down the IDE."
+        }
+      }
+    },
+    "shortcuts": {
+      "title": "⌨️ Keyboard Shortcuts",
+      "runCtQuery": {
+        "action": "Run CT-Query",
+        "keys": "Ctrl+# → Space",
+        "description": "Select and execute CTE"
+      },
+      "executeFromHere": {
+        "action": "Execute from Here",
+        "keys": "Ctrl+# → Enter",
+        "description": "Execute from current position with dependencies"
+      },
+      "copySql": {
+        "action": "Copy CT-Query SQL",
+        "keys": "Ctrl+# → C",
+        "description": "Copy SQL to clipboard"
+      },
+      "editAndRun": {
+        "action": "Edit and Run SQL",
+        "keys": "Ctrl+# → W",
+        "description": "Edit and execute query (e.g., add WHERE clauses)"
+      }
+    },
+    "installation": {
+      "title": "📦 Installation",
+      "step1": "Open IntelliJ IDEA / DataGrip",
+      "step2": "Go to Settings → Plugins → Marketplace",
+      "step3": "Search for \"cteXecutor\"",
+      "step4": "Click Install",
+      "step5": "Restart your IDE"
+    },
+    "support": {
+      "title": "❤️ Support",
+      "intro": "If this plugin helps you, I'd appreciate:",
+      "githubStar": "A star on GitHub",
+      "marketplaceReview": "A review on JetBrains Marketplace",
+      "bugReports": "Bug reports for improvement",
+      "featureIdeas": "Ideas for new features"
+    }
+  }
+}
