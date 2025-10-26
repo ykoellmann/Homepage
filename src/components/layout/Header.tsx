@@ -1,10 +1,12 @@
-import {ArrowLeft, ArrowRight, Search, Settings, Tally4} from "lucide-react";
+import React from "react";
+import {ArrowLeft, ArrowRight, Settings, Tally4, Search} from "lucide-react";
 import {HoverButton} from "../hover-button";
 import {ProjectIcon} from "../project-icon";
 import {type PageEntry} from "../../lib/buildFileTree";
 import logo from '../../assets/logo.svg';
 import {type RunConfig, RunControls} from "../run-controls/RunControls.tsx";
 import {useHistoryStatus} from "../../hooks/useHistoryStatus.ts";
+import {SearchEverywhere} from "../SearchEverywhere.tsx";
 
 interface HeaderProps {
     runConfigs: RunConfig[];
@@ -22,6 +24,20 @@ export function Header({
                            onStop
                        }: HeaderProps) {
     const {canGoBack, canGoForward} = useHistoryStatus();
+    const [searchOpen, setSearchOpen] = React.useState(false);
+
+    // Global keyboard shortcut for search
+    React.useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'a') {
+                e.preventDefault();
+                setSearchOpen(true);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     return (
         <div className="header gap-2">
@@ -54,12 +70,13 @@ export function Header({
                     onStop={onStop}
                 />
                 <div className="p-3"></div>
-                <HoverButton>
+                <HoverButton onClick={() => setSearchOpen(true)} title="Search Everywhere (⇧⌘A)">
                     <Search className="icon"/>
                 </HoverButton>
                 <HoverButton>
                     <Settings className="icon"/>
                 </HoverButton>
+                <SearchEverywhere isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
             </div>
         </div>
     );

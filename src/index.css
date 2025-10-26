@@ -159,7 +159,6 @@ html, body, #root {
 }
 
 .menu-item {
-  padding: 8px 12px;
   margin: 4px 0;
   border-radius: var(--radius);
   font-size: 13px;

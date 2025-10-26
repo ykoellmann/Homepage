@@ -9,6 +9,11 @@ import {buildFileTreeFromGlob, type PageEntry} from './lib/buildFileTree';
 import {type RunConfig} from './components/run-controls/RunControls.tsx';
 import {useNavigation} from './hooks/useNavigation';
 import {useTabPersistence} from './hooks/useTabPersistance.ts';
+import {searchService} from './lib/searchService.ts';
+import {aboutPageMeta} from './pages/about/meta.ts';
+import {cryptbornePageMeta} from './pages/src/cryptborne/meta.ts';
+import {satTrackPageMeta} from './pages/src/SatTrack/meta.ts';
+import {contactPageMeta} from './pages/contact/meta.ts';
 
 function App() {
     const [showExplorer, setShowExplorer] = useState(true);
@@ -17,6 +22,14 @@ function App() {
     const tabSystemRef = useRef<TabSystemRef | null>(null);
 
     const {tree, pages} = buildFileTreeFromGlob();
+
+    // Register pages with search service
+    useEffect(() => {
+        searchService.registerPage(aboutPageMeta);
+        searchService.registerPage(cryptbornePageMeta);
+        searchService.registerPage(satTrackPageMeta);
+        searchService.registerPage(contactPageMeta);
+    }, []);
     const [currentPage, setCurrentPage] = useState<PageEntry | null>(null);
     const [routePath, setRoutePath] = useState<string>(window.location.pathname);
 

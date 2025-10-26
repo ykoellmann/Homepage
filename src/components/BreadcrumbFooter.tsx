@@ -1,7 +1,8 @@
 import React, {useState, useRef} from "react";
 import {ChevronRight, Folder, FileCode} from "lucide-react";
 import type {FileNode} from "./file-explorer.tsx";
-import {useClickOutside} from "../hooks/useClickOutside";
+import {Popup, type PopupSection} from "./Popup";
+import {useClickOutside} from "../hooks/useClickOutside.ts";
 
 interface BreadcrumbFooterProps {
     path: string;
@@ -21,8 +22,7 @@ export function BreadcrumbFooter({
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);
 
-    // @ts-ignore
-    useClickOutside(footerRef, () => setOpenIndex(null));
+    useClickOutside(footerRef as React.RefObject<HTMLElement>, () => setOpenIndex(null));
 
     return (
         <div className="footer-breadcrumb" ref={footerRef}>
@@ -94,18 +94,34 @@ function BreadcrumbItem({
         }
     }
 
-    function handleEntryClick(entry: FileNode, e: React.MouseEvent) {
-        e.stopPropagation();
+    function handleEntryClick(entry: FileNode) {
         const newPath = "/" + [...parts.slice(1, index + 1), entry.name].join("/");
 
         if (entry.type === "folder") {
             onOpenFolder?.(newPath);
-            setOpenIndex(index + 1);
+            // Keep popup open and shift to next level
+            setTimeout(() => setOpenIndex(index + 1), 0);
         } else {
             onNavigate?.(newPath);
             setOpenIndex(null);
         }
     }
+
+    const popupSections: PopupSection[] = [
+        {
+            items: entries.map(entry => {
+                const Icon = entry.type === "folder" ? Folder : FileCode;
+                const iconClass = entry.type === "folder" ? "icon-folder" : "icon-file";
+
+                return {
+                    id: entry.name,
+                    label: entry.name,
+                    icon: <Icon size={14} className={iconClass}/>,
+                    onClick: () => handleEntryClick(entry)
+                };
+            })
+        }
+    ];
 
     return (
         <div className="footer-breadcrumb-item-wrapper">
@@ -116,34 +132,15 @@ function BreadcrumbItem({
                 {part}
             </span>
 
-            {isOpen && hasChildren && (
-                <div className="breadcrumb-dropdown">
-                    {entries.map((entry) => (
-                        <BreadcrumbDropdownItem
-                            key={entry.name}
-                            entry={entry}
-                            onClick={(e) => handleEntryClick(entry, e)}
-                        />
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
-
-interface BreadcrumbDropdownItemProps {
-    entry: FileNode;
-    onClick: (e: React.MouseEvent) => void;
-}
-
-function BreadcrumbDropdownItem({entry, onClick}: BreadcrumbDropdownItemProps) {
-    const Icon = entry.type === "folder" ? Folder : FileCode;
-    const iconClass = entry.type === "folder" ? "icon-folder" : "icon-file";
-
-    return (
-        <div className="breadcrumb-dropdown-item" onClick={onClick}>
-            <Icon size={14} className={iconClass}/>
-            <span>{entry.name}</span>
+            <Popup
+                isOpen={isOpen && hasChildren}
+                onClose={() => setOpenIndex(null)}
+                sections={popupSections}
+                position="top"
+                align="start"
+                width="12rem"
+                itemSpacing="compact"
+            />
         </div>
     );
 }

@@ -80,15 +80,15 @@ export function RunControls({
                     <ChevronDown className="icon"/>
                 </HoverButton>
 
-                {dropdownOpen && (
-                    <RunConfigDropdown
-                        mainConfigs={mainConfigs}
-                        specialConfigs={specialConfigs}
-                        currentPage={currentPage}
-                        onSelectConfig={handleSelect}
-                        onSelectCurrentFile={handleCurrentFileSelect}
-                    />
-                )}
+                <RunConfigDropdown
+                    mainConfigs={mainConfigs}
+                    specialConfigs={specialConfigs}
+                    currentPage={currentPage}
+                    isOpen={dropdownOpen}
+                    onClose={() => setDropdownOpen(false)}
+                    onSelectConfig={handleSelect}
+                    onSelectCurrentFile={handleCurrentFileSelect}
+                />
             </div>
 
             <RunActionButtons
