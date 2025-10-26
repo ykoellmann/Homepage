@@ -16,8 +16,11 @@ import {aboutPageMeta} from './pages/about/meta.ts';
 import {cryptbornePageMeta} from './pages/src/cryptborne/meta.ts';
 import {satTrackPageMeta} from './pages/src/SatTrack/meta.ts';
 import {contactPageMeta} from './pages/contact/meta.ts';
+import {useViewMode} from './contexts/ViewModeContext';
+import {ModernView} from './components/ModernView';
 
 function App() {
+    const {viewMode} = useViewMode();
     const [showExplorer, setShowExplorer] = useState(true);
     const [explorerWidth, setExplorerWidth] = useState<number>(260);
     const [showTerminal, setShowTerminal] = useState(false);
@@ -59,30 +62,37 @@ function App() {
 
     // Browser back/forward navigation
     useEffect(() => {
-        const onPopState = () => {
-            // Sync our history tracking state
-            syncHistoryState();
+        const onNavigationPopState = (event: Event) => {
+            const customEvent = event as CustomEvent;
+            console.log('🔙 Navigation popstate:', customEvent.detail);
 
-            const newPath = window.location.pathname;
+            syncHistoryState();
+            const newPath = customEvent.detail.pathname;
             setRoutePath(newPath);
 
+            const actualPath = newPath.replace(/^\/ide/, '');
+            const cleanedPath = actualPath.replace(/^\/+/, '').replace(/\/+$/, '');
+            const pageEntry = pages[cleanedPath];
+
+            if (!pageEntry) return;
+
             const tabs = tabSystemRef.current?.getAllTabs() || [];
-            const existingTab = tabs.find((t: Tab) => t.path === newPath);
+            const existingTab = tabs.find((t: Tab) => {
+                const tabActualPath = t.path.replace(/^\/ide/, '');
+                return tabActualPath === actualPath;
+            });
 
             if (existingTab) {
+                setCurrentPage(pageEntry);
                 tabSystemRef.current?.activateTabByPath(newPath);
             } else {
-                const cleanedPath = newPath.replace(/^\/+/, '').replace(/\/+$/, '');
-                const pageEntry = pages[cleanedPath];
-                if (pageEntry) {
-                    navigateTo(newPath, false);
-                }
+                navigateTo(newPath, false);
             }
         };
 
-        window.addEventListener('popstate', onPopState);
-        return () => window.removeEventListener('popstate', onPopState);
-    }, [pages, navigateTo]);
+        window.addEventListener('navigation:popstate', onNavigationPopState);
+        return () => window.removeEventListener('navigation:popstate', onNavigationPopState);
+    }, [pages, navigateTo, setCurrentPage]);
 
     function handleResizeStart(e: React.MouseEvent) {
         resizingRef.current = true;
@@ -127,6 +137,11 @@ function App() {
     function handleFileOpen(path: string) {
         const cleanPath = path.replace(/\.(txt|md|html|tsx|ts|js)$/i, '').replace(/^\/+/, '');
         navigateTo(`/${cleanPath}`);
+    }
+
+    // If in modern view, render that instead (after all hooks)
+    if (viewMode === 'modern') {
+        return <ModernView/>;
     }
 
     return (

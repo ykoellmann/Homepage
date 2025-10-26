@@ -20,7 +20,6 @@ export function useNavigation({
 
     function navigateTo(path: string, updateHistory: boolean = true) {
         const fullPath = normalizePath(path);
-
         if (updateHistory && window.location.pathname !== fullPath) {
             // Use our custom pushHistoryState instead of navigate
             // This way we control the history state tracking
@@ -30,7 +29,9 @@ export function useNavigation({
             setRoutePath(fullPath);
         }
 
-        const cleanedPath = fullPath.replace(/^\/+/, '').replace(/\/+$/, '');
+        // Extract the actual page path (remove /ide prefix if present)
+        const actualPath = fullPath.replace(/^\/ide/, '');
+        const cleanedPath = actualPath.replace(/^\/+/, '').replace(/\/+$/, '');
         const pageEntry = pages[cleanedPath];
 
         if (pageEntry) {
@@ -46,13 +47,20 @@ export function useNavigation({
 
             tabSystemRef.current?.openTab(tab);
         } else {
-            console.warn('Page not found:', cleanedPath);
         }
     }
 
     function normalizePath(path: string): string {
         let fullPath = `${path.startsWith('/') ? path : '/' + path}`;
-        return fullPath.replace(/^\/homepage/, '');
+        fullPath = fullPath.replace(/^\/homepage/, '');
+
+        // Ensure /ide prefix is preserved if we're in IDE mode
+        const isIdePath = window.location.pathname.startsWith('/ide');
+        if (isIdePath && !fullPath.startsWith('/ide')) {
+            fullPath = fullPath === '/' ? '/ide' : `/ide${fullPath}`;
+        }
+
+        return fullPath;
     }
 
     function getTabTitle(path: string, entry: PageEntry): string {

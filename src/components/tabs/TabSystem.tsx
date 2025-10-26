@@ -158,7 +158,16 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
 
     function activateTabByPath(path: string): void {
         if (layout.group) {
-            const tab = layout.group.tabs.find(t => t.path === path);
+            // Normalize paths by removing /ide prefix for comparison
+            const normalizedSearchPath = path.replace(/^\/ide/, '');
+
+            const tab = layout.group.tabs.find(t => {
+                const normalizedTabPath = t.path.replace(/^\/ide/, '');
+                return normalizedTabPath === normalizedSearchPath || t.path === path;
+            });
+            console.log(tab)
+
+
             if (tab) {
                 setActiveTab(tab.id, layout.group.id, false);
             }

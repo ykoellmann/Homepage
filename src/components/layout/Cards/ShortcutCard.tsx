@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface ShortcutCardProps {
     action: string;
     keys: string;
@@ -19,19 +21,18 @@ export function ShortcutCard({ action, keys, description }: ShortcutCardProps) {
                 {/* Keys */}
                 <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
                     {keyParts.map((key, index) => (
-                        <>
+                        <React.Fragment key={index}>
                             {index > 0 && key !== '→' && (
                                 <span className="text-gray-400 dark:text-gray-600 text-sm">→</span>
                             )}
                             {key !== '→' && (
                                 <kbd
-                                    key={index}
                                     className="px-2 md:px-3 py-1 md:py-1.5 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded font-mono text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300 shadow-sm"
                                 >
                                     {key}
                                 </kbd>
                             )}
-                        </>
+                        </React.Fragment>
                     ))}
                 </div>
 

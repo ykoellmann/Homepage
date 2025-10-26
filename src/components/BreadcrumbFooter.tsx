@@ -17,7 +17,9 @@ export function BreadcrumbFooter({
                                      onOpenFolder,
                                      tree
                                  }: BreadcrumbFooterProps) {
-    const pathParts = path.replace(/^\/+/, "").split("/").filter(Boolean);
+    // Remove /ide prefix for display purposes
+    const displayPath = path.replace(/^\/ide/, '');
+    const pathParts = displayPath.replace(/^\/+/, "").split("/").filter(Boolean);
     const parts = ["homepage", ...pathParts];
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const footerRef = useRef<HTMLDivElement>(null);

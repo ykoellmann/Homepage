@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Globe, Palette } from 'lucide-react';
+import { useViewMode } from '../contexts/ViewModeContext';
 
 interface SettingsDialogProps {
     isOpen: boolean;
@@ -11,8 +12,10 @@ type SettingsCategory = 'appearance' | 'language';
 
 export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
     const { i18n } = useTranslation('common');
+    const { viewMode, setViewMode } = useViewMode();
     const [selectedCategory, setSelectedCategory] = useState<SettingsCategory>('appearance');
     const [tempLanguage, setTempLanguage] = useState(i18n.language);
+    const [tempViewMode, setTempViewMode] = useState(viewMode);
 
     const categories = [
         { id: 'appearance' as const, label: 'Appearance & Behavior', icon: Palette },
@@ -28,6 +31,9 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
         if (tempLanguage !== i18n.language) {
             i18n.changeLanguage(tempLanguage);
         }
+        if (tempViewMode !== viewMode) {
+            setViewMode(tempViewMode);
+        }
     };
 
     const handleOk = () => {
@@ -37,15 +43,17 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
 
     const handleCancel = () => {
         setTempLanguage(i18n.language);
+        setTempViewMode(viewMode);
         onClose();
     };
 
-    // Reset temp language when dialog opens
+    // Reset temp values when dialog opens
     useEffect(() => {
         if (isOpen) {
             setTempLanguage(i18n.language);
+            setTempViewMode(viewMode);
         }
-    }, [isOpen, i18n.language]);
+    }, [isOpen, i18n.language, viewMode]);
 
     // Close on Escape key
     useEffect(() => {
@@ -110,11 +118,81 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                                        Appearance
+                                        View Mode
                                     </h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                                        Appearance settings coming soon...
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                        Choose how you want to view the portfolio.
                                     </p>
+
+                                    <div className="space-y-2">
+                                        <label
+                                            className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                                                tempViewMode === 'ide'
+                                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                                    : 'border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
+                                            }`}
+                                        >
+                                            <input
+                                                type="radio"
+                                                name="viewMode"
+                                                value="ide"
+                                                checked={tempViewMode === 'ide'}
+                                                onChange={(e) => setTempViewMode(e.target.value as 'ide')}
+                                                className="w-4 h-4 mt-1 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                            />
+                                            <div className="flex-1">
+                                                <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                                    IDE View
+                                                </div>
+                                                <div className="text-xs text-gray-600 dark:text-gray-400">
+                                                    VS Code-inspired interface with file explorer and tabs. Perfect for developers.
+                                                </div>
+                                            </div>
+                                            {tempViewMode === 'ide' && (
+                                                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                </svg>
+                                            )}
+                                        </label>
+
+                                        <label
+                                            className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                                                tempViewMode === 'modern'
+                                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                                    : 'border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
+                                            }`}
+                                        >
+                                            <input
+                                                type="radio"
+                                                name="viewMode"
+                                                value="modern"
+                                                checked={tempViewMode === 'modern'}
+                                                onChange={(e) => setTempViewMode(e.target.value as 'modern')}
+                                                className="w-4 h-4 mt-1 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                            />
+                                            <div className="flex-1">
+                                                <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                                    Modern View
+                                                </div>
+                                                <div className="text-xs text-gray-600 dark:text-gray-400">
+                                                    Traditional portfolio layout with hero section. Mobile-friendly and accessible.
+                                                </div>
+                                            </div>
+                                            {tempViewMode === 'modern' && (
+                                                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                </svg>
+                                            )}
+                                        </label>
+                                    </div>
+
+                                    {tempViewMode !== viewMode && (
+                                        <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                                            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                                                Click "Apply" or "OK" to switch the view mode.
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -190,8 +268,8 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                     </button>
                     <button
                         onClick={handleApply}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
-                        disabled={tempLanguage === i18n.language}
+                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={tempLanguage === i18n.language && tempViewMode === viewMode}
                     >
                         Apply
                     </button>

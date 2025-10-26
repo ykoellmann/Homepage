@@ -87,6 +87,14 @@ export function useHistoryStatus() {
                 }
             }
             updateStatus();
+
+            // 🔥 NEU: Dispatch custom event für andere Components
+            window.dispatchEvent(new CustomEvent('navigation:popstate', {
+                detail: {
+                    pathname: window.location.pathname,
+                    state: window.history.state
+                }
+            }));
         };
 
         // Listen for custom history change events

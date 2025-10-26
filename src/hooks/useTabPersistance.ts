@@ -34,7 +34,9 @@ export function useTabPersistence({
     useEffect(() => {
         const timer = setTimeout(() => {
             const currentPath = window.location.pathname;
-            const cleanedPath = currentPath.replace(/^\/+/, '').replace(/\/+$/, '');
+            // Remove /ide prefix to get actual page path
+            const actualPath = currentPath.replace(/^\/ide/, '');
+            const cleanedPath = actualPath.replace(/^\/+/, '').replace(/\/+$/, '');
 
             const stored = sessionStorage.getItem(STORAGE_KEY);
 
