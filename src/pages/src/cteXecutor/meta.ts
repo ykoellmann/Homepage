@@ -1,48 +1,6 @@
-// Feature ist durchsuchbar
-import type {BasePageMeta, Searchable} from "../../../lib/basePage.ts";
+import type { IDEPluginProjectMeta } from "../shared/types.ts";
 
-export interface Feature extends Searchable {
-    _searchableId: string;
-    _searchWeight?: number;
-
-    icon: string;
-    title: string;
-    description: string;
-    category: 'cte-management' | 'execute-from-here' | 'productivity';
-}
-
-// Code Example ist durchsuchbar
-export interface CodeExample extends Searchable {
-    _searchableId: string;
-    _searchWeight?: number;
-
-    title: string;
-    description: string;
-    code: string;
-    explanation: string;
-    highlight?: string; // Wo der Cursor platziert werden soll
-}
-
-// Shortcut ist durchsuchbar
-export interface Shortcut extends Searchable {
-    _searchableId: string;
-    _searchWeight?: number;
-
-    action: string;
-    keys: string;
-    description: string;
-}
-
-// Project Page Meta - erweitert BasePageMeta
-export interface ProjectPageMeta extends BasePageMeta {
-    features: Feature[];
-    codeExamples: CodeExample[];
-    shortcuts: Shortcut[];
-    version: string;
-    downloads?: string;
-}
-
-export const cteXecutorPageMeta: ProjectPageMeta = {
+export const cteXecutorPageMeta: IDEPluginProjectMeta = {
     // BasePageMeta Pflichtfelder
     name: "cteXecutor",
     slug: "ctexecutor",

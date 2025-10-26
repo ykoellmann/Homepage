@@ -1,28 +1,6 @@
-import type {BasePageMeta, Searchable} from "../../../lib/basePage.ts";
+import type { ProjectWithTechStackMeta } from "../shared/types.ts";
 
-export interface Feature extends Searchable {
-    _searchableId: string;
-    _searchWeight?: number;
-    icon: string;
-    title: string;
-    description: string;
-}
-
-export interface TechStack extends Searchable {
-    _searchableId: string;
-    _searchWeight?: number;
-    name: string;
-    category: 'engine' | 'library' | 'tool' | 'data';
-}
-
-export interface ProjectPageMeta extends BasePageMeta {
-    features: Feature[];
-    techStack: TechStack[];
-    demoUrl?: string;
-    screenshots?: string[];
-}
-
-export const satTrackPageMeta: ProjectPageMeta = {
+export const satTrackPageMeta: ProjectWithTechStackMeta = {
     // BasePageMeta
     name: "SatTrak",
     slug: "sattrack",

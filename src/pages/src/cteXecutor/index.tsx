@@ -1,7 +1,8 @@
-import {cteXecutorPageMeta} from "./meta.ts";
-import {ProjectHeader} from "../../../components/layout/ProjectHeader.tsx";
-import {FeatureCard} from "../../../components/layout/Cards/FeatureCard.tsx";
-import {ShortcutCard} from "../../../components/layout/Cards/ShortcutCard.tsx";
+import { cteXecutorPageMeta } from "./meta.ts";
+import { ProjectHeader } from "../../../components/layout/ProjectHeader.tsx";
+import { FeaturesSection } from "../../../components/layout/FeaturesSection.tsx";
+import { FeatureCard } from "../../../components/layout/Cards/FeatureCard.tsx";
+import { ShortcutCard } from "../../../components/layout/Cards/ShortcutCard.tsx";
 
 export default function CteXecutorPage() {
     const cteManagementFeatures = cteXecutorPageMeta.features.filter(f => f.category === 'cte-management');
@@ -17,26 +18,17 @@ export default function CteXecutorPage() {
                 description={cteXecutorPageMeta.description}
                 version={cteXecutorPageMeta.version}
                 downloads={cteXecutorPageMeta.downloads}
-                githubUrl={cteXecutorPageMeta.debugUrl}
+                githubUrl={cteXecutorPageMeta.debugUrl || undefined}
                 marketplaceUrl={cteXecutorPageMeta.url}
             />
 
             {/* CTE Management Features */}
-            <section className="space-y-3 md:space-y-4">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    🎯 CTE Management
-                </h2>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
-                    {cteManagementFeatures.map((feature) => (
-                        <FeatureCard
-                            key={feature._searchableId}
-                            icon={feature.icon}
-                            title={feature.title}
-                            description={feature.description}
-                        />
-                    ))}
-                </div>
-            </section>
+            <FeaturesSection
+                title="🎯 CTE Management"
+                features={cteManagementFeatures}
+                columns={{ default: 'grid-cols-1', lg: 'lg:grid-cols-2' }}
+                spacing="space-y-3 md:space-y-4"
+            />
 
             {/* Execute from Here Features */}
             <section className="space-y-3 md:space-y-4">
@@ -56,38 +48,31 @@ export default function CteXecutorPage() {
             </section>
 
             {/* Productivity Features */}
-            <section className="space-y-3 md:space-y-4">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    ⚡ Developer Productivity
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4">
-                    {productivityFeatures.map((feature) => (
-                        <FeatureCard
-                            key={feature._searchableId}
-                            icon={feature.icon}
-                            title={feature.title}
-                            description={feature.description}
-                        />
-                    ))}
-                </div>
-            </section>
+            <FeaturesSection
+                title="⚡ Developer Productivity"
+                features={productivityFeatures}
+                columns={{ default: 'grid-cols-1', md: 'md:grid-cols-2', xl: 'xl:grid-cols-3' }}
+                spacing="space-y-3 md:space-y-4"
+            />
 
             {/* Keyboard Shortcuts */}
-            <section className="space-y-3 md:space-y-4">
-                <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    ⌨️ Keyboard Shortcuts
-                </h2>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
-                    {cteXecutorPageMeta.shortcuts.map((shortcut) => (
-                        <ShortcutCard
-                            key={shortcut._searchableId}
-                            action={shortcut.action}
-                            keys={shortcut.keys}
-                            description={shortcut.description}
-                        />
-                    ))}
-                </div>
-            </section>
+            {cteXecutorPageMeta.shortcuts && (
+                <section className="space-y-3 md:space-y-4">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        ⌨️ Keyboard Shortcuts
+                    </h2>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
+                        {cteXecutorPageMeta.shortcuts.map((shortcut) => (
+                            <ShortcutCard
+                                key={shortcut._searchableId}
+                                action={shortcut.action}
+                                keys={shortcut.keys}
+                                description={shortcut.description}
+                            />
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {/* Installation */}
             <section className="space-y-3 md:space-y-4">
