@@ -1,11 +1,13 @@
-import {Folder} from "lucide-react";
+import {Folder, Terminal} from "lucide-react";
 import {HoverButton} from "../hover-button";
 
 interface SidebarProps {
     onToggleExplorer: () => void;
+    onToggleTerminal: () => void;
+    terminalOpen: boolean;
 }
 
-export function Sidebar({onToggleExplorer}: SidebarProps) {
+export function Sidebar({onToggleExplorer, onToggleTerminal, terminalOpen}: SidebarProps) {
     return (
         <div className="sidebar">
             <HoverButton
@@ -14,6 +16,13 @@ export function Sidebar({onToggleExplorer}: SidebarProps) {
                 onClick={onToggleExplorer}
             >
                 <Folder className="icon"/>
+            </HoverButton>
+            <HoverButton
+                active={terminalOpen}
+                title="Terminal"
+                onClick={onToggleTerminal}
+            >
+                <Terminal className="icon"/>
             </HoverButton>
         </div>
     );

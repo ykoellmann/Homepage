@@ -4,6 +4,7 @@ import {Header} from './components/layout/Header';
 import {Sidebar} from './components/layout/Sidebar';
 import {Explorer} from './components/layout/Explorer';
 import {BreadcrumbFooter} from './components/BreadcrumbFooter.tsx';
+import {Terminal} from './components/Terminal.tsx';
 import TabSystem, {type Tab, type TabSystemRef} from './components/tabs/TabSystem.tsx';
 import {buildFileTreeFromGlob, type PageEntry} from './lib/buildFileTree';
 import {type RunConfig} from './components/run-controls/RunControls.tsx';
@@ -19,6 +20,9 @@ import {contactPageMeta} from './pages/contact/meta.ts';
 function App() {
     const [showExplorer, setShowExplorer] = useState(true);
     const [explorerWidth, setExplorerWidth] = useState<number>(260);
+    const [showTerminal, setShowTerminal] = useState(false);
+    const [terminalHeight, setTerminalHeight] = useState<number>(300);
+    const [isResizingTerminal, setIsResizingTerminal] = useState(false);
     const resizingRef = useRef(false);
     const tabSystemRef = useRef<TabSystemRef | null>(null);
 
@@ -135,7 +139,11 @@ function App() {
                 onStop={handleStop}
             />
 
-            <Sidebar onToggleExplorer={() => setShowExplorer(v => !v)} />
+            <Sidebar
+                onToggleExplorer={() => setShowExplorer(v => !v)}
+                onToggleTerminal={() => setShowTerminal(v => !v)}
+                terminalOpen={showTerminal}
+            />
 
             <BreadcrumbFooter
                 path={routePath}
@@ -145,25 +153,53 @@ function App() {
             />
 
             <div className="main">
-                {showExplorer && (
-                    <Explorer
-                        tree={tree}
-                        width={explorerWidth}
-                        onResizeStart={handleResizeStart}
-                        onFileOpen={handleFileOpen}
-                    />
-                )}
-
-                <div className="content">
-                    <TabSystem
-                        ref={tabSystemRef}
-                        onTabChange={(tab) => {
-                            if (tab) {
-                                setCurrentPage(pages[tab.id] || null);
-                                setRoutePath(tab.path);
-                            }
+                <div
+                    className="flex flex-col"
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        pointerEvents: isResizingTerminal ? 'none' : 'auto'
+                    }}
+                >
+                    <div
+                        className="flex flex-1 overflow-hidden"
+                        style={{
+                            width: '100%',
+                            flex: showTerminal ? `0 0 calc(100% - ${terminalHeight}px)` : '1 1 100%'
                         }}
-                    />
+                    >
+                        {showExplorer && (
+                            <Explorer
+                                tree={tree}
+                                width={explorerWidth}
+                                onResizeStart={handleResizeStart}
+                                onFileOpen={handleFileOpen}
+                            />
+                        )}
+
+                        <div className="content">
+                            <TabSystem
+                                ref={tabSystemRef}
+                                onTabChange={(tab) => {
+                                    if (tab) {
+                                        setCurrentPage(pages[tab.id] || null);
+                                        setRoutePath(tab.path);
+                                    }
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    {showTerminal && (
+                        <Terminal
+                            pages={Object.values(pages)}
+                            isOpen={showTerminal}
+                            height={terminalHeight}
+                            onHeightChange={setTerminalHeight}
+                            onResizeStart={() => setIsResizingTerminal(true)}
+                            onResizeEnd={() => setIsResizingTerminal(false)}
+                        />
+                    )}
                 </div>
             </div>
         </div>
