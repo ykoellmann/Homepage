@@ -24,7 +24,7 @@ export const contactPageMeta: ContactPageMeta = {
     contactMethods: [
         {
             id: 'email',
-            icon: '📧',
+            icon: 'Mail',
             label: 'Email',
             value: 'ykoellmann@icloud.com',
             href: 'mailto:ykoellmann@icloud.com',
@@ -32,7 +32,7 @@ export const contactPageMeta: ContactPageMeta = {
         },
         {
             id: 'github',
-            icon: '🐙',
+            icon: 'Github',
             label: 'GitHub',
             value: '@ykoellmann',
             href: 'https://github.com/ykoellmann',
@@ -40,7 +40,7 @@ export const contactPageMeta: ContactPageMeta = {
         },
         {
             id: 'linkedin',
-            icon: '💼',
+            icon: 'Linkedin',
             label: 'LinkedIn',
             value: 'Yannik Köllmann',
             href: 'https://linkedin.com/in/yannikkoellmann',

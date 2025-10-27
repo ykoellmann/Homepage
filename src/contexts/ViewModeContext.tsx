@@ -40,13 +40,13 @@ export const ViewModeProvider: React.FC<ViewModeProviderProps> = ({ children }) 
       // Switch to IDE view - add /ide prefix
       if (!currentPath.startsWith('/ide')) {
         newPath = currentPath === '/' ? '/ide' : `/ide${currentPath}`;
-        navigate(newPath, { replace: true });
+        navigate(newPath);
       }
     } else {
       // Switch to Modern view - remove /ide prefix
       if (currentPath.startsWith('/ide')) {
         newPath = currentPath.replace(/^\/ide/, '') || '/';
-        navigate(newPath, { replace: true });
+        navigate(newPath);
       }
     }
 

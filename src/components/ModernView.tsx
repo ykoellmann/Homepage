@@ -1,20 +1,72 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useViewMode } from '../contexts/ViewModeContext';
-import { Monitor, ExternalLink, Github, ChevronDown, Sparkles } from 'lucide-react';
+import { Monitor, ExternalLink, ChevronDown, Sparkles, Mail, Zap } from 'lucide-react';
 import { aboutPageMeta, type Experience } from '../pages/about/meta';
 import { contactPageMeta } from '../pages/contact/meta';
 import { useTranslation } from 'react-i18next';
 import { getCryptborneMeta, getSatTrackMeta, getCteXecutorMeta } from '../lib/i18nMetaHelpers';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { GithubIcon } from './icons/GithubIcon';
+import { LinkedinIcon } from './icons/LinkedinIcon';
+
+const iconMap = {
+  'Mail': Mail,
+  'Github': GithubIcon,
+  'Linkedin': LinkedinIcon,
+};
+
+// Hook für Intersection Observer Animationen
+const useInView = (options = {}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsInView(true);
+      }
+    }, { threshold: 0.1, ...options });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return { ref, isInView };
+};
+
+// Cinematic Divider Component
+const CinematicDivider: React.FC = () => (
+    <div className="cinematic-divider">
+      <div className="divider-depth-layer depth-1" />
+      <div className="divider-depth-layer depth-2" />
+      <div className="divider-depth-layer depth-3" />
+      <div className="divider-depth-layer depth-4" />
+      <div className="divider-depth-layer depth-5" />
+      <div className="cinematic-glow-top" />
+      <div className="cinematic-glow-bottom" />
+      <div className="cinematic-particles">
+        {[...Array(15)].map((_, i) => (
+            <div key={i} className="particle" style={{ left: `${(i * 7) + 5}%`, animationDelay: `${i * 0.3}s` }} />
+        ))}
+      </div>
+    </div>
+);
 
 export const ModernView: React.FC = () => {
   const { toggleViewMode } = useViewMode();
   const { t, i18n } = useTranslation();
   const [activeSection, setActiveSection] = useState('home');
   const [scrolled, setScrolled] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showMobileWarning, setShowMobileWarning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const navRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
   const [indicatorStyle, setIndicatorStyle] = useState<{ width: string; left: string }>({ width: '0px', left: '0px' });
@@ -29,9 +81,8 @@ export const ModernView: React.FC = () => {
   const sortedExperiences = [...aboutPageMeta.experiences].sort((a, b) => {
     const getYear = (exp: Experience) => {
       if (exp.endMonth.toLowerCase().includes('heute') || exp.endMonth.toLowerCase().includes('today')) {
-        return 9999; // Current experiences come first
+        return 9999;
       }
-      // Extract year from endMonth (e.g., "Jan. 2024" -> 2024)
       const yearMatch = exp.endMonth.match(/\d{4}/);
       return yearMatch ? parseInt(yearMatch[0]) : 0;
     };
@@ -48,16 +99,19 @@ export const ModernView: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Track scroll position for header styling and mouse position for parallax
+  // Real-time scroll tracking
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
       const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight - container.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+
+      setScrollProgress(progress);
       setScrolled(scrollTop > 50);
 
-      // Update active section based on scroll position
       const sections = ['home', 'about', 'experience', 'projects', 'contact'];
       const scrollPosition = scrollTop + 100;
 
@@ -73,15 +127,9 @@ export const ModernView: React.FC = () => {
       }
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    window.addEventListener('mousemove', handleMouseMove);
+    container.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       container.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
@@ -122,17 +170,31 @@ export const ModernView: React.FC = () => {
     { id: 'contact', label: i18n.language === 'de' ? 'Kontakt' : 'Contact' },
   ];
 
-  const parallaxX = (mousePosition.x / window.innerWidth - 0.5) * 20;
-  const parallaxY = (mousePosition.y / window.innerHeight - 0.5) * 20;
+  // Hooks für InView Animationen
+  const aboutSection = useInView();
+  const experienceSection = useInView();
+  const projectsSection = useInView();
+  const contactSection = useInView();
 
   return (
       <div
           ref={scrollContainerRef}
           className="fixed inset-0 w-full h-full overflow-y-auto bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white"
           style={{ scrollbarGutter: 'stable', overflowX: 'hidden' }}>
+
+        {/* Animated Scroll Progress Bar */}
+        <div className="fixed top-0 left-0 right-0 h-1 z-[60] bg-slate-800/50">
+          <div
+              className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-150 relative overflow-hidden"
+              style={{ width: `${scrollProgress}%` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
+          </div>
+        </div>
+
         {/* Sticky Navigation */}
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            scrolled ? 'bg-slate-900/95 backdrop-blur-lg shadow-lg' : 'bg-transparent'
+            scrolled ? 'bg-slate-900/95 backdrop-blur-lg shadow-lg shadow-blue-500/10' : 'bg-transparent'
         }`}>
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <button
@@ -157,24 +219,25 @@ export const ModernView: React.FC = () => {
                     {item.label}
                   </button>
               ))}
-              {/* Sliding indicator */}
               <div
-                  className="absolute h-10 bg-blue-600 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/50 -z-10"
+                  className="absolute h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/50 -z-10"
                   style={{
                     width: indicatorStyle.width,
                     left: indicatorStyle.left,
                     top: '0px'
                   }}
-              />
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-blue-200/30 to-blue-400/0 animate-pulse-slow" />
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
               <LanguageSwitcher />
               <button
                   onClick={handleViewModeToggle}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all hover:scale-105 shadow-lg"
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-all hover:scale-105 shadow-lg group"
               >
-                <Monitor size={18} />
+                <Monitor size={18} className="group-hover:rotate-12 transition-transform" />
                 <span className="hidden sm:inline">IDE View</span>
               </button>
             </div>
@@ -183,194 +246,152 @@ export const ModernView: React.FC = () => {
 
         {/* Mobile Warning Dialog */}
         {showMobileWarning && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-6">
-              <div className="bg-slate-800 rounded-2xl p-8 max-w-md w-full border border-slate-700 shadow-2xl">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
+              <div className="bg-slate-800 rounded-2xl p-8 max-w-md mx-4 border border-slate-700 shadow-2xl animate-scale-in">
                 <h3 className="text-2xl font-bold mb-4 text-white">
-                  {i18n.language === 'de' ? 'Achtung' : 'Warning'}
+                  {i18n.language === 'de' ? 'Mobile Ansicht' : 'Mobile View'}
                 </h3>
-                <p className="text-gray-300 mb-6 leading-relaxed">
+                <p className="text-gray-300 mb-6">
                   {i18n.language === 'de'
-                      ? 'Die IDE-Ansicht ist nicht für mobile Geräte optimiert. Die Bedienung kann eingeschränkt sein. Möchtest du trotzdem fortfahren?'
-                      : 'The IDE view is not optimized for mobile devices. Functionality may be limited. Do you want to continue anyway?'}
+                      ? 'Die IDE-Ansicht ist für Desktop optimiert. Bitte verwende einen Desktop-Browser für die beste Erfahrung.'
+                      : 'The IDE view is optimized for desktop. Please use a desktop browser for the best experience.'}
                 </p>
-                <div className="flex gap-3">
-                  <button
-                      onClick={() => {
-                        setShowMobileWarning(false);
-                        toggleViewMode();
-                      }}
-                      className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors"
-                  >
-                    {i18n.language === 'de' ? 'Fortfahren' : 'Continue'}
-                  </button>
-                  <button
-                      onClick={() => setShowMobileWarning(false)}
-                      className="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-colors"
-                  >
-                    {i18n.language === 'de' ? 'Abbrechen' : 'Cancel'}
-                  </button>
-                </div>
+                <button
+                    onClick={() => setShowMobileWarning(false)}
+                    className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors font-semibold"
+                >
+                  {i18n.language === 'de' ? 'Verstanden' : 'Got it'}
+                </button>
               </div>
             </div>
         )}
 
         {/* Hero Section */}
-        <section id="home" className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
-          {/* Animated Background Elements */}
+        <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden px-6">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div
-                className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float"
-                style={{ transform: `translate(${parallaxX}px, ${parallaxY}px)` }}
-            />
-            <div
-                className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float-delayed"
-                style={{ transform: `translate(${-parallaxX}px, ${-parallaxY}px)` }}
-            />
-            <Sparkles
-                className="absolute top-20 right-20 text-blue-400/20 animate-pulse"
-                size={48}
-                style={{ transform: `translate(${parallaxX * 0.5}px, ${parallaxY * 0.5}px)` }}
-            />
-            <Sparkles
-                className="absolute bottom-40 left-20 text-purple-400/20 animate-pulse"
-                size={36}
-                style={{ transform: `translate(${-parallaxX * 0.3}px, ${-parallaxY * 0.3}px)`, animationDelay: '1s' }}
-            />
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-float" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float-delayed" />
+            <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/5 rounded-full blur-3xl animate-float-slow" />
           </div>
 
           <div className="max-w-5xl mx-auto text-center relative z-10">
             <div className="mb-8 animate-fade-in">
-              <h1 className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600 bg-clip-text text-transparent animate-gradient"
-                  style={{ transform: `translate(${parallaxX * 0.1}px, ${parallaxY * 0.1}px)` }}>
+              <Sparkles className="inline-block text-yellow-400 w-12 h-12 mb-4 animate-spin-slow" />
+            </div>
+            <h1 className="text-6xl md:text-8xl font-bold mb-6 animate-slide-up">
+              <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient">
                 Yannik Köllmann
-              </h1>
-              <p className="text-2xl md:text-3xl text-gray-300 mb-4 font-light animate-slide-up">
-                {i18n.language === 'de'
-                    ? 'Full Stack Developer & Software Engineer'
-                    : 'Full Stack Developer & Software Engineer'}
-              </p>
-              <p className="text-lg text-gray-400 mb-12 max-w-2xl mx-auto animate-slide-up-delayed">
-                {i18n.language === 'de'
-                    ? 'Software Engineer | Informatik-Student @ FSU Jena'
-                    : 'Software Engineer | Computer Science Student @ FSU Jena'}
-              </p>
-            </div>
-
-            <div className="flex gap-4 justify-center flex-wrap mb-12 animate-fade-in-up">
-              <button
-                  onClick={() => scrollToSection('projects')}
-                  className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-2xl hover:shadow-blue-500/50"
-              >
-                {i18n.language === 'de' ? 'Projekte ansehen' : 'View Projects'}
-              </button>
-              <button
-                  onClick={() => scrollToSection('contact')}
-                  className="px-8 py-4 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all transform hover:scale-105 border border-slate-600 hover:border-blue-500 shadow-lg"
-              >
-                {i18n.language === 'de' ? 'Kontakt aufnehmen' : 'Get in Touch'}
-              </button>
-            </div>
-
+              </span>
+            </h1>
+            <p className="text-2xl md:text-4xl text-gray-300 mb-8 animate-slide-up-delayed">
+              {i18n.language === 'de' ? 'Full-Stack Entwickler & Informatik-Student' : 'Full-Stack Developer & Computer Science Student'}
+            </p>
+            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 animate-fade-in-up">
+              {aboutPageMeta.description}
+            </p>
             <button
-                onClick={() => scrollToSection('about')}
-                className="animate-bounce text-gray-400 hover:text-white transition-colors hover:scale-110 transform"
+                onClick={() => scrollToSection('projects')}
+                className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full transition-all hover:scale-105 shadow-lg hover:shadow-blue-500/50 animate-fade-in-up"
             >
-              <ChevronDown size={32} />
+              <span className="font-semibold">
+                {i18n.language === 'de' ? 'Meine Projekte' : 'View My Work'}
+              </span>
+              <ChevronDown className="group-hover:translate-y-1 transition-transform animate-bounce-subtle" size={20} />
             </button>
           </div>
         </section>
 
-        {/* Wave Divider */}
-        <div className="w-full relative" style={{ marginLeft: 0, marginRight: 0 }}>
-          <svg className="w-full h-16 md:h-24" style={{ display: 'block' }} viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" fill="rgba(30, 41, 59, 0.3)"/>
-          </svg>
-        </div>
+        {/* Cinematic 3D Divider */}
+        <CinematicDivider />
 
         {/* About Section */}
-        <section id="about" className="py-32 px-6 bg-slate-800/30 relative w-full">
+        <section
+            id="about"
+            ref={aboutSection.ref}
+            className={`py-32 px-6 relative transition-all duration-1000 ${
+                aboutSection.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+        >
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-5xl font-bold mb-12 text-center bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-              {i18n.language === 'de' ? 'Über mich' : 'About Me'}
-            </h2>
-            <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700 backdrop-blur hover:border-blue-500/50 transition-all">
-              <p className="text-xl text-gray-300 leading-relaxed mb-6">
-                {i18n.language === 'de' ? (
-                    <>
-                      Ich bin ein leidenschaftlicher Softwareentwickler mit abgeschlossener Ausbildung zum <strong className="text-white">Software Engineer</strong> und aktuell studiere ich <strong className="text-white">Informatik an der Friedrich-Schiller-Universität Jena</strong>.
-                    </>
-                ) : (
-                    <>
-                      I'm a passionate software developer with a completed education as a <strong className="text-white">Software Engineer</strong> and currently studying <strong className="text-white">Computer Science at Friedrich Schiller University Jena</strong>.
-                    </>
-                )}
-              </p>
-              <p className="text-xl text-gray-300 leading-relaxed">
+            <div className="flex items-center gap-4 mb-8">
+              <Zap className={`text-blue-500 transition-all duration-700 ${
+                  aboutSection.isInView ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 -rotate-180'
+              }`} size={40} />
+              <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                {i18n.language === 'de' ? 'Über mich' : 'About Me'}
+              </h2>
+            </div>
+            <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
+              <p className={`transition-all duration-700 ${
+                  aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
+              }`}>
                 {i18n.language === 'de'
-                    ? 'Meine Expertise liegt in der Full-Stack-Entwicklung mit Schwerpunkt auf modernen Web-Technologien, Game Development mit Unity und der Entwicklung innovativer Tools für Entwickler.'
-                    : 'My expertise lies in full-stack development with a focus on modern web technologies, game development with Unity, and creating innovative tools for developers.'}
+                    ? 'Ich bin ein leidenschaftlicher Softwareentwickler mit Fokus auf moderne Webtechnologien und Backend-Systeme.'
+                    : 'I am a passionate software developer focused on modern web technologies and backend systems.'}
+              </p>
+              <p className={`transition-all duration-700 ${
+                  aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
+              }`}
+                 style={{ transitionDelay: '150ms' }}>
+                {i18n.language === 'de'
+                    ? 'Nach meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung studiere ich nun Informatik an der Friedrich-Schiller-Universität Jena.'
+                    : 'After completing my training as an IT specialist for application development, I am now studying computer science at Friedrich Schiller University Jena.'}
+              </p>
+              <p className={`transition-all duration-700 ${
+                  aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
+              }`}
+                 style={{ transitionDelay: '300ms' }}>
+                {i18n.language === 'de'
+                    ? 'Meine Expertise liegt in der Entwicklung skalierbarer Backend-Architekturen mit C# und ASP.NET Core sowie in modernen Frontend-Technologien.'
+                    : 'My expertise lies in developing scalable backend architectures with C# and ASP.NET Core as well as modern frontend technologies.'}
               </p>
             </div>
           </div>
         </section>
 
-        {/* Wave Divider */}
-        <div className="w-full relative bg-slate-800/30" style={{ marginLeft: 0, marginRight: 0 }}>
-          <svg className="w-full h-16 md:h-24" style={{ display: 'block' }} viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,64L80,58.7C160,53,320,43,480,48C640,53,800,75,960,80C1120,85,1280,75,1360,69.3L1440,64L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z" fill="rgba(15, 23, 42, 1)"/>
-          </svg>
-        </div>
+        {/* Cinematic 3D Divider */}
+        <CinematicDivider />
 
         {/* Experience Section */}
-        <section id="experience" className="py-32 px-6 relative w-full">
-          <div className="max-w-6xl mx-auto">
+        <section
+            id="experience"
+            ref={experienceSection.ref}
+            className={`py-32 px-6 relative transition-all duration-1000 ${
+                experienceSection.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+        >
+          <div className="max-w-5xl mx-auto">
             <h2 className="text-5xl font-bold mb-16 text-center bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
               {i18n.language === 'de' ? 'Erfahrung' : 'Experience'}
             </h2>
-            <div className="space-y-6">
+
+            <div className="space-y-8">
               {sortedExperiences.map((exp, index) => (
                   <div
-                      key={exp._searchableId}
-                      className="group bg-slate-800/50 rounded-2xl p-8 border border-slate-700 hover:border-blue-500/50 transition-all hover:shadow-xl hover:shadow-blue-500/10 backdrop-blur"
-                      style={{ animationDelay: `${index * 100}ms` }}
+                      key={exp.position}
+                      className={`group relative bg-gradient-to-br from-slate-800/40 to-slate-800/20 rounded-2xl p-8 border border-slate-700 hover:border-blue-500 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/20 backdrop-blur overflow-hidden ${
+                          experienceSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+                      }`}
+                      style={{ transitionDelay: `${index * 100}ms` }}
                   >
-                    <div className="flex flex-col md:flex-row md:items-start gap-6">
-                      {exp.logoUrl && (
-                          <img
-                              src={exp.logoUrl}
-                              alt={exp.company}
-                              className="w-16 h-16 rounded-lg object-cover"
-                          />
-                      )}
-                      <div className="flex-1">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-3">
-                          <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-purple-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-purple-500 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:w-2" />
+
+                    <div className="relative z-10">
+                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+                        <div>
+                          <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors duration-300">
                             {exp.position}
                           </h3>
-                          <span className="text-gray-400 text-sm">
-                        {exp.startMonth} - {exp.endMonth}
-                      </span>
+                          <p className="text-xl text-gray-300 mt-2 group-hover:text-gray-200 transition-colors">{exp.company}</p>
                         </div>
-                        <p className="text-xl text-blue-400 mb-2">{exp.company}</p>
-                        {exp.location && (
-                            <p className="text-gray-400 mb-4">{exp.location}</p>
-                        )}
-                        {exp.description && (
-                            <p className="text-gray-300 mb-4">{exp.description}</p>
-                        )}
-                        {exp.skills.length > 0 && (
-                            <div className="flex flex-wrap gap-2">
-                              {exp.skills.map((skill) => (
-                                  <span
-                                      key={skill}
-                                      className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm border border-blue-500/30"
-                                  >
-                            {skill}
-                          </span>
-                              ))}
-                            </div>
-                        )}
+                        <span className="text-blue-400 font-semibold whitespace-nowrap bg-blue-500/10 px-4 py-2 rounded-lg group-hover:bg-blue-500/20 transition-colors">
+                          {exp.startMonth} - {exp.endMonth}
+                        </span>
                       </div>
+                      {exp.description && (
+                          <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">{exp.description}</p>
+                      )}
                     </div>
                   </div>
               ))}
@@ -378,91 +399,93 @@ export const ModernView: React.FC = () => {
           </div>
         </section>
 
-        {/* Wave Divider */}
-        <div className="w-full relative" style={{ marginLeft: 0, marginRight: 0 }}>
-          <svg className="w-full h-16 md:h-24" style={{ display: 'block' }} viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,32L80,37.3C160,43,320,53,480,58.7C640,64,800,64,960,58.7C1120,53,1280,43,1360,37.3L1440,32L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" fill="rgba(30, 41, 59, 0.3)"/>
-          </svg>
-        </div>
+        {/* Cinematic 3D Divider */}
+        <CinematicDivider />
 
         {/* Projects Section */}
-        <section id="projects" className="py-32 px-6 bg-slate-800/30 relative w-full">
+        <section
+            id="projects"
+            ref={projectsSection.ref}
+            className={`py-32 px-6 relative transition-all duration-1000 ${
+                projectsSection.isInView ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+            }`}
+        >
           <div className="max-w-7xl mx-auto">
             <h2 className="text-5xl font-bold mb-16 text-center bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
               {i18n.language === 'de' ? 'Projekte' : 'Projects'}
             </h2>
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project, index) => {
-                const colorClasses = [
-                  {
-                    card: 'bg-gradient-to-br from-purple-900/50 to-slate-800/50 border-purple-500/30 hover:border-purple-500 hover:shadow-purple-500/20',
-                    title: 'group-hover:text-purple-400',
-                    button: 'bg-purple-600 hover:bg-purple-700'
-                  },
-                  {
-                    card: 'bg-gradient-to-br from-blue-900/50 to-slate-800/50 border-blue-500/30 hover:border-blue-500 hover:shadow-blue-500/20',
-                    title: 'group-hover:text-blue-400',
-                    button: 'bg-blue-600 hover:bg-blue-700'
-                  },
-                  {
-                    card: 'bg-gradient-to-br from-green-900/50 to-slate-800/50 border-green-500/30 hover:border-green-500 hover:shadow-green-500/20',
-                    title: 'group-hover:text-green-400',
-                    button: 'bg-green-600 hover:bg-green-700'
-                  }
-                ];
-                const colors = colorClasses[index % colorClasses.length];
+                const colors = {
+                  card: 'bg-slate-800/30 border-slate-700 hover:border-blue-500',
+                  title: 'group-hover:text-blue-400',
+                  button: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-500/30'
+                };
 
                 return (
                     <div
                         key={project.slug}
-                        className={`group rounded-2xl p-8 border transition-all hover:shadow-2xl backdrop-blur transform hover:scale-105 ${colors.card}`}
-                        style={{ animationDelay: `${index * 100}ms` }}
+                        className={`group rounded-2xl p-8 border transition-all duration-700 hover:shadow-2xl hover:shadow-blue-500/20 backdrop-blur transform hover:scale-105 hover:-translate-y-3 ${colors.card} ${
+                            projectsSection.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                        } relative overflow-hidden`}
+                        style={{ transitionDelay: `${index * 150}ms` }}
                     >
-                      <div className="text-4xl mb-4">{project.icon}</div>
-                      <h3 className={`text-3xl font-bold mb-3 text-white transition-colors ${colors.title}`}>
-                        {project.name}
-                      </h3>
-                      <p className="text-gray-300 mb-6 text-base leading-relaxed">
-                        {project.description}
-                      </p>
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-purple-500/5 to-pink-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                      <div className="mb-6">
-                        <h4 className="text-sm font-semibold text-gray-400 mb-3">
-                          {i18n.language === 'de' ? 'Features:' : 'Features:'}
-                        </h4>
-                        <div className="space-y-2">
-                          {project.features.slice(0, 3).map((feature) => (
-                              <div key={feature._searchableId} className="flex items-start gap-2">
-                                <span className="text-base flex-shrink-0">{feature.icon}</span>
-                                <span className="text-gray-300 text-sm">{feature.title}</span>
-                              </div>
-                          ))}
+                      <div className="relative z-10">
+                        <div className="text-4xl mb-4 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">{project.icon}</div>
+                        <h3 className={`text-3xl font-bold mb-3 text-white transition-colors duration-300 ${colors.title}`}>
+                          {project.name}
+                        </h3>
+                        <p className="text-gray-300 mb-6 text-base leading-relaxed group-hover:text-gray-200 transition-colors">
+                          {project.description}
+                        </p>
+
+                        <div className="mb-6">
+                          <h4 className="text-sm font-semibold text-gray-400 mb-3">
+                            {i18n.language === 'de' ? 'Features:' : 'Features:'}
+                          </h4>
+                          <div className="space-y-2">
+                            {project.features.slice(0, 3).map((feature, featureIndex) => (
+                                <div
+                                    key={feature._searchableId}
+                                    className={`flex items-start gap-2 transition-all duration-500 ${
+                                        projectsSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-3'
+                                    }`}
+                                    style={{ transitionDelay: `${(index * 150) + (featureIndex * 100)}ms` }}
+                                >
+                                  <span className="text-base flex-shrink-0 group-hover:scale-125 transition-transform">{feature.icon}</span>
+                                  <span className="text-gray-300 text-sm group-hover:text-gray-200 transition-colors">{feature.title}</span>
+                                </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="flex gap-3 flex-wrap">
-                        {project.url && (
-                            <a
-                                href={project.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-semibold hover:scale-105 ${colors.button}`}
-                            >
-                              <ExternalLink size={16} />
-                              {i18n.language === 'de' ? 'Live Demo' : 'Live Demo'}
-                            </a>
-                        )}
-                        {project.debugUrl && (
-                            <a
-                                href={project.debugUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-all text-sm font-semibold hover:scale-105"
-                            >
-                              <Github size={16} />
-                              GitHub
-                            </a>
-                        )}
+                        <div className="flex gap-3 flex-wrap">
+                          {project.url && (
+                              <a
+                                  href={project.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-semibold hover:scale-110 ${colors.button}`}
+                              >
+                                <ExternalLink size={16} />
+                                {i18n.language === 'de' ? 'Live Demo' : 'Live Demo'}
+                              </a>
+                          )}
+                          {project.debugUrl && (
+                              <a
+                                  href={project.debugUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-all text-sm font-semibold hover:scale-110"
+                              >
+                                <GithubIcon size={16} />
+                                GitHub
+                              </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                 );
@@ -471,15 +494,17 @@ export const ModernView: React.FC = () => {
           </div>
         </section>
 
-        {/* Wave Divider */}
-        <div className="w-full relative bg-slate-800/30" style={{ marginLeft: 0, marginRight: 0 }}>
-          <svg className="w-full h-16 md:h-24" style={{ display: 'block' }} viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,96L80,90.7C160,85,320,75,480,69.3C640,64,800,64,960,69.3C1120,75,1280,85,1360,90.7L1440,96L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z" fill="rgba(15, 23, 42, 1)"/>
-          </svg>
-        </div>
+        {/* Cinematic 3D Divider */}
+        <CinematicDivider />
 
         {/* Contact Section */}
-        <section id="contact" className="py-32 px-6 relative w-full">
+        <section
+            id="contact"
+            ref={contactSection.ref}
+            className={`py-32 px-6 relative w-full transition-all duration-1000 ${
+                contactSection.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
+        >
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
               {i18n.language === 'de' ? 'Lass uns reden' : "Let's Talk"}
@@ -489,36 +514,48 @@ export const ModernView: React.FC = () => {
             </p>
 
             <div className="grid gap-6 max-w-2xl mx-auto">
-              {contactPageMeta.contactMethods.map((method, index) => (
-                  <a
-                      key={method.id}
-                      href={method.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group bg-slate-800/50 rounded-2xl p-8 border border-slate-700 hover:border-blue-500 transition-all hover:shadow-xl hover:shadow-blue-500/10 backdrop-blur transform hover:scale-105"
-                      style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <div className="flex items-center gap-6">
-                      <div className="text-5xl group-hover:scale-110 transition-transform">{method.icon}</div>
-                      <div className="flex-1 text-left">
-                        <p className="text-sm font-medium text-gray-400 mb-1">
-                          {method.label}
-                        </p>
-                        <p className="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors">
-                          {method.value}
-                        </p>
+              {contactPageMeta.contactMethods.map((method, index) => {
+                const IconComponent = iconMap[method.icon as keyof typeof iconMap];
+                return (
+                    <a
+                        key={method.id}
+                        href={method.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`group bg-gradient-to-br from-slate-800/50 to-slate-800/30 rounded-2xl p-8 border border-slate-700 hover:border-blue-500 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/20 backdrop-blur transform hover:scale-105 relative overflow-hidden ${
+                            contactSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+                        }`}
+                        style={{
+                          transitionDelay: `${index * 100}ms`,
+                          transitionDuration: '700ms'
+                        }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="flex items-center gap-6 relative z-10">
+                        <div className="text-blue-400 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
+                          <IconComponent size={48} />
+                        </div>
+                        <div className="flex-1 text-left">
+                          <p className="text-sm font-medium text-gray-400 mb-1">
+                            {method.label}
+                          </p>
+                          <p className="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors duration-300">
+                            {method.value}
+                          </p>
+                        </div>
+                        <ExternalLink className="text-gray-400 group-hover:text-blue-400 group-hover:translate-x-2 transition-all duration-300" size={24} />
                       </div>
-                      <ExternalLink className="text-gray-400 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" size={24} />
-                    </div>
-                  </a>
-              ))}
+                    </a>
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="py-8 px-6 border-t border-slate-700">
-          <div className="max-w-7xl mx-auto text-center text-gray-400">
+        <footer className="py-8 px-6 border-t border-slate-700 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent opacity-50" />
+          <div className="max-w-7xl mx-auto text-center text-gray-400 relative z-10">
             <p>
               {i18n.language === 'de'
                   ? '© 2025 Yannik Köllmann. Gemacht mit ❤️ und viel ☕'
@@ -528,36 +565,35 @@ export const ModernView: React.FC = () => {
         </footer>
 
         <style>{`
+        /* Optimized animations */
         @keyframes gradient {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
         }
         .animate-gradient {
           background-size: 200% 200%;
-          animation: gradient 5s ease infinite;
+          animation: gradient 8s ease infinite;
         }
+        
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+        
         @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in {
           animation: fade-in 1s ease-out;
         }
+        
         @keyframes slide-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         .animate-slide-up {
           animation: slide-up 0.8s ease-out 0.3s both;
@@ -565,35 +601,324 @@ export const ModernView: React.FC = () => {
         .animate-slide-up-delayed {
           animation: slide-up 0.8s ease-out 0.5s both;
         }
+        
         @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(40px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in-up {
           animation: fade-in-up 1s ease-out 0.7s both;
         }
+        
         @keyframes float {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(30px, -30px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
+          0%, 100% { transform: translate(0, 0); }
+          33% { transform: translate(30px, -30px); }
+          66% { transform: translate(-20px, 20px); }
         }
         .animate-float {
           animation: float 20s ease-in-out infinite;
         }
         .animate-float-delayed {
-          animation: float 20s ease-in-out infinite 5s;
+          animation: float 20s ease-in-out infinite 10s;
+        }
+        .animate-float-slow {
+          animation: float 30s ease-in-out infinite 5s;
+        }
+        
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 10s linear infinite;
+        }
+        
+        @keyframes bounce-subtle {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-subtle {
+          animation: bounce-subtle 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.7; }
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 3s ease-in-out infinite;
+        }
+        
+        @keyframes scale-in {
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-scale-in {
+          animation: scale-in 0.3s ease-out;
+        }
+        
+        /* CINEMATIC 3D PARALLAX DIVIDER */
+        .cinematic-divider {
+          position: relative;
+          height: 250px;
+          overflow: hidden;
+          perspective: 1500px;
+          transform-style: preserve-3d;
+        }
+        
+        .divider-depth-layer {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg,
+            rgba(59, 130, 246, 0.15) 0%,
+            rgba(168, 85, 247, 0.25) 35%,
+            rgba(236, 72, 153, 0.2) 65%,
+            rgba(59, 130, 246, 0.15) 100%
+          );
+          transform-style: preserve-3d;
+        }
+        
+        /* Layer 1 - Closest, most dramatic */
+        @keyframes depth-wave-1 {
+          0%, 100% {
+            transform: translateZ(150px) translateX(0%) rotateX(15deg) scaleY(1.2);
+            clip-path: polygon(
+              0% 45%, 10% 35%, 20% 50%, 30% 30%, 40% 45%, 50% 25%, 
+              60% 40%, 70% 30%, 80% 45%, 90% 35%, 100% 40%,
+              100% 100%, 0% 100%
+            );
+          }
+          50% {
+            transform: translateZ(200px) translateX(-8%) rotateX(20deg) scaleY(1.4);
+            clip-path: polygon(
+              0% 35%, 10% 50%, 20% 30%, 30% 45%, 40% 25%, 50% 40%,
+              60% 30%, 70% 45%, 80% 35%, 90% 50%, 100% 30%,
+              100% 100%, 0% 100%
+            );
+          }
+        }
+        
+        .depth-1 {
+          animation: depth-wave-1 10s ease-in-out infinite;
+          opacity: 0.8;
+          filter: blur(1px) brightness(1.3);
+          z-index: 5;
+        }
+        
+        /* Layer 2 */
+        @keyframes depth-wave-2 {
+          0%, 100% {
+            transform: translateZ(100px) translateX(0%) rotateX(12deg) scaleY(1.15);
+            clip-path: polygon(
+              0% 50%, 12% 40%, 25% 55%, 37% 35%, 50% 50%, 62% 40%,
+              75% 55%, 87% 40%, 100% 50%,
+              100% 100%, 0% 100%
+            );
+          }
+          50% {
+            transform: translateZ(140px) translateX(6%) rotateX(18deg) scaleY(1.3);
+            clip-path: polygon(
+              0% 40%, 12% 55%, 25% 35%, 37% 50%, 50% 40%, 62% 55%,
+              75% 35%, 87% 55%, 100% 40%,
+              100% 100%, 0% 100%
+            );
+          }
+        }
+        
+        .depth-2 {
+          animation: depth-wave-2 12s ease-in-out infinite 0.5s;
+          opacity: 0.6;
+          filter: blur(2px) brightness(1.2);
+          z-index: 4;
+        }
+        
+        /* Layer 3 */
+        @keyframes depth-wave-3 {
+          0%, 100% {
+            transform: translateZ(60px) translateX(0%) rotateX(10deg) scaleY(1.1);
+            clip-path: polygon(
+              0% 55%, 15% 45%, 30% 58%, 45% 42%, 60% 55%, 75% 45%, 90% 58%, 100% 48%,
+              100% 100%, 0% 100%
+            );
+          }
+          50% {
+            transform: translateZ(90px) translateX(-5%) rotateX(15deg) scaleY(1.25);
+            clip-path: polygon(
+              0% 45%, 15% 58%, 30% 42%, 45% 55%, 60% 45%, 75% 58%, 90% 42%, 100% 55%,
+              100% 100%, 0% 100%
+            );
+          }
+        }
+        
+        .depth-3 {
+          animation: depth-wave-3 14s ease-in-out infinite 1s;
+          opacity: 0.45;
+          filter: blur(4px) brightness(1.1);
+          z-index: 3;
+        }
+        
+        /* Layer 4 */
+        @keyframes depth-wave-4 {
+          0%, 100% {
+            transform: translateZ(30px) translateX(0%) rotateX(8deg) scaleY(1.05);
+            clip-path: polygon(
+              0% 58%, 20% 48%, 40% 60%, 60% 50%, 80% 58%, 100% 52%,
+              100% 100%, 0% 100%
+            );
+          }
+          50% {
+            transform: translateZ(50px) translateX(4%) rotateX(12deg) scaleY(1.15);
+            clip-path: polygon(
+              0% 48%, 20% 60%, 40% 50%, 60% 58%, 80% 48%, 100% 60%,
+              100% 100%, 0% 100%
+            );
+          }
+        }
+        
+        .depth-4 {
+          animation: depth-wave-4 16s ease-in-out infinite 1.5s;
+          opacity: 0.3;
+          filter: blur(6px) brightness(1.05);
+          z-index: 2;
+        }
+        
+        /* Layer 5 - Farthest */
+        @keyframes depth-wave-5 {
+          0%, 100% {
+            transform: translateZ(10px) translateX(0%) rotateX(5deg);
+            clip-path: polygon(
+              0% 60%, 25% 52%, 50% 62%, 75% 54%, 100% 58%,
+              100% 100%, 0% 100%
+            );
+          }
+          50% {
+            transform: translateZ(20px) translateX(-3%) rotateX(8deg);
+            clip-path: polygon(
+              0% 52%, 25% 62%, 50% 54%, 75% 60%, 100% 52%,
+              100% 100%, 0% 100%
+            );
+          }
+        }
+        
+        .depth-5 {
+          animation: depth-wave-5 18s ease-in-out infinite 2s;
+          opacity: 0.2;
+          filter: blur(10px);
+          z-index: 1;
+        }
+        
+        /* Cinematic Glows */
+        @keyframes cinematic-glow-top {
+          0%, 100% {
+            opacity: 0.4;
+            transform: translateY(0%) scaleX(1);
+          }
+          50% {
+            opacity: 0.7;
+            transform: translateY(-10%) scaleX(1.3);
+          }
+        }
+        
+        .cinematic-glow-top {
+          position: absolute;
+          top: 10%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80%;
+          height: 120px;
+          background: radial-gradient(ellipse at center,
+            rgba(59, 130, 246, 0.5) 0%,
+            rgba(168, 85, 247, 0.4) 30%,
+            rgba(236, 72, 153, 0.3) 60%,
+            transparent 85%
+          );
+          filter: blur(40px);
+          animation: cinematic-glow-top 6s ease-in-out infinite;
+          z-index: 6;
+          pointer-events: none;
+        }
+        
+        @keyframes cinematic-glow-bottom {
+          0%, 100% {
+            opacity: 0.3;
+            transform: translateY(0%) scaleX(1);
+          }
+          50% {
+            opacity: 0.6;
+            transform: translateY(10%) scaleX(1.4);
+          }
+        }
+        
+        .cinematic-glow-bottom {
+          position: absolute;
+          bottom: 15%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 90%;
+          height: 100px;
+          background: radial-gradient(ellipse at center,
+            rgba(236, 72, 153, 0.4) 0%,
+            rgba(168, 85, 247, 0.3) 40%,
+            transparent 75%
+          );
+          filter: blur(50px);
+          animation: cinematic-glow-bottom 7s ease-in-out infinite 1s;
+          z-index: 6;
+          pointer-events: none;
+        }
+        
+        /* Floating Particles */
+        .cinematic-particles {
+          position: absolute;
+          inset: 0;
+          z-index: 7;
+          pointer-events: none;
+        }
+        
+        @keyframes particle-float {
+          0% {
+            transform: translateY(120%) translateX(0) scale(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-20%) translateX(var(--drift, 20px)) scale(1);
+            opacity: 0;
+          }
+        }
+        
+        .particle {
+          position: absolute;
+          bottom: 0;
+          width: 4px;
+          height: 4px;
+          background: radial-gradient(circle, rgba(168, 85, 247, 1) 0%, transparent 70%);
+          border-radius: 50%;
+          animation: particle-float 8s ease-in infinite;
+          --drift: calc((var(--index, 1) - 7) * 15px);
+        }
+        
+        .particle:nth-child(3n) {
+          background: radial-gradient(circle, rgba(59, 130, 246, 1) 0%, transparent 70%);
+          animation-duration: 9s;
+        }
+        
+        .particle:nth-child(3n+1) {
+          background: radial-gradient(circle, rgba(236, 72, 153, 1) 0%, transparent 70%);
+          animation-duration: 10s;
+        }
+        
+        /* Performance optimization */
+        * {
+          will-change: auto;
+        }
+        .group:hover * {
+          will-change: transform;
         }
       `}</style>
       </div>
