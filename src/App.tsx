@@ -18,6 +18,7 @@ import {satTrackPageMeta} from './pages/src/SatTrack/meta.ts';
 import {contactPageMeta} from './pages/contact/meta.ts';
 import {useViewMode} from './contexts/ViewModeContext';
 import {ModernView} from './components/ModernView';
+import SplashScreen from "./components/Splashscreen.tsx";
 
 function App() {
     const {viewMode} = useViewMode();
@@ -146,6 +147,9 @@ function App() {
 
     return (
         <div className="app-root">
+            <SplashScreen>
+
+            </SplashScreen>
             <Header
                 runConfigs={runConfigs}
                 currentPage={currentPage}
