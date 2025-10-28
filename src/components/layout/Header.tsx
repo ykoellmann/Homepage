@@ -8,6 +8,7 @@ import {type RunConfig, RunControls} from "../run-controls/RunControls.tsx";
 import {useHistoryStatus} from "../../hooks/useHistoryStatus.ts";
 import {SearchEverywhere} from "../SearchEverywhere.tsx";
 import {SettingsDialog} from "../SettingsDialog.tsx";
+import {keymapService} from "../../lib/keymapService.ts";
 
 interface HeaderProps {
     runConfigs: RunConfig[];
@@ -15,6 +16,10 @@ interface HeaderProps {
     onRun: (cfg: RunConfig) => void;
     onDebug: (cfg: RunConfig) => void;
     onStop: () => void;
+    searchOpen: boolean;
+    setSearchOpen: (open: boolean) => void;
+    settingsOpen: boolean;
+    setSettingsOpen: (open: boolean) => void;
 }
 
 export function Header({
@@ -22,58 +27,28 @@ export function Header({
                            currentPage,
                            onRun,
                            onDebug,
-                           onStop
+                           onStop,
+                           searchOpen,
+                           setSearchOpen,
+                           settingsOpen,
+                           setSettingsOpen
                        }: HeaderProps) {
     const {canGoBack, canGoForward} = useHistoryStatus();
-    const [searchOpen, setSearchOpen] = React.useState(false);
-    const [settingsOpen, setSettingsOpen] = React.useState(false);
 
-    // Track shift key presses for double-shift detection
-    const shiftTimerRef = React.useRef<NodeJS.Timeout | null>(null);
-    const shiftPressCountRef = React.useRef(0);
-
-    // Global keyboard shortcuts
+    // Special: Shift+Shift detection (not handled by keymap service due to special logic)
     React.useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Ctrl+Shift+A for search (existing)
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'a') {
-                e.preventDefault();
-                setSearchOpen(true);
-            }
-            // Ctrl+Alt+S for settings
-            else if (e.ctrlKey && e.altKey && e.key === 's') {
-                e.preventDefault();
-                setSettingsOpen(true);
-            }
-            // Shift+Shift for search everywhere
-            else if (e.key === 'Shift') {
-                shiftPressCountRef.current++;
-
-                if (shiftPressCountRef.current === 1) {
-                    // First shift press - start timer
-                    shiftTimerRef.current = setTimeout(() => {
-                        // Reset if second shift wasn't pressed within 500ms
-                        shiftPressCountRef.current = 0;
-                    }, 500);
-                } else if (shiftPressCountRef.current === 2) {
-                    // Second shift press - open search
+            if (e.key === 'Shift') {
+                if (keymapService.handleShiftPress()) {
                     e.preventDefault();
                     setSearchOpen(true);
-                    shiftPressCountRef.current = 0;
-                    if (shiftTimerRef.current) {
-                        clearTimeout(shiftTimerRef.current);
-                    }
                 }
             }
         };
 
         const handleKeyUp = (e: KeyboardEvent) => {
-            // Reset shift counter if any other key is pressed
-            if (e.key !== 'Shift' && shiftPressCountRef.current > 0) {
-                shiftPressCountRef.current = 0;
-                if (shiftTimerRef.current) {
-                    clearTimeout(shiftTimerRef.current);
-                }
+            if (e.key !== 'Shift') {
+                keymapService.resetShiftCounter();
             }
         };
 
@@ -82,9 +57,6 @@ export function Header({
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('keyup', handleKeyUp);
-            if (shiftTimerRef.current) {
-                clearTimeout(shiftTimerRef.current);
-            }
         };
     }, []);
 

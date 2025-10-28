@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Globe, Palette } from 'lucide-react';
+import { X, Globe, Palette, Keyboard } from 'lucide-react';
 import { useViewMode } from '../contexts/ViewModeContext';
+import { KeymapSettings } from './KeymapSettings';
 
 interface SettingsDialogProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-type SettingsCategory = 'appearance' | 'language';
+type SettingsCategory = 'appearance' | 'language' | 'keymap';
 
 export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
     const { i18n } = useTranslation('common');
@@ -20,6 +21,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
     const categories = [
         { id: 'appearance' as const, label: 'Appearance & Behavior', icon: Palette },
         { id: 'language' as const, label: 'Language', icon: Globe },
+        { id: 'keymap' as const, label: 'Keymap', icon: Keyboard },
     ];
 
     const languages = [
@@ -61,36 +63,42 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
 
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
+                e.preventDefault();
+                e.stopPropagation();
                 handleCancel();
             }
         };
-        window.addEventListener('keydown', handleEscape);
-        return () => window.removeEventListener('keydown', handleEscape);
+        // Use capture phase for higher priority
+        window.addEventListener('keydown', handleEscape, true);
+        return () => window.removeEventListener('keydown', handleEscape, true);
     }, [isOpen, i18n.language]);
 
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="w-full max-w-5xl h-[600px] bg-white dark:bg-gray-800 rounded-lg shadow-2xl flex flex-col overflow-hidden border border-gray-300 dark:border-gray-700">
+            <div className="w-full max-w-5xl h-[600px] rounded-lg shadow-2xl flex flex-col overflow-hidden border" style={{ background: '#2B2D30', borderColor: '#393B40' }}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-                    <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                <div className="flex items-center justify-between px-6 py-3 border-b" style={{ borderColor: '#393B40' }}>
+                    <h2 className="text-lg font-semibold" style={{ color: '#BCBEC4' }}>
                         Settings
                     </h2>
                     <button
                         onClick={handleCancel}
-                        className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                        className="p-1 rounded transition-colors"
+                        style={{ color: '#6C707E' }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = '#3C3F41'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         aria-label="Close settings"
                     >
-                        <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                        <X className="w-5 h-5" />
                     </button>
                 </div>
 
                 {/* Content */}
                 <div className="flex flex-1 overflow-hidden">
                     {/* Sidebar */}
-                    <div className="w-64 border-r border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
+                    <div className="w-64 border-r overflow-y-auto" style={{ borderColor: '#393B40', background: '#2B2D30' }}>
                         <div className="p-2">
                             {categories.map((category) => {
                                 const Icon = category.icon;
@@ -98,11 +106,21 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                     <button
                                         key={category.id}
                                         onClick={() => setSelectedCategory(category.id)}
-                                        className={`w-full flex items-center gap-3 px-3 py-2 rounded text-sm font-medium transition-colors ${
-                                            selectedCategory === category.id
-                                                ? 'bg-blue-500 text-white'
-                                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800'
-                                        }`}
+                                        className="w-full flex items-center gap-3 px-3 py-2 rounded text-sm font-medium transition-colors"
+                                        style={{
+                                            background: selectedCategory === category.id ? '#1d4ed8' : 'transparent',
+                                            color: selectedCategory === category.id ? 'white' : '#BCBEC4'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (selectedCategory !== category.id) {
+                                                e.currentTarget.style.background = '#3C3F41';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (selectedCategory !== category.id) {
+                                                e.currentTarget.style.background = 'transparent';
+                                            }
+                                        }}
                                     >
                                         <Icon className="w-4 h-4" />
                                         {category.label}
@@ -113,24 +131,34 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                     </div>
 
                     {/* Main Content */}
-                    <div className="flex-1 overflow-y-auto p-6">
+                    <div className="flex-1 overflow-y-auto p-6" style={{ background: '#2B2D30' }}>
                         {selectedCategory === 'appearance' && (
                             <div className="space-y-6">
                                 <div>
-                                    <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                                    <h3 className="text-base font-semibold mb-4" style={{ color: '#BCBEC4' }}>
                                         View Mode
                                     </h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                    <p className="text-sm mb-4" style={{ color: '#808080' }}>
                                         Choose how you want to view the portfolio.
                                     </p>
 
                                     <div className="space-y-2">
                                         <label
-                                            className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
-                                                tempViewMode === 'ide'
-                                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                                                    : 'border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
-                                            }`}
+                                            className="flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors"
+                                            style={{
+                                                borderColor: tempViewMode === 'ide' ? '#1d4ed8' : '#393B40',
+                                                background: tempViewMode === 'ide' ? '#1d4ed8/20' : 'transparent'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                if (tempViewMode !== 'ide') {
+                                                    e.currentTarget.style.background = '#3C3F41';
+                                                }
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                if (tempViewMode !== 'ide') {
+                                                    e.currentTarget.style.background = 'transparent';
+                                                }
+                                            }}
                                         >
                                             <input
                                                 type="radio"
@@ -138,29 +166,39 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                                 value="ide"
                                                 checked={tempViewMode === 'ide'}
                                                 onChange={(e) => setTempViewMode(e.target.value as 'ide')}
-                                                className="w-4 h-4 mt-1 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                                className="w-4 h-4 mt-1"
                                             />
                                             <div className="flex-1">
-                                                <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                                <div className="text-sm font-medium mb-1" style={{ color: '#BCBEC4' }}>
                                                     IDE View
                                                 </div>
-                                                <div className="text-xs text-gray-600 dark:text-gray-400">
+                                                <div className="text-xs" style={{ color: '#808080' }}>
                                                     VS Code-inspired interface with file explorer and tabs. Perfect for developers.
                                                 </div>
                                             </div>
                                             {tempViewMode === 'ide' && (
-                                                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg className="w-5 h-5 mt-1" style={{ color: '#1d4ed8' }} fill="currentColor" viewBox="0 0 20 20">
                                                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                 </svg>
                                             )}
                                         </label>
 
                                         <label
-                                            className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
-                                                tempViewMode === 'modern'
-                                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                                                    : 'border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
-                                            }`}
+                                            className="flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors"
+                                            style={{
+                                                borderColor: tempViewMode === 'modern' ? '#1d4ed8' : '#393B40',
+                                                background: tempViewMode === 'modern' ? '#1d4ed8/20' : 'transparent'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                if (tempViewMode !== 'modern') {
+                                                    e.currentTarget.style.background = '#3C3F41';
+                                                }
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                if (tempViewMode !== 'modern') {
+                                                    e.currentTarget.style.background = 'transparent';
+                                                }
+                                            }}
                                         >
                                             <input
                                                 type="radio"
@@ -168,18 +206,18 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                                 value="modern"
                                                 checked={tempViewMode === 'modern'}
                                                 onChange={(e) => setTempViewMode(e.target.value as 'modern')}
-                                                className="w-4 h-4 mt-1 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                                className="w-4 h-4 mt-1"
                                             />
                                             <div className="flex-1">
-                                                <div className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                                                <div className="text-sm font-medium mb-1" style={{ color: '#BCBEC4' }}>
                                                     Modern View
                                                 </div>
-                                                <div className="text-xs text-gray-600 dark:text-gray-400">
+                                                <div className="text-xs" style={{ color: '#808080' }}>
                                                     Traditional portfolio layout with hero section. Mobile-friendly and accessible.
                                                 </div>
                                             </div>
                                             {tempViewMode === 'modern' && (
-                                                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <svg className="w-5 h-5 mt-1" style={{ color: '#1d4ed8' }} fill="currentColor" viewBox="0 0 20 20">
                                                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                 </svg>
                                             )}
@@ -187,8 +225,8 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                     </div>
 
                                     {tempViewMode !== viewMode && (
-                                        <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                                            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                                        <div className="mt-4 p-3 border rounded-lg" style={{ background: '#3C3F41', borderColor: '#6B7280' }}>
+                                            <p className="text-sm" style={{ color: '#FCD34D' }}>
                                                 Click "Apply" or "OK" to switch the view mode.
                                             </p>
                                         </div>
@@ -200,26 +238,36 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                         {selectedCategory === 'language' && (
                             <div className="space-y-6">
                                 <div>
-                                    <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                                    <h3 className="text-base font-semibold mb-4" style={{ color: '#BCBEC4' }}>
                                         Language Settings
                                     </h3>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                    <p className="text-sm mb-4" style={{ color: '#808080' }}>
                                         Select the language for the application interface.
                                     </p>
 
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        <label className="text-sm font-medium" style={{ color: '#BCBEC4' }}>
                                             Interface Language
                                         </label>
                                         <div className="space-y-2">
                                             {languages.map((lang) => (
                                                 <label
                                                     key={lang.code}
-                                                    className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-                                                        tempLanguage === lang.code
-                                                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                                                            : 'border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
-                                                    }`}
+                                                    className="flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors"
+                                                    style={{
+                                                        borderColor: tempLanguage === lang.code ? '#1d4ed8' : '#393B40',
+                                                        background: tempLanguage === lang.code ? '#1d4ed8/20' : 'transparent'
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        if (tempLanguage !== lang.code) {
+                                                            e.currentTarget.style.background = '#3C3F41';
+                                                        }
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        if (tempLanguage !== lang.code) {
+                                                            e.currentTarget.style.background = 'transparent';
+                                                        }
+                                                    }}
                                                 >
                                                     <input
                                                         type="radio"
@@ -227,16 +275,16 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                                         value={lang.code}
                                                         checked={tempLanguage === lang.code}
                                                         onChange={(e) => setTempLanguage(e.target.value)}
-                                                        className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                                        className="w-4 h-4"
                                                     />
                                                     <span className="text-2xl">{lang.flag}</span>
                                                     <div className="flex-1">
-                                                        <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                        <div className="text-sm font-medium" style={{ color: '#BCBEC4' }}>
                                                             {lang.name}
                                                         </div>
                                                     </div>
                                                     {tempLanguage === lang.code && (
-                                                        <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                                        <svg className="w-5 h-5" style={{ color: '#1d4ed8' }} fill="currentColor" viewBox="0 0 20 20">
                                                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                                         </svg>
                                                     )}
@@ -246,8 +294,8 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                     </div>
 
                                     {tempLanguage !== i18n.language && (
-                                        <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                                            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                                        <div className="mt-4 p-3 border rounded-lg" style={{ background: '#3C3F41', borderColor: '#6B7280' }}>
+                                            <p className="text-sm" style={{ color: '#FCD34D' }}>
                                                 Click "Apply" or "OK" to change the language.
                                             </p>
                                         </div>
@@ -255,27 +303,44 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                 </div>
                             </div>
                         )}
+
+                        {selectedCategory === 'keymap' && (
+                            <KeymapSettings />
+                        )}
                     </div>
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                <div className="flex items-center justify-end gap-2 px-6 py-2 border-t" style={{ borderColor: '#393B40', background: '#2B2D30' }}>
                     <button
                         onClick={handleCancel}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
+                        className="px-4 py-1.5 text-sm font-medium rounded transition-colors"
+                        style={{ color: '#BCBEC4' }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = '#3C3F41'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleApply}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-1.5 text-sm font-medium rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ color: '#BCBEC4' }}
+                        onMouseEnter={(e) => {
+                            if (!e.currentTarget.disabled) {
+                                e.currentTarget.style.background = '#3C3F41';
+                            }
+                        }}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         disabled={tempLanguage === i18n.language && tempViewMode === viewMode}
                     >
                         Apply
                     </button>
                     <button
                         onClick={handleOk}
-                        className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-1.5 text-sm font-medium text-white rounded transition-colors"
+                        style={{ background: '#1d4ed8' }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = '#1e40af'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = '#1d4ed8'}
                     >
                         OK
                     </button>

@@ -17,36 +17,44 @@ export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
 
     // Keyboard Shortcuts wie JetBrains
     useEffect(() => {
+        if (!isOpen) return;
+
         const handleKeyDown = (e: KeyboardEvent) => {
-            // ESC -> Close
-            if (e.key === 'Escape' && isOpen) {
+            // ESC -> Close (capture phase to prevent other handlers)
+            if (e.key === 'Escape') {
                 e.preventDefault();
+                e.stopPropagation();
                 setQuery('');
                 onClose();
+                return;
             }
 
             // Arrow Navigation
-            if (isOpen && results.length > 0) {
+            if (results.length > 0) {
                 if (e.key === 'ArrowDown') {
                     e.preventDefault();
+                    e.stopPropagation();
                     setSelectedIndex((prev) =>
                         prev < results.length - 1 ? prev + 1 : 0
                     );
                 } else if (e.key === 'ArrowUp') {
                     e.preventDefault();
+                    e.stopPropagation();
                     setSelectedIndex((prev) =>
                         prev > 0 ? prev - 1 : results.length - 1
                     );
                 } else if (e.key === 'Enter' && results[selectedIndex]) {
                     e.preventDefault();
+                    e.stopPropagation();
                     window.location.href = `/${results[selectedIndex].pageSlug}`;
                     onClose();
                 }
             }
         };
 
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        // Use capture phase to catch events before keymap service
+        window.addEventListener('keydown', handleKeyDown, true);
+        return () => window.removeEventListener('keydown', handleKeyDown, true);
     }, [isOpen, results, selectedIndex, onClose]);
 
     // Focus input when opened

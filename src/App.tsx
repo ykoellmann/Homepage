@@ -19,6 +19,7 @@ import {contactPageMeta} from './pages/contact/meta.ts';
 import {useViewMode} from './contexts/ViewModeContext';
 import {ModernView} from './components/ModernView';
 import SplashScreen from "./components/Splashscreen.tsx";
+import {registerAllShortcuts, unregisterAllShortcuts} from './lib/registerShortcuts.ts';
 
 function App() {
     const {viewMode} = useViewMode();
@@ -42,6 +43,8 @@ function App() {
     }, []);
     const [currentPage, setCurrentPage] = useState<PageEntry | null>(null);
     const [routePath, setRoutePath] = useState<string>(window.location.pathname);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [settingsOpen, setSettingsOpen] = useState(false);
 
     const runConfigs = Object.values(pages)
         .map(p => p.meta?.runConfig)
@@ -106,18 +109,17 @@ function App() {
         return () => window.removeEventListener('navigation:popstate', onNavigationPopState);
     }, [pages, navigateTo, setCurrentPage]);
 
-    // Breadcrumb shortcut: Ctrl+F2 to open lowest folder
+    // Register keyboard shortcuts
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.ctrlKey && (e.key === 'F2' || e.code === 'F2')) {
-                e.preventDefault();
-                e.stopPropagation();
-                breadcrumbRef.current?.openLowestFolder();
-            }
-        };
+        registerAllShortcuts({
+            onSearchOpen: () => setSearchOpen(true),
+            onSettingsOpen: () => setSettingsOpen(true),
+            onBreadcrumbOpen: () => breadcrumbRef.current?.openLowestFolder()
+        });
 
-        window.addEventListener('keydown', handleKeyDown, true);
-        return () => window.removeEventListener('keydown', handleKeyDown, true);
+        return () => {
+            unregisterAllShortcuts();
+        };
     }, []);
 
     function handleResizeStart(e: React.MouseEvent) {
@@ -181,6 +183,10 @@ function App() {
                 onRun={handleRun}
                 onDebug={handleDebug}
                 onStop={handleStop}
+                searchOpen={searchOpen}
+                setSearchOpen={setSearchOpen}
+                settingsOpen={settingsOpen}
+                setSettingsOpen={setSettingsOpen}
             />
 
             <Sidebar

@@ -16,22 +16,44 @@ export function SearchBar({ contentRef }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const matchElementsRef = useRef<HTMLElement[]>([]);
 
-  // Handler für Cmd+F / Ctrl+F
+  // Handler für Cmd+F / Ctrl+F and ESC
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Cmd+F (Mac) oder Ctrl+F (Windows/Linux)
       if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
         e.preventDefault();
-        setIsVisible(true);
+        e.stopPropagation();
+        if (isVisible) {
+          // Already open - focus input
+          inputRef.current?.focus();
+          inputRef.current?.select();
+        } else {
+          // Open search bar
+          setIsVisible(true);
+        }
       }
-      // ESC zum Schließen
-      if (e.key === 'Escape' && isVisible) {
+    };
+
+    // Use capture phase
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
+  }, [isVisible]);
+
+  // Separate ESC handler that only runs when visible
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
         handleClose();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    // Use capture phase for ESC to have highest priority
+    window.addEventListener('keydown', handleEscape, true);
+    return () => window.removeEventListener('keydown', handleEscape, true);
   }, [isVisible]);
 
   // Focus auf Input wenn geöffnet
@@ -198,6 +220,12 @@ export function SearchBar({ contentRef }: SearchBarProps) {
                 } else {
                   findNext();
                 }
+              } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                findNext();
+              } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                findPrevious();
               }
             }}
             className="bg-transparent text-[#BCBEC4] text-sm outline-none py-1 placeholder-[#6C707E] w-full max-w-[360px]"
