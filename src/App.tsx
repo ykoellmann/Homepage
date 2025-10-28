@@ -3,7 +3,7 @@ import {useState, useRef, useEffect} from 'react';
 import {Header} from './components/layout/Header';
 import {Sidebar} from './components/layout/Sidebar';
 import {Explorer} from './components/layout/Explorer';
-import {BreadcrumbFooter} from './components/BreadcrumbFooter.tsx';
+import {BreadcrumbFooter, type BreadcrumbFooterRef} from './components/BreadcrumbFooter.tsx';
 import {Terminal} from './components/Terminal.tsx';
 import TabSystem, {type Tab, type TabSystemRef} from './components/tabs/TabSystem.tsx';
 import {buildFileTreeFromGlob, type PageEntry} from './lib/buildFileTree';
@@ -29,6 +29,7 @@ function App() {
     const [isResizingTerminal, setIsResizingTerminal] = useState(false);
     const resizingRef = useRef(false);
     const tabSystemRef = useRef<TabSystemRef | null>(null);
+    const breadcrumbRef = useRef<BreadcrumbFooterRef | null>(null);
 
     const {tree, pages} = buildFileTreeFromGlob();
 
@@ -60,6 +61,16 @@ function App() {
         navigateTo,
         setCurrentPage
     });
+
+    // Handle GitHub Pages SPA redirect from 404.html
+    useEffect(() => {
+        const redirect = sessionStorage.getItem('spa_redirect');
+        if (redirect) {
+            sessionStorage.removeItem('spa_redirect');
+            window.history.replaceState(null, '', redirect);
+            navigateTo(redirect, false);
+        }
+    }, [navigateTo]);
 
     // Browser back/forward navigation
     useEffect(() => {
@@ -94,6 +105,20 @@ function App() {
         window.addEventListener('navigation:popstate', onNavigationPopState);
         return () => window.removeEventListener('navigation:popstate', onNavigationPopState);
     }, [pages, navigateTo, setCurrentPage]);
+
+    // Breadcrumb shortcut: Ctrl+F2 to open lowest folder
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.ctrlKey && (e.key === 'F2' || e.code === 'F2')) {
+                e.preventDefault();
+                e.stopPropagation();
+                breadcrumbRef.current?.openLowestFolder();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown, true);
+        return () => window.removeEventListener('keydown', handleKeyDown, true);
+    }, []);
 
     function handleResizeStart(e: React.MouseEvent) {
         resizingRef.current = true;
@@ -165,6 +190,7 @@ function App() {
             />
 
             <BreadcrumbFooter
+                ref={breadcrumbRef}
                 path={routePath}
                 onNavigate={navigateTo}
                 onOpenFolder={handleOpenFolder}

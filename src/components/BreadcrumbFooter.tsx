@@ -1,4 +1,4 @@
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect, useImperativeHandle, forwardRef} from "react";
 import {ChevronRight, Folder, FileCode} from "lucide-react";
 import type {FileNode} from "./file-explorer.tsx";
 import {Popup, type PopupSection} from "./Popup";
@@ -11,12 +11,16 @@ interface BreadcrumbFooterProps {
     tree?: FileNode[];
 }
 
-export function BreadcrumbFooter({
+export interface BreadcrumbFooterRef {
+    openLowestFolder: () => void;
+}
+
+export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooterProps>(({
                                      path,
                                      onNavigate,
                                      onOpenFolder,
                                      tree
-                                 }: BreadcrumbFooterProps) {
+                                 }, ref) => {
     // Remove /ide prefix for display purposes
     const displayPath = path.replace(/^\/ide/, '');
     const pathParts = displayPath.replace(/^\/+/, "").split("/").filter(Boolean);
@@ -25,6 +29,86 @@ export function BreadcrumbFooter({
     const footerRef = useRef<HTMLDivElement>(null);
 
     useClickOutside(footerRef as React.RefObject<HTMLElement>, () => setOpenIndex(null));
+
+    // Expose imperative methods
+    useImperativeHandle(ref, () => ({
+        openLowestFolder: () => {
+            // Open the lowest (rightmost) folder
+            const lowestIndex = parts.length - 1;
+            const node = getNode(parts.slice(0, lowestIndex + 1), tree);
+            const hasChildren = (node?.children || []).length > 0;
+
+            if (hasChildren) {
+                setOpenIndex(lowestIndex);
+            } else {
+                // If current folder has no children, search backwards for a folder with children
+                for (let i = lowestIndex - 1; i >= 0; i--) {
+                    const checkNode = getNode(parts.slice(0, i + 1), tree);
+                    if ((checkNode?.children || []).length > 0) {
+                        setOpenIndex(i);
+                        break;
+                    }
+                }
+            }
+        }
+    }), [parts, tree]);
+
+    // Arrow key navigation between breadcrumb levels
+    useEffect(() => {
+        if (openIndex === null) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                // Go one level up (left)
+                if (openIndex > 0) {
+                    const newIndex = openIndex - 1;
+                    const node = getNode(parts.slice(0, newIndex + 1), tree);
+                    const hasChildren = (node?.children || []).length > 0;
+
+                    if (hasChildren) {
+                        setOpenIndex(newIndex);
+                    } else {
+                        // Keep searching left for a folder with children
+                        for (let i = newIndex - 1; i >= 0; i--) {
+                            const checkNode = getNode(parts.slice(0, i + 1), tree);
+                            if ((checkNode?.children || []).length > 0) {
+                                setOpenIndex(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                // Go one level down (right)
+                if (openIndex < parts.length - 1) {
+                    const newIndex = openIndex + 1;
+                    const node = getNode(parts.slice(0, newIndex + 1), tree);
+                    const hasChildren = (node?.children || []).length > 0;
+
+                    if (hasChildren) {
+                        setOpenIndex(newIndex);
+                    } else {
+                        // Keep searching right for a folder with children
+                        for (let i = newIndex + 1; i < parts.length; i++) {
+                            const checkNode = getNode(parts.slice(0, i + 1), tree);
+                            if ((checkNode?.children || []).length > 0) {
+                                setOpenIndex(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                setOpenIndex(null);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [openIndex, parts, tree]);
 
     return (
         <div className="footer-breadcrumb" ref={footerRef}>
@@ -57,7 +141,9 @@ export function BreadcrumbFooter({
             })}
         </div>
     );
-}
+});
+
+BreadcrumbFooter.displayName = 'BreadcrumbFooter';
 
 interface BreadcrumbItemProps {
     part: string;

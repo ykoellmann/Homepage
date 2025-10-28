@@ -54,10 +54,17 @@ export function useNavigation({
         let fullPath = `${path.startsWith('/') ? path : '/' + path}`;
         fullPath = fullPath.replace(/^\/homepage/, '');
 
-        // Ensure /ide prefix is preserved if we're in IDE mode
-        const isIdePath = window.location.pathname.startsWith('/ide');
-        if (isIdePath && !fullPath.startsWith('/ide')) {
-            fullPath = fullPath === '/' ? '/ide' : `/ide${fullPath}`;
+        // Always ensure /ide prefix for IDE view
+        // Check if path already has /ide prefix
+        if (!fullPath.startsWith('/ide')) {
+            // Check if we're supposed to be in IDE mode by checking current location OR localStorage
+            const currentPathIsIde = window.location.pathname.startsWith('/ide');
+            const preferredMode = localStorage.getItem('preferred_view_mode');
+
+            // If either condition is true, add /ide prefix
+            if (currentPathIsIde || preferredMode === 'ide') {
+                fullPath = fullPath === '/' ? '/ide' : `/ide${fullPath}`;
+            }
         }
 
         return fullPath;
