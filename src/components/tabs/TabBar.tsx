@@ -35,7 +35,7 @@ export function TabBar({
     }
 
     return (
-        <div className="flex bg-[#1E1F22] border-b border-[#393B40] overflow-x-auto scrollbar-thin">
+        <div className="flex bg-[#1E1F22] border-b border-[#393B40] overflow-x-auto">
             {tabs.map((tab, index) => (
                 <TabItem
                     key={tab.id}
