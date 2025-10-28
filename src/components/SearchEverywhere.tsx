@@ -1,5 +1,7 @@
 import {useState, useMemo, useEffect, useRef} from "react";
 import {searchService} from "../lib/searchService.ts";
+import {useLocation, useNavigate} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface SearchEverywhereProps {
     isOpen: boolean;
@@ -7,13 +9,24 @@ interface SearchEverywhereProps {
 }
 
 export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
+    const { t } = useTranslation('common');
     const [query, setQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const results = useMemo(() => {
         return searchService.searchEverywhere(query);
     }, [query]);
+
+    // Helper to navigate correctly based on current view mode
+    const navigateToResult = (pageSlug: string) => {
+        const isInIdeView = location.pathname.startsWith('/ide');
+        const targetPath = isInIdeView ? `/ide/${pageSlug}` : `/${pageSlug}`;
+        navigate(targetPath);
+        onClose();
+    };
 
     // Keyboard Shortcuts wie JetBrains
     useEffect(() => {
@@ -46,8 +59,7 @@ export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
                 } else if (e.key === 'Enter' && results[selectedIndex]) {
                     e.preventDefault();
                     e.stopPropagation();
-                    window.location.href = `/${results[selectedIndex].pageSlug}`;
-                    onClose();
+                    navigateToResult(results[selectedIndex].pageSlug);
                 }
             }
         };
@@ -88,7 +100,7 @@ export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
                     <input
                         ref={inputRef}
                         type="text"
-                        placeholder="Search everywhere..."
+                        placeholder={t('search.placeholder')}
                         value={query}
                         onChange={(e) => {
                             setQuery(e.target.value);
@@ -113,14 +125,14 @@ export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
                 >
                     {results.length === 0 && query && (
                         <div className="p-8 text-center" style={{ color: '#6b7280' }}>
-                            No results found
+                            {t('search.noResults')}
                         </div>
                     )}
 
                     {results.length === 0 && !query && (
                         <div className="p-8 text-center" style={{ color: '#6b7280' }}>
-                            <p className="text-base mb-2">Search Everywhere</p>
-                            <p className="text-xs opacity-75">Start typing to search through all pages, experiences, projects, and more...</p>
+                            <p className="text-base mb-2">{t('search.emptyTitle')}</p>
+                            <p className="text-xs opacity-75">{t('search.emptyDescription')}</p>
                         </div>
                     )}
 
@@ -128,19 +140,17 @@ export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
                         const isSelected = selectedIndex >= 0 && idx === selectedIndex;
 
                         return (
-                            <a
+                            <div
                                 key={`${result.pageSlug}-${result.item._searchableId}`}
-                                href={`/${result.pageSlug}`}
-                                className="block px-4 py-3 transition-colors no-underline"
+                                className="block px-4 py-3 transition-colors cursor-pointer"
                                 style={{
                                     borderBottom: '1px solid var(--panel-border)',
                                     background: isSelected ? '#1d4ed8' : 'transparent',
                                     color: isSelected ? 'white' : 'var(--text)',
-                                    cursor: 'pointer'
                                 }}
-                            onMouseEnter={() => setSelectedIndex(idx)}
-                            onClick={() => onClose()}
-                        >
+                                onMouseEnter={() => setSelectedIndex(idx)}
+                                onClick={() => navigateToResult(result.pageSlug)}
+                            >
                             <div className="flex items-start justify-between gap-3">
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
@@ -204,7 +214,7 @@ export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
                                     </div>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                         );
                     })}
                 </div>

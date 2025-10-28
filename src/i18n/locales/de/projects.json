@@ -125,6 +125,88 @@
       "title": "🛠️ Tech Stack"
     }
   },
+  "homepage": {
+    "name": "Homepage / Portfolio",
+    "description": "Ein modernes Portfolio mit IDE-ähnlicher Oberfläche inspiriert von VS Code - Gebaut mit React, TypeScript und Vite",
+    "keywords": ["React", "TypeScript", "Vite", "Portfolio", "IDE", "VS Code", "Tab System", "Web Development"],
+    "about": {
+      "title": "📝 Über das Projekt",
+      "paragraph1": "Diese Homepage ist ein persönliches Portfolio-Projekt, das eine einzigartige IDE-ähnliche Benutzeroberfläche bietet, inspiriert von Visual Studio Code. Es kombiniert die Ästhetik einer Entwicklungsumgebung mit der Funktionalität einer modernen Webseite.",
+      "paragraph2": "Das Projekt demonstriert fortgeschrittene React-Konzepte wie benutzerdefiniertes Routing, State-Management, und ein vollständig funktionales Tab-System. Es zeigt meine Fähigkeiten in Frontend-Entwicklung und UI/UX-Design."
+    },
+    "goals": {
+      "title": "🎯 Projektziele",
+      "goal1": "Eine interaktive und ansprechende Portfolio-Erfahrung schaffen",
+      "goal2": "Fortgeschrittene React- und TypeScript-Konzepte demonstrieren",
+      "goal3": "Eine wiederverwendbare IDE-Komponenten-Bibliothek aufbauen",
+      "goal4": "Best Practices in modernem Web-Development zeigen"
+    },
+    "features": {
+      "title": "✨ Features",
+      "ideInterface": {
+        "title": "IDE-ähnliche Benutzeroberfläche",
+        "description": "VS Code-inspirierte Oberfläche mit Datei-Explorer, Tab-System und Breadcrumb-Navigation"
+      },
+      "tabSystem": {
+        "title": "Tab-basierte Navigation",
+        "description": "Vollständig funktionales Tab-System mit Drag-and-Drop, Tab-Persistenz und Browser-History-Integration"
+      },
+      "searchEverywhere": {
+        "title": "Search Everywhere",
+        "description": "Globale Suche mit Fuzzy-Matching über alle Seiten, Features und Tech-Stack-Elemente"
+      },
+      "customizableKeymaps": {
+        "title": "Anpassbare Tastenkombinationen",
+        "description": "Vollständig konfigurierbares Keymap-System mit benutzerdefinierten Shortcuts"
+      },
+      "dualViewModes": {
+        "title": "Dual View Modes",
+        "description": "Umschalten zwischen moderner Webseite und IDE-Ansicht mit separaten Routing-Pfaden"
+      },
+      "i18n": {
+        "title": "Internationalisierung",
+        "description": "Vollständige Mehrsprachigkeit (Deutsch/Englisch) mit react-i18next"
+      },
+      "interactiveBackground": {
+        "title": "Interaktiver Hintergrund",
+        "description": "Dynamische Partikel-Animation die auf Mausbewegung und Klicks reagiert"
+      },
+      "breadcrumbNavigation": {
+        "title": "Breadcrumb-Navigation",
+        "description": "Intelligente Pfad-Anzeige mit Dropdown-Navigation durch die Dateistruktur"
+      },
+      "responsiveDesign": {
+        "title": "Responsive Design",
+        "description": "Optimiert für Desktop, Tablet und Mobile mit Tailwind CSS"
+      },
+      "githubPages": {
+        "title": "GitHub Pages Deployment",
+        "description": "Automatisches Deployment mit CI/CD und SPA-Routing-Unterstützung"
+      }
+    },
+    "techStack": {
+      "title": "🛠️ Tech Stack"
+    },
+    "architecture": {
+      "title": "🏗️ Architektur",
+      "fileTree": {
+        "title": "Dynamischer File Tree",
+        "description": "Automatische Seitenerkennung mit Vite's import.meta.glob() - neue Seiten werden dynamisch in den Explorer eingefügt"
+      },
+      "routing": {
+        "title": "Hybrid-Routing",
+        "description": "Kombination aus React Router und benutzerdefiniertem Tab-System mit Browser-History-Integration"
+      },
+      "persistence": {
+        "title": "State Persistence",
+        "description": "Tab-Zustand überlebt Page-Reloads durch sessionStorage, View-Mode wird in localStorage gespeichert"
+      },
+      "search": {
+        "title": "Search Service",
+        "description": "Zentralisierter Such-Service mit gewichteten Ergebnissen und Fuzzy-Matching für optimale Suche"
+      }
+    }
+  },
   "ctexecutor": {
     "name": "cteXecutor",
     "description": "Execute and manage Common Table Expressions (CTEs) with ease in DataGrip and IntelliJ-based IDEs",

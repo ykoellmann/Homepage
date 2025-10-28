@@ -125,6 +125,88 @@
       "title": "🛠️ Tech Stack"
     }
   },
+  "homepage": {
+    "name": "Homepage / Portfolio",
+    "description": "A modern portfolio website with an IDE-like interface inspired by VS Code - Built with React, TypeScript and Vite",
+    "keywords": ["React", "TypeScript", "Vite", "Portfolio", "IDE", "VS Code", "Tab System", "Web Development"],
+    "about": {
+      "title": "📝 About the Project",
+      "paragraph1": "This homepage is a personal portfolio project that offers a unique IDE-like user interface inspired by Visual Studio Code. It combines the aesthetics of a development environment with the functionality of a modern website.",
+      "paragraph2": "The project demonstrates advanced React concepts such as custom routing, state management, and a fully functional tab system. It showcases my skills in frontend development and UI/UX design."
+    },
+    "goals": {
+      "title": "🎯 Project Goals",
+      "goal1": "Create an interactive and engaging portfolio experience",
+      "goal2": "Demonstrate advanced React and TypeScript concepts",
+      "goal3": "Build a reusable IDE component library",
+      "goal4": "Showcase best practices in modern web development"
+    },
+    "features": {
+      "title": "✨ Features",
+      "ideInterface": {
+        "title": "IDE-like User Interface",
+        "description": "VS Code-inspired interface with file explorer, tab system and breadcrumb navigation"
+      },
+      "tabSystem": {
+        "title": "Tab-based Navigation",
+        "description": "Fully functional tab system with drag-and-drop, tab persistence and browser history integration"
+      },
+      "searchEverywhere": {
+        "title": "Search Everywhere",
+        "description": "Global search with fuzzy matching across all pages, features and tech stack elements"
+      },
+      "customizableKeymaps": {
+        "title": "Customizable Keybindings",
+        "description": "Fully configurable keymap system with custom shortcuts"
+      },
+      "dualViewModes": {
+        "title": "Dual View Modes",
+        "description": "Switch between modern website and IDE view with separate routing paths"
+      },
+      "i18n": {
+        "title": "Internationalization",
+        "description": "Full multilingual support (German/English) with react-i18next"
+      },
+      "interactiveBackground": {
+        "title": "Interactive Background",
+        "description": "Dynamic particle animation that responds to mouse movement and clicks"
+      },
+      "breadcrumbNavigation": {
+        "title": "Breadcrumb Navigation",
+        "description": "Smart path display with dropdown navigation through the file structure"
+      },
+      "responsiveDesign": {
+        "title": "Responsive Design",
+        "description": "Optimized for desktop, tablet and mobile with Tailwind CSS"
+      },
+      "githubPages": {
+        "title": "GitHub Pages Deployment",
+        "description": "Automatic deployment with CI/CD and SPA routing support"
+      }
+    },
+    "techStack": {
+      "title": "🛠️ Tech Stack"
+    },
+    "architecture": {
+      "title": "🏗️ Architecture",
+      "fileTree": {
+        "title": "Dynamic File Tree",
+        "description": "Automatic page discovery with Vite's import.meta.glob() - new pages are dynamically added to the explorer"
+      },
+      "routing": {
+        "title": "Hybrid Routing",
+        "description": "Combination of React Router and custom tab system with browser history integration"
+      },
+      "persistence": {
+        "title": "State Persistence",
+        "description": "Tab state survives page reloads through sessionStorage, view mode is stored in localStorage"
+      },
+      "search": {
+        "title": "Search Service",
+        "description": "Centralized search service with weighted results and fuzzy matching for optimal search experience"
+      }
+    }
+  },
   "ctexecutor": {
     "name": "cteXecutor",
     "description": "Execute and manage Common Table Expressions (CTEs) with ease in DataGrip and IntelliJ-based IDEs",

@@ -1,139 +1,119 @@
-import type { ProjectWithTechStackMeta } from "../shared/types.ts";
+/**
+ * SatTrack Project Meta
+ *
+ * This file defines:
+ * 1. TypeScript interfaces for JSON translation structure
+ * 2. Non-translatable metadata (URLs, search weights, icons)
+ */
 
-export const satTrackPageMeta: ProjectWithTechStackMeta = {
-    // BasePageMeta
-    name: "SatTrak",
-    slug: "sattrack",
-    description: "Interaktive 3D-Satelliten-Visualisierung mit Unity und Cesium - Verfolge über 5000 Satelliten in Echtzeit auf einem virtuellen Globus",
-    keywords: ["Unity", "Cesium", "Satelliten", "3D", "Visualisierung", "Echtzeit", "GPS", "Orbit", "Space"],
-    category: "Projects",
-    icon: "🚀",
+// ============================================================================
+// Translation Structure (matches projects.json structure)
+// ============================================================================
 
-    // Project-spezifisch
-    debugUrl: "https://github.com/JanVogt06/SatTrak-SatelliteVisualization",
+export interface SatTrackTranslations {
+    name: string;
+    description: string;
+    keywords: string[];
+    about: {
+        title: string;
+        paragraph1: string;
+        paragraph2: string;
+        badges: {
+            satellites: string;
+            realtime: string;
+            unity: string;
+            university: string;
+        };
+    };
+    features: {
+        title: string;
+        realtimeTracking: {
+            title: string;
+            description: string;
+        };
+        interactiveCamera: {
+            title: string;
+            description: string;
+        };
+        famousSatellites: {
+            title: string;
+            description: string;
+        };
+        orbitVisualization: {
+            title: string;
+            description: string;
+        };
+        heatmap: {
+            title: string;
+            description: string;
+        };
+        dayNight: {
+            title: string;
+            description: string;
+        };
+        locationSearch: {
+            title: string;
+            description: string;
+        };
+        timeControl: {
+            title: string;
+            description: string;
+        };
+        performance: {
+            title: string;
+            description: string;
+        };
+    };
+    team: {
+        title: string;
+        description: string;
+        university: string;
+    };
+    techStack: {
+        title: string;
+    };
+}
 
-    features: [
-        {
-            _searchableId: 'feature-realtime-tracking',
-            _searchWeight: 10,
-            icon: '🛰️',
-            title: 'Echtzeit-Satellitenverfolgung',
-            description: 'Visualisierung von über 5000 aktiven Satelliten mit TLE-Daten von Celestrak',
-        },
-        {
-            _searchableId: 'feature-interactive-camera',
-            _searchWeight: 9,
-            icon: '📹',
-            title: 'Interaktive Kamerasteuerung',
-            description: 'Nahtloser Übergang zwischen Weltraum- und Erdansicht mit Zoom-Slider',
-        },
-        {
-            _searchableId: 'feature-famous-satellites',
-            _searchWeight: 8,
-            icon: '⭐',
-            title: 'Famous Satellites',
-            description: 'Spezielle 3D-Modelle für berühmte Satelliten wie ISS, Hubble Teleskop',
-        },
-        {
-            _searchableId: 'feature-orbit-visualization',
-            _searchWeight: 9,
-            icon: '🌍',
-            title: 'Orbit-Visualisierung',
-            description: 'Darstellung von Satelliten-Orbits mit verschiedenen Farben (bis zu 9 gleichzeitig)',
-        },
-        {
-            _searchableId: 'feature-heatmap',
-            _searchWeight: 7,
-            icon: '🔥',
-            title: 'Heatmap-Visualisierung',
-            description: 'GPU-basierte Darstellung der Satellitendichte auf der Erdoberfläche',
-        },
-        {
-            _searchableId: 'feature-day-night',
-            _searchWeight: 8,
-            icon: '🌓',
-            title: 'Tag/Nacht-System',
-            description: 'Realistische Beleuchtung mit dynamischem Tag/Nacht-Zyklus',
-        },
-        {
-            _searchableId: 'feature-location-search',
-            _searchWeight: 7,
-            icon: '🔍',
-            title: 'Ortssuche',
-            description: 'Schnelle Navigation zu über 1000 Städten weltweit mit GeoNames-Datenbank',
-        },
-        {
-            _searchableId: 'feature-time-control',
-            _searchWeight: 8,
-            icon: '⏱️',
-            title: 'Zeitsteuerung',
-            description: 'Zeitraffer (0x - 1000x) mit Zeit-Slider und Zoom-Funktion',
-        },
-        {
-            _searchableId: 'feature-performance',
-            _searchWeight: 7,
-            icon: '⚡',
-            title: 'Performance-optimiert',
-            description: 'GPU-Instancing und Unity Job-System für flüssige Darstellung',
-        },
-    ],
+// ============================================================================
+// Non-Translatable Metadata
+// ============================================================================
 
+export const satTrackMeta = {
+    slug: 'sattrack' as const,
+    category: 'Projects' as const,
+    icon: '🚀',
+    debugUrl: 'https://github.com/JanVogt06/SatTrak-SatelliteVisualization',
+
+    // Feature search configuration
+    features: {
+        realtimeTracking: { searchWeight: 10, icon: '🛰️' },
+        interactiveCamera: { searchWeight: 9, icon: '📹' },
+        famousSatellites: { searchWeight: 8, icon: '⭐' },
+        orbitVisualization: { searchWeight: 9, icon: '🌍' },
+        heatmap: { searchWeight: 7, icon: '🔥' },
+        dayNight: { searchWeight: 8, icon: '🌓' },
+        locationSearch: { searchWeight: 7, icon: '🔍' },
+        timeControl: { searchWeight: 8, icon: '⏱️' },
+        performance: { searchWeight: 7, icon: '⚡' },
+    },
+
+    // Tech stack (no translation needed)
     techStack: [
-        {
-            _searchableId: 'tech-unity',
-            _searchWeight: 10,
-            name: 'Unity 2022.3 LTS',
-            category: 'engine',
-        },
-        {
-            _searchableId: 'tech-cesium',
-            _searchWeight: 10,
-            name: 'Cesium for Unity',
-            category: 'library',
-        },
-        {
-            _searchableId: 'tech-urp',
-            _searchWeight: 7,
-            name: 'Universal Render Pipeline',
-            category: 'engine',
-        },
-        {
-            _searchableId: 'tech-sgp4',
-            _searchWeight: 9,
-            name: 'SGP4 Orbit Propagation',
-            category: 'library',
-        },
-        {
-            _searchableId: 'tech-job-system',
-            _searchWeight: 8,
-            name: 'Unity Job System',
-            category: 'engine',
-        },
-        {
-            _searchableId: 'tech-celestrak',
-            _searchWeight: 8,
-            name: 'CelesTrak TLE Data',
-            category: 'data',
-        },
-        {
-            _searchableId: 'tech-geonames',
-            _searchWeight: 6,
-            name: 'GeoNames Database',
-            category: 'data',
-        },
-        {
-            _searchableId: 'tech-git-lfs',
-            _searchWeight: 5,
-            name: 'Git LFS',
-            category: 'tool',
-        },
+        { name: 'Unity 2022.3 LTS', searchWeight: 10, category: 'engine' as const },
+        { name: 'Cesium for Unity', searchWeight: 10, category: 'library' as const },
+        { name: 'Universal Render Pipeline', searchWeight: 7, category: 'engine' as const },
+        { name: 'SGP4 Orbit Propagation', searchWeight: 9, category: 'library' as const },
+        { name: 'Unity Job System', searchWeight: 8, category: 'engine' as const },
+        { name: 'CelesTrak TLE Data', searchWeight: 8, category: 'data' as const },
+        { name: 'GeoNames Database', searchWeight: 6, category: 'data' as const },
+        { name: 'Git LFS', searchWeight: 5, category: 'tool' as const },
     ],
-};
+} as const;
 
+export type SatTrackMeta = typeof satTrackMeta;
+
+// Export for runConfig compatibility
 export const runConfig = {
-    name: satTrackPageMeta.name,
-    slug: satTrackPageMeta.slug,
-    description: satTrackPageMeta.description,
-    icon: satTrackPageMeta.icon,
-    debugUrl: satTrackPageMeta.debugUrl,
+    name: 'SatTrack',
+    debugUrl: satTrackMeta.debugUrl,
 };

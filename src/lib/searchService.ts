@@ -30,6 +30,22 @@ export class SearchService {
     }
 
     /**
+     * Updates all registered pages with new translations
+     * Called when language changes
+     */
+    updatePages(pages: BasePageMeta[]) {
+        this.pages.clear();
+        pages.forEach(page => this.registerPage(page));
+    }
+
+    /**
+     * Clears all registered pages
+     */
+    clearPages() {
+        this.pages.clear();
+    }
+
+    /**
      * Hauptsuche - durchsucht ALLE Felder ALLER Pages
      * Wie JetBrains "Search Everywhere"
      */

@@ -1,96 +1,114 @@
-import type { ProjectWithTechStackMeta } from "../shared/types.ts";
+/**
+ * Cryptborne Project Meta
+ *
+ * This file defines:
+ * 1. TypeScript interfaces for JSON translation structure
+ * 2. Non-translatable metadata (URLs, search weights, icons)
+ */
 
-export const cryptbornePageMeta: ProjectWithTechStackMeta = {
-    // BasePageMeta
-    name: "Cryptborne",
-    slug: "cryptborne",
-    description: "Top-down Dungeon Crawler im mittelalterlichen Fantasy-Setting - Kämpfe dich durch prozedural generierte Dungeons mit einzigartigen Waffen",
-    keywords: ["Unity", "Dungeon Crawler", "Roguelike", "Top-Down", "Fantasy", "Procedural Generation", "Game Development"],
-    category: "Projects",
-    icon: "⚔️",
+// ============================================================================
+// Translation Structure (matches projects.json structure)
+// ============================================================================
 
-    // Project-spezifisch
-    url: "https://jy-studios.github.io/cryptborne/",
-    debugUrl: "https://github.com/JY-Studios/cryptborne",
+export interface CryptborneTranslations {
+    name: string;
+    description: string;
+    keywords: string[];
+    about: {
+        title: string;
+        paragraph1: string;
+        paragraph2: string;
+    };
+    features: {
+        title: string;
+        proceduralDungeons: {
+            title: string;
+            description: string;
+        };
+        weaponVariety: {
+            title: string;
+            description: string;
+        };
+        enemyAi: {
+            title: string;
+            description: string;
+        };
+        inventory: {
+            title: string;
+            description: string;
+        };
+        smoothMovement: {
+            title: string;
+            description: string;
+        };
+        medievalAesthetic: {
+            title: string;
+            description: string;
+        };
+    };
+    gameplayHighlights: {
+        title: string;
+        modularDungeons: {
+            title: string;
+            description: string;
+        };
+        weaponVariety: {
+            title: string;
+            description: string;
+        };
+        combatSystem: {
+            title: string;
+            description: string;
+        };
+        lowPolyAesthetic: {
+            title: string;
+            description: string;
+        };
+    };
+    techStack: {
+        title: string;
+        unity6: string;
+        csharp: string;
+        kaykit: string;
+        proceduralGen: string;
+    };
+}
 
-    features: [
-        {
-            _searchableId: 'feature-procedural-dungeons',
-            _searchWeight: 10,
-            icon: '🏰',
-            title: 'Prozedural generierte Dungeons',
-            description: 'Jedes Spiel bietet neue, zufällig generierte Dungeon-Layouts für endlosen Wiederspielwert',
-        },
-        {
-            _searchableId: 'feature-weapon-variety',
-            _searchWeight: 9,
-            icon: '⚔️',
-            title: 'Vielfältige Waffensysteme',
-            description: 'Verschiedene Waffen mit einzigartigen Schussmustern und Spielstilen',
-        },
-        {
-            _searchableId: 'feature-enemy-ai',
-            _searchWeight: 8,
-            icon: '👾',
-            title: 'Dynamische Gegner-KI',
-            description: 'Intelligente Feinde mit anpassungsfähigem Verhalten und verschiedenen Angriffsmustern',
-        },
-        {
-            _searchableId: 'feature-inventory',
-            _searchWeight: 7,
-            icon: '🎒',
-            title: 'Waffen-Hotbar & Inventar',
-            description: 'Intuitives Inventarsystem mit schnellem Waffenwechsel über Hotbar',
-        },
-        {
-            _searchableId: 'feature-smooth-movement',
-            _searchWeight: 8,
-            icon: '🎮',
-            title: 'Flüssige Charaktersteuerung',
-            description: 'Responsive Bewegungsmechaniken und präzises Combat-System',
-        },
-        {
-            _searchableId: 'feature-medieval-aesthetic',
-            _searchWeight: 6,
-            icon: '🎨',
-            title: 'Medieval Fantasy Ästhetik',
-            description: 'Kohärente visuelle Gestaltung mit KayKit Assets im Low-Poly-Stil',
-        },
-    ],
+// ============================================================================
+// Non-Translatable Metadata
+// ============================================================================
 
-    techStack: [
-        {
-            _searchableId: 'tech-unity6',
-            _searchWeight: 10,
-            name: 'Unity 6',
-            category: 'engine',
-        },
-        {
-            _searchableId: 'tech-csharp',
-            _searchWeight: 9,
-            name: 'C#',
-            category: 'engine',
-        },
-        {
-            _searchableId: 'tech-kaykit',
-            _searchWeight: 7,
-            name: 'KayKit Assets',
-            category: 'assets',
-        },
-        {
-            _searchableId: 'tech-procedural-gen',
-            _searchWeight: 8,
-            name: 'Procedural Generation',
-            category: 'library',
-        },
-    ],
-};
+export const cryptborneMeta = {
+    slug: 'cryptborne' as const,
+    category: 'Projects' as const,
+    icon: '⚔️',
+    url: 'https://jy-studios.github.io/cryptborne/',
+    debugUrl: 'https://github.com/JY-Studios/cryptborne',
 
+    // Feature search configuration
+    features: {
+        proceduralDungeons: { searchWeight: 10, icon: '🏰' },
+        weaponVariety: { searchWeight: 9, icon: '⚔️' },
+        enemyAi: { searchWeight: 8, icon: '👾' },
+        inventory: { searchWeight: 7, icon: '🎒' },
+        smoothMovement: { searchWeight: 8, icon: '🎮' },
+        medievalAesthetic: { searchWeight: 6, icon: '🎨' },
+    },
+
+    // Tech stack search configuration
+    techStack: {
+        unity6: { searchWeight: 10, category: 'engine' as const },
+        csharp: { searchWeight: 9, category: 'engine' as const },
+        kaykit: { searchWeight: 7, category: 'assets' as const },
+        proceduralGen: { searchWeight: 8, category: 'library' as const },
+    },
+} as const;
+
+export type CryptborneMeta = typeof cryptborneMeta;
+
+// Export for runConfig compatibility
 export const runConfig = {
-    name: cryptbornePageMeta.name,
-    slug: cryptbornePageMeta.slug,
-    description: cryptbornePageMeta.description,
-    icon: cryptbornePageMeta.icon,
-    url: cryptbornePageMeta.url,
-    debugUrl: cryptbornePageMeta.debugUrl,
+    name: 'Cryptborne',
+    url: cryptborneMeta.url,
+    debugUrl: cryptborneMeta.debugUrl,
 };

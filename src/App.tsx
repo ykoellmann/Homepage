@@ -1,5 +1,6 @@
 import './App.css'
 import {useState, useRef, useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Header} from './components/layout/Header';
 import {Sidebar} from './components/layout/Sidebar';
 import {Explorer} from './components/layout/Explorer';
@@ -11,17 +12,15 @@ import {type RunConfig} from './components/run-controls/RunControls.tsx';
 import {useNavigation} from './hooks/useNavigation';
 import {useTabPersistence} from './hooks/useTabPersistance.ts';
 import {handlePopState as syncHistoryState} from './hooks/useHistoryStatus';
-import {searchService} from './lib/searchService.ts';
-import {aboutPageMeta} from './pages/about/meta.ts';
-import {cryptbornePageMeta} from './pages/src/cryptborne/meta.ts';
-import {satTrackPageMeta} from './pages/src/SatTrack/meta.ts';
-import {contactPageMeta} from './pages/contact/meta.ts';
+import {registerAllPages} from './lib/registerPages.ts';
 import {useViewMode} from './contexts/ViewModeContext';
 import {ModernView} from './components/ModernView';
 import SplashScreen from "./components/Splashscreen.tsx";
 import {registerAllShortcuts, unregisterAllShortcuts} from './lib/registerShortcuts.ts';
+import i18n from './i18n';
 
 function App() {
+    const { t } = useTranslation();
     const {viewMode} = useViewMode();
     const [showExplorer, setShowExplorer] = useState(true);
     const [explorerWidth, setExplorerWidth] = useState<number>(260);
@@ -34,13 +33,21 @@ function App() {
 
     const {tree, pages} = buildFileTreeFromGlob();
 
-    // Register pages with search service
+    // Register pages with search service and update on language change
     useEffect(() => {
-        searchService.registerPage(aboutPageMeta);
-        searchService.registerPage(cryptbornePageMeta);
-        searchService.registerPage(satTrackPageMeta);
-        searchService.registerPage(contactPageMeta);
-    }, []);
+        registerAllPages(t);
+
+        // Re-register when language changes
+        const handleLanguageChange = () => {
+            registerAllPages(t);
+        };
+
+        i18n.on('languageChanged', handleLanguageChange);
+
+        return () => {
+            i18n.off('languageChanged', handleLanguageChange);
+        };
+    }, [t]);
     const [currentPage, setCurrentPage] = useState<PageEntry | null>(null);
     const [routePath, setRoutePath] = useState<string>(window.location.pathname);
     const [searchOpen, setSearchOpen] = useState(false);
@@ -87,7 +94,9 @@ function App() {
 
             const actualPath = newPath.replace(/^\/ide/, '');
             const cleanedPath = actualPath.replace(/^\/+/, '').replace(/\/+$/, '');
-            const pageEntry = pages[cleanedPath];
+
+            // Case-insensitive page lookup
+            const pageEntry = findPageCaseInsensitive(cleanedPath, pages);
 
             if (!pageEntry) return;
 
@@ -108,6 +117,21 @@ function App() {
         window.addEventListener('navigation:popstate', onNavigationPopState);
         return () => window.removeEventListener('navigation:popstate', onNavigationPopState);
     }, [pages, navigateTo, setCurrentPage]);
+
+    function findPageCaseInsensitive(path: string, pagesObj: Record<string, PageEntry>): PageEntry | undefined {
+        // First try exact match
+        if (pagesObj[path]) {
+            return pagesObj[path];
+        }
+
+        // Then try case-insensitive match
+        const lowerPath = path.toLowerCase();
+        const matchingKey = Object.keys(pagesObj).find(
+            key => key.toLowerCase() === lowerPath
+        );
+
+        return matchingKey ? pagesObj[matchingKey] : undefined;
+    }
 
     // Register keyboard shortcuts
     useEffect(() => {

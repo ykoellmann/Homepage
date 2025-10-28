@@ -1,14 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect } from 'react';
+import { useCommonTranslations } from '../hooks/useCommonTranslations';
 
 export function LanguageSwitcher() {
-    const { i18n, t } = useTranslation('common');
+    const { i18n } = useTranslation('common');
+    const translations = useCommonTranslations();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const languages = [
-        { code: 'de', name: t('languages.de'), flag: '🇩🇪' },
-        { code: 'en', name: t('languages.en'), flag: '🇬🇧' }
+        { code: 'de', name: translations.languages.de, flag: '🇩🇪' },
+        { code: 'en', name: translations.languages.en, flag: '🇬🇧' }
     ];
 
     const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];

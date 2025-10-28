@@ -32,7 +32,9 @@ export function useNavigation({
         // Extract the actual page path (remove /ide prefix if present)
         const actualPath = fullPath.replace(/^\/ide/, '');
         const cleanedPath = actualPath.replace(/^\/+/, '').replace(/\/+$/, '');
-        const pageEntry = pages[cleanedPath];
+
+        // Case-insensitive page lookup
+        const pageEntry = findPageCaseInsensitive(cleanedPath);
 
         if (pageEntry) {
             setCurrentPage(pageEntry);
@@ -48,6 +50,21 @@ export function useNavigation({
             tabSystemRef.current?.openTab(tab);
         } else {
         }
+    }
+
+    function findPageCaseInsensitive(path: string): PageEntry | undefined {
+        // First try exact match
+        if (pages[path]) {
+            return pages[path];
+        }
+
+        // Then try case-insensitive match
+        const lowerPath = path.toLowerCase();
+        const matchingKey = Object.keys(pages).find(
+            key => key.toLowerCase() === lowerPath
+        );
+
+        return matchingKey ? pages[matchingKey] : undefined;
     }
 
     function normalizePath(path: string): string {

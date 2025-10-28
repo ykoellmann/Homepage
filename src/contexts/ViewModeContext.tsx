@@ -32,6 +32,15 @@ export const ViewModeProvider: React.FC<ViewModeProviderProps> = ({ children }) 
   useEffect(() => {
     if (hasInitialized) return;
 
+    // Check if there's a pending SPA redirect from GitHub Pages
+    const hasSpaRedirect = sessionStorage.getItem('spa_redirect');
+
+    // If there's a SPA redirect pending, don't interfere - let App.tsx handle it
+    if (hasSpaRedirect) {
+      setHasInitialized(true);
+      return;
+    }
+
     const preferredMode = localStorage.getItem(VIEW_MODE_KEY) as ViewMode | null;
     const isRootPath = location.pathname === '/' || location.pathname === '';
     const isProjectPath = location.pathname.startsWith('/src/') ||
@@ -66,10 +75,12 @@ export const ViewModeProvider: React.FC<ViewModeProviderProps> = ({ children }) 
         navigate(newPath);
       }
     } else {
-      // Switch to Modern view - remove /ide prefix
+      // Switch to Modern view - always go to root
       if (currentPath.startsWith('/ide')) {
-        newPath = currentPath.replace(/^\/ide/, '') || '/';
+        newPath = '/';
         navigate(newPath);
+        // Clear tab state from sessionStorage to prevent restore on reload
+        sessionStorage.removeItem('tabs_state');
       }
     }
 

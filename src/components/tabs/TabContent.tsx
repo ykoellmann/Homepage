@@ -1,8 +1,8 @@
 import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import {InteractiveBackground} from "../layout/InteractiveBackground.tsx";
 import {SearchBar} from './SearchBar';
 import { keymapService } from '../../lib/keymapService';
+import { useCommonTranslations } from '../../hooks/useCommonTranslations';
 
 interface TabContentProps {
     activeComponent: React.ComponentType | null | undefined;
@@ -11,7 +11,7 @@ interface TabContentProps {
 
 export function TabContent({activeComponent: ActiveComponent, hasNoTabs}: TabContentProps) {
     const contentRef = useRef<HTMLDivElement>(null);
-    const { t } = useTranslation('common');
+    const translations = useCommonTranslations();
 
     // Get current shortcuts dynamically
     const getShortcut = (actionId: string): string => {
@@ -31,20 +31,28 @@ export function TabContent({activeComponent: ActiveComponent, hasNoTabs}: TabCon
                     {ActiveComponent && <ActiveComponent/>}
                     {!ActiveComponent && hasNoTabs && (
                         <div className="flex items-center justify-center min-h-[calc(100vh-12rem)] text-gray-400 -m-8">
-                            <div className="text-left space-y-4 max-w-2xl px-6">
+                            <div className="text-left space-y-6 max-w-2xl px-6">
                                 <div className="space-y-2">
                                     <p className="font-mono text-sm">
-                                        {t('emptyState.shortcuts.search')}: {searchShortcut}
+                                        {translations.emptyState.shortcuts.search}: {searchShortcut}
                                     </p>
                                     <p className="font-mono text-sm">
-                                        {t('emptyState.shortcuts.navigationBar')}: {navigationBarShortcut}
+                                        {translations.emptyState.shortcuts.navigationBar}: {navigationBarShortcut}
                                     </p>
                                     <p className="font-mono text-sm">
-                                        {t('emptyState.shortcuts.settings')}: {settingsShortcut}
+                                        {translations.emptyState.shortcuts.settings}: {settingsShortcut}
                                     </p>
                                 </div>
-                                <p className="text-sm mt-6 leading-relaxed">
-                                    {t('emptyState.info')}
+                                <div className="border-t border-gray-700 pt-4">
+                                    <p className="font-semibold text-gray-300 mb-2">
+                                        {translations.emptyState.runControls.title}
+                                    </p>
+                                    <p className="text-sm text-gray-400">
+                                        {translations.emptyState.runControls.description}
+                                    </p>
+                                </div>
+                                <p className="text-sm leading-relaxed border-t border-gray-700 pt-4">
+                                    {translations.emptyState.info}
                                 </p>
                             </div>
                         </div>

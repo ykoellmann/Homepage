@@ -2,6 +2,7 @@ import {contactPageMeta} from "./meta.ts";
 import { Mail } from 'lucide-react';
 import { GithubIcon } from '../../components/icons/GithubIcon';
 import { LinkedinIcon } from '../../components/icons/LinkedinIcon';
+import { useTranslation } from 'react-i18next';
 
 const iconMap = {
     'Mail': Mail,
@@ -10,16 +11,18 @@ const iconMap = {
 };
 
 export default function ContactPage() {
+    const { t } = useTranslation('common');
+
     return (
         <div className="flex items-center justify-center min-h-[60vh] p-8">
             <div className="w-full max-w-2xl space-y-8">
                 {/* Header */}
                 <div className="text-center space-y-3">
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-                        Lass uns reden
+                        {t('contact.title')}
                     </h1>
                     <p className="text-lg text-gray-600 dark:text-gray-400">
-                        Ich freue mich von dir zu hören
+                        {t('contact.subtitle')}
                     </p>
                 </div>
 

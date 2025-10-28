@@ -24,11 +24,53 @@
     "de": "Deutsch",
     "en": "English"
   },
+  "contact": {
+    "title": "Let's Talk",
+    "subtitle": "I'd love to hear from you"
+  },
+  "search": {
+    "placeholder": "Search everywhere...",
+    "noResults": "No results found",
+    "emptyTitle": "Search Everywhere",
+    "emptyDescription": "Start typing to search through all pages, experiences, projects, and more..."
+  },
+  "settings": {
+    "title": "Settings",
+    "categories": {
+      "appearance": "Appearance & Behavior",
+      "language": "Language",
+      "keymap": "Keymap"
+    },
+    "appearance": {
+      "viewMode": "View Mode",
+      "viewModeDescription": "Choose how you want to view the portfolio.",
+      "ideView": "IDE View",
+      "ideViewDescription": "VS Code-inspired interface with file explorer and tabs. Perfect for developers.",
+      "modernView": "Modern View",
+      "modernViewDescription": "Traditional portfolio layout with hero section. Mobile-friendly and accessible.",
+      "applyNote": "Click \"Apply\" or \"OK\" to switch the view mode."
+    },
+    "language": {
+      "title": "Language Settings",
+      "description": "Select the language for the application interface.",
+      "interfaceLanguage": "Interface Language",
+      "applyNote": "Click \"Apply\" or \"OK\" to change the language."
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "apply": "Apply",
+      "ok": "OK"
+    }
+  },
   "emptyState": {
     "shortcuts": {
       "search": "Search Everywhere",
       "navigationBar": "Navigation Bar",
       "settings": "Settings"
+    },
+    "runControls": {
+      "title": "Run Controls",
+      "description": "Use the buttons in the top right (▶ Start / 🐛 Debug) to open project links"
     },
     "info": "You can switch back to the modern view in the settings. More information about the IDE view can be found under src/homepage."
   }

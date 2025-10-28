@@ -12,16 +12,16 @@ interface SettingsDialogProps {
 type SettingsCategory = 'appearance' | 'language' | 'keymap';
 
 export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
-    const { i18n } = useTranslation('common');
+    const { i18n, t } = useTranslation('common');
     const { viewMode, setViewMode } = useViewMode();
     const [selectedCategory, setSelectedCategory] = useState<SettingsCategory>('appearance');
     const [tempLanguage, setTempLanguage] = useState(i18n.language);
     const [tempViewMode, setTempViewMode] = useState(viewMode);
 
     const categories = [
-        { id: 'appearance' as const, label: 'Appearance & Behavior', icon: Palette },
-        { id: 'language' as const, label: 'Language', icon: Globe },
-        { id: 'keymap' as const, label: 'Keymap', icon: Keyboard },
+        { id: 'appearance' as const, label: t('settings.categories.appearance'), icon: Palette },
+        { id: 'language' as const, label: t('settings.categories.language'), icon: Globe },
+        { id: 'keymap' as const, label: t('settings.categories.keymap'), icon: Keyboard },
     ];
 
     const languages = [
@@ -81,7 +81,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-3 border-b" style={{ borderColor: '#393B40' }}>
                     <h2 className="text-lg font-semibold" style={{ color: '#BCBEC4' }}>
-                        Settings
+                        {t('settings.title')}
                     </h2>
                     <button
                         onClick={handleCancel}
@@ -136,10 +136,10 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-base font-semibold mb-4" style={{ color: '#BCBEC4' }}>
-                                        View Mode
+                                        {t('settings.appearance.viewMode')}
                                     </h3>
                                     <p className="text-sm mb-4" style={{ color: '#808080' }}>
-                                        Choose how you want to view the portfolio.
+                                        {t('settings.appearance.viewModeDescription')}
                                     </p>
 
                                     <div className="space-y-2">
@@ -170,10 +170,10 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                             />
                                             <div className="flex-1">
                                                 <div className="text-sm font-medium mb-1" style={{ color: '#BCBEC4' }}>
-                                                    IDE View
+                                                    {t('settings.appearance.ideView')}
                                                 </div>
                                                 <div className="text-xs" style={{ color: '#808080' }}>
-                                                    VS Code-inspired interface with file explorer and tabs. Perfect for developers.
+                                                    {t('settings.appearance.ideViewDescription')}
                                                 </div>
                                             </div>
                                             {tempViewMode === 'ide' && (
@@ -210,10 +210,10 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                             />
                                             <div className="flex-1">
                                                 <div className="text-sm font-medium mb-1" style={{ color: '#BCBEC4' }}>
-                                                    Modern View
+                                                    {t('settings.appearance.modernView')}
                                                 </div>
                                                 <div className="text-xs" style={{ color: '#808080' }}>
-                                                    Traditional portfolio layout with hero section. Mobile-friendly and accessible.
+                                                    {t('settings.appearance.modernViewDescription')}
                                                 </div>
                                             </div>
                                             {tempViewMode === 'modern' && (
@@ -227,7 +227,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                     {tempViewMode !== viewMode && (
                                         <div className="mt-4 p-3 border rounded-lg" style={{ background: '#3C3F41', borderColor: '#6B7280' }}>
                                             <p className="text-sm" style={{ color: '#FCD34D' }}>
-                                                Click "Apply" or "OK" to switch the view mode.
+                                                {t('settings.appearance.applyNote')}
                                             </p>
                                         </div>
                                     )}
@@ -239,15 +239,15 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-base font-semibold mb-4" style={{ color: '#BCBEC4' }}>
-                                        Language Settings
+                                        {t('settings.language.title')}
                                     </h3>
                                     <p className="text-sm mb-4" style={{ color: '#808080' }}>
-                                        Select the language for the application interface.
+                                        {t('settings.language.description')}
                                     </p>
 
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium" style={{ color: '#BCBEC4' }}>
-                                            Interface Language
+                                            {t('settings.language.interfaceLanguage')}
                                         </label>
                                         <div className="space-y-2">
                                             {languages.map((lang) => (
@@ -296,7 +296,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                     {tempLanguage !== i18n.language && (
                                         <div className="mt-4 p-3 border rounded-lg" style={{ background: '#3C3F41', borderColor: '#6B7280' }}>
                                             <p className="text-sm" style={{ color: '#FCD34D' }}>
-                                                Click "Apply" or "OK" to change the language.
+                                                {t('settings.language.applyNote')}
                                             </p>
                                         </div>
                                     )}
@@ -319,7 +319,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                         onMouseEnter={(e) => e.currentTarget.style.background = '#3C3F41'}
                         onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >
-                        Cancel
+                        {t('settings.buttons.cancel')}
                     </button>
                     <button
                         onClick={handleApply}
@@ -333,7 +333,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                         onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         disabled={tempLanguage === i18n.language && tempViewMode === viewMode}
                     >
-                        Apply
+                        {t('settings.buttons.apply')}
                     </button>
                     <button
                         onClick={handleOk}
@@ -342,7 +342,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                         onMouseEnter={(e) => e.currentTarget.style.background = '#1e40af'}
                         onMouseLeave={(e) => e.currentTarget.style.background = '#1d4ed8'}
                     >
-                        OK
+                        {t('settings.buttons.ok')}
                     </button>
                 </div>
             </div>

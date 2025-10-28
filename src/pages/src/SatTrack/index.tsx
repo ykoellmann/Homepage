@@ -1,13 +1,11 @@
-import { useTranslation } from 'react-i18next';
-import { getSatTrackMeta } from "../../../lib/i18nMetaHelpers.ts";
+import { useProjectPage } from "../../../hooks/useProjectPage.ts";
 import { ProjectHero } from "../../../components/layout/ProjectHero.tsx";
 import { FeaturesSection } from "../../../components/layout/FeaturesSection.tsx";
 import { TechStackGrid } from "../../../components/layout/TechStackGrid.tsx";
 import { InfoSection } from "../../../components/layout/InfoSection.tsx";
 
 export default function SatTrackPage() {
-    const { t } = useTranslation();
-    const meta = getSatTrackMeta(t);
+    const { meta, translations } = useProjectPage('sattrack');
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
@@ -16,12 +14,11 @@ export default function SatTrackPage() {
                 name={meta.name}
                 icon={meta.icon}
                 description={meta.description}
-                githubUrl={meta.debugUrl}
             />
 
             {/* Features */}
             <FeaturesSection
-                title={t('projects:sattrack.features.title')}
+                title={translations.features.title}
                 features={meta.features}
                 columns={{ default: 'grid-cols-1', md: 'md:grid-cols-2', xl: 'xl:grid-cols-3' }}
             />
@@ -29,7 +26,7 @@ export default function SatTrackPage() {
             {/* Tech Stack */}
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    {t('projects:sattrack.techStack.title')}
+                    {translations.techStack.title}
                 </h2>
                 <TechStackGrid
                     items={meta.techStack}
@@ -39,25 +36,25 @@ export default function SatTrackPage() {
             </section>
 
             {/* Project Info */}
-            <InfoSection title={t('projects:sattrack.about.title')} gradient="blue">
+            <InfoSection title={translations.about.title} gradient="blue">
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    {t('projects:sattrack.about.paragraph1')}
+                    {translations.about.paragraph1}
                 </p>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    {t('projects:sattrack.about.paragraph2')}
+                    {translations.about.paragraph2}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-4">
                     <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium">
-                        {t('projects:sattrack.about.badges.satellites')}
+                        {translations.about.badges.satellites}
                     </span>
                     <span className="px-3 py-1 bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 rounded-full text-sm font-medium">
-                        {t('projects:sattrack.about.badges.realtime')}
+                        {translations.about.badges.realtime}
                     </span>
                     <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium">
-                        {t('projects:sattrack.about.badges.unity')}
+                        {translations.about.badges.unity}
                     </span>
                     <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 rounded-full text-sm font-medium">
-                        {t('projects:sattrack.about.badges.university')}
+                        {translations.about.badges.university}
                     </span>
                 </div>
             </InfoSection>
@@ -65,14 +62,14 @@ export default function SatTrackPage() {
             {/* Team */}
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    {t('projects:sattrack.team.title')}
+                    {translations.team.title}
                 </h2>
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
                     <p className="text-gray-700 dark:text-gray-300">
-                        {t('projects:sattrack.team.description')}
+                        {translations.team.description}
                     </p>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                        {t('projects:sattrack.team.university')}
+                        {translations.team.university}
                     </p>
                 </div>
             </section>

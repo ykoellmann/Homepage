@@ -24,11 +24,53 @@
     "de": "Deutsch",
     "en": "English"
   },
+  "contact": {
+    "title": "Lass uns reden",
+    "subtitle": "Ich freue mich von dir zu hören"
+  },
+  "search": {
+    "placeholder": "Überall suchen...",
+    "noResults": "Keine Ergebnisse gefunden",
+    "emptyTitle": "Überall suchen",
+    "emptyDescription": "Beginnen Sie mit der Eingabe, um alle Seiten, Erfahrungen, Projekte und mehr zu durchsuchen..."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "categories": {
+      "appearance": "Erscheinungsbild & Verhalten",
+      "language": "Sprache",
+      "keymap": "Tastaturkürzel"
+    },
+    "appearance": {
+      "viewMode": "Ansichtsmodus",
+      "viewModeDescription": "Wählen Sie aus, wie Sie das Portfolio anzeigen möchten.",
+      "ideView": "IDE-Ansicht",
+      "ideViewDescription": "VS Code-inspirierte Oberfläche mit Datei-Explorer und Tabs. Perfekt für Entwickler.",
+      "modernView": "Moderne Ansicht",
+      "modernViewDescription": "Traditionelles Portfolio-Layout mit Hero-Bereich. Mobilfreundlich und zugänglich.",
+      "applyNote": "Klicken Sie auf \"Übernehmen\" oder \"OK\", um den Ansichtsmodus zu wechseln."
+    },
+    "language": {
+      "title": "Spracheinstellungen",
+      "description": "Wählen Sie die Sprache für die Benutzeroberfläche.",
+      "interfaceLanguage": "Oberflächensprache",
+      "applyNote": "Klicken Sie auf \"Übernehmen\" oder \"OK\", um die Sprache zu ändern."
+    },
+    "buttons": {
+      "cancel": "Abbrechen",
+      "apply": "Übernehmen",
+      "ok": "OK"
+    }
+  },
   "emptyState": {
     "shortcuts": {
       "search": "Überall Suchen",
       "navigationBar": "Navigationsleiste",
       "settings": "Einstellungen"
+    },
+    "runControls": {
+      "title": "Run Controls",
+      "description": "Verwenden Sie die Buttons oben rechts (▶ Start / 🐛 Debug), um Projekt-Links zu öffnen"
     },
     "info": "Sie können in den Einstellungen zurück zur modernen Ansicht wechseln. Weitere Informationen zur IDE-Ansicht finden Sie unter src/homepage."
   }
