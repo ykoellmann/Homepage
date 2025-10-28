@@ -23,5 +23,13 @@
   "languages": {
     "de": "Deutsch",
     "en": "English"
+  },
+  "emptyState": {
+    "shortcuts": {
+      "search": "Überall Suchen",
+      "navigationBar": "Navigationsleiste",
+      "settings": "Einstellungen"
+    },
+    "info": "Sie können in den Einstellungen zurück zur modernen Ansicht wechseln. Weitere Informationen zur IDE-Ansicht finden Sie unter src/homepage."
   }
 }

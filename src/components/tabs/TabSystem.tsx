@@ -1,4 +1,5 @@
 import {useState, useEffect, useImperativeHandle, forwardRef} from 'react';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {type Tab, type LayoutNode, type TabGroup as TabGroupType} from './types';
 import {TabGroup} from "./TabGroup.tsx";
 import {pushHistoryState} from '../../hooks/useHistoryStatus';
@@ -29,6 +30,9 @@ function saveToStorage(tabs: { id: string; title: string; path: string; scrollPo
 }
 
 const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [layout, setLayout] = useState<LayoutNode>(() => ({
         type: 'group',
         id: 'root',
@@ -44,14 +48,19 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
     const [componentMap, setComponentMap] = useState<Map<string, React.ComponentType>>(new Map());
 
     useEffect(() => {
-        if (layout.group && layout.group.tabs.length > 0) {
-            const simplifiedTabs = layout.group.tabs.map(t => ({
-                id: t.id,
-                title: t.title,
-                path: t.path,
-                scrollPosition: t.scrollPosition
-            }));
-            saveToStorage(simplifiedTabs, layout.group.activeTabId);
+        if (layout.group) {
+            if (layout.group.tabs.length > 0) {
+                const simplifiedTabs = layout.group.tabs.map(t => ({
+                    id: t.id,
+                    title: t.title,
+                    path: t.path,
+                    scrollPosition: t.scrollPosition
+                }));
+                saveToStorage(simplifiedTabs, layout.group.activeTabId);
+            } else {
+                // Clear storage when no tabs are open
+                sessionStorage.removeItem(STORAGE_KEY);
+            }
         }
     }, [layout]);
 
@@ -86,7 +95,7 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
     }
 
     function closeTab(tabId: string, groupId: string = 'group-1') {
-        const result = { newActiveTab: null as Tab | null };
+        const result = { newActiveTab: null as Tab | null, tabsRemaining: 0 };
 
         setLayout(prev => {
             const newLayout = {...prev};
@@ -108,8 +117,16 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
 
                         if (result.newActiveTab?.path) {
                             pushHistoryState(result.newActiveTab.path);
+                        } else if (group.tabs.length === 0) {
+                            // No tabs remaining, navigate to /ide if we're in IDE view
+                            const isInIdeView = location.pathname.startsWith('/ide');
+                            if (isInIdeView) {
+                                navigate('/ide', { replace: true });
+                            }
                         }
                     }
+
+                    result.tabsRemaining = group.tabs.length;
                 }
             });
 

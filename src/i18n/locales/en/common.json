@@ -23,5 +23,13 @@
   "languages": {
     "de": "Deutsch",
     "en": "English"
+  },
+  "emptyState": {
+    "shortcuts": {
+      "search": "Search Everywhere",
+      "navigationBar": "Navigation Bar",
+      "settings": "Settings"
+    },
+    "info": "You can switch back to the modern view in the settings. More information about the IDE view can be found under src/homepage."
   }
 }

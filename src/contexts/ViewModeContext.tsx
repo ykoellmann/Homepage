@@ -26,6 +26,29 @@ export const ViewModeProvider: React.FC<ViewModeProviderProps> = ({ children }) 
   const currentViewMode: ViewMode = isIdePath ? 'ide' : 'modern';
 
   const [viewMode, setViewModeState] = useState<ViewMode>(currentViewMode);
+  const [hasInitialized, setHasInitialized] = useState(false);
+
+  // Redirect to preferred view on initial load
+  useEffect(() => {
+    if (hasInitialized) return;
+
+    const preferredMode = localStorage.getItem(VIEW_MODE_KEY) as ViewMode | null;
+    const isRootPath = location.pathname === '/' || location.pathname === '';
+    const isProjectPath = location.pathname.startsWith('/src/') ||
+                          location.pathname.startsWith('/about') ||
+                          location.pathname.startsWith('/contact');
+
+    // If at root and user prefers IDE mode, redirect to /ide
+    if (isRootPath && preferredMode === 'ide') {
+      navigate('/ide', { replace: true });
+    }
+    // If accessing a project route directly without /ide prefix, redirect to IDE view
+    else if (isProjectPath && !location.pathname.startsWith('/ide')) {
+      navigate(`/ide${location.pathname}`, { replace: true });
+    }
+
+    setHasInitialized(true);
+  }, [hasInitialized, location.pathname, navigate]);
 
   // Sync view mode with route changes
   useEffect(() => {
