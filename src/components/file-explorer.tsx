@@ -87,11 +87,11 @@ export const FileExplorer: React.FC<FileExplorerProps> = ({ data, onOpenFile, cl
 
   return (
     <div className={cn(
-      "h-full w-[260px] bg-[var(--panel-bg)] border-r border-[var(--panel-border)] text-sm overflow-auto",
+      "h-full w-[260px] bg-[#2B2D30] border-r border-[#1E1F22] text-sm overflow-auto",
       className
     )}>
       {/* Tool window header (Rider-like) */}
-      <div className="sticky top-0 z-10 bg-[#2b2d30] border-b border-[#1e1f22] px-4 py-1.5 text-sm tracking-normal text-white font-semibold text-left">
+      <div className="sticky top-0 z-10 bg-[#2B2D30] border-b border-[#1E1F22] px-4 py-1.5 text-sm tracking-normal text-white font-semibold text-left">
         Project
       </div>
       <div className="py-1">

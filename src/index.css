@@ -4,9 +4,9 @@
 :root {
   font-family: 'JetBrains Mono', monospace;
   color: #A5A7AC;
-  background: #262626;
+  background: #1E1F22;
 
-  --app-bg: #262626;
+  --app-bg: #1E1F22;
   --panel-bg: #2B2D30;
   --panel-border: #1E1F22;
   --text: #A5A7AC;
@@ -132,7 +132,7 @@ html, body, #root {
 /* ===== Contentbereich ===== */
 .content {
   flex: 1;
-  background: #262626;
+  background: #1E1F22;
   overflow: auto;
   color: #c2c3c7;
 }

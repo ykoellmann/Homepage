@@ -44,7 +44,7 @@ export function TabItem({
         onDrop();
     }
 
-    const baseClasses = "flex items-center gap-2 px-4 py-2 min-w-[120px] max-w-[200px] cursor-pointer border-r border-[#2b2b2b] select-none relative bg-[#1e1f22] text-white hover:bg-[#2b2d30]";
+    const baseClasses = "flex items-center gap-2 px-4 py-2 min-w-[120px] max-w-[200px] cursor-pointer border-r border-[#1E1F22] select-none relative bg-[#1E1F22] text-white hover:bg-[#2b2d30]";
 
     return (
         <div className="relative group">
