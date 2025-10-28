@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {InteractiveBackground} from "../layout/InteractiveBackground.tsx";
 import {SearchBar} from './SearchBar';
-import { useKeymap } from '../../contexts/KeymapContext';
 import { keymapService } from '../../lib/keymapService';
 
 interface TabContentProps {
@@ -13,7 +12,6 @@ interface TabContentProps {
 export function TabContent({activeComponent: ActiveComponent, hasNoTabs}: TabContentProps) {
     const contentRef = useRef<HTMLDivElement>(null);
     const { t } = useTranslation('common');
-    const { actions } = useKeymap();
 
     // Get current shortcuts dynamically
     const getShortcut = (actionId: string): string => {
