@@ -1,7 +1,14 @@
 import {useState, useMemo, useEffect, useRef} from "react";
 import {searchService} from "../lib/searchService.ts";
 import {useLocation, useNavigate} from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useComponentTranslations } from '../hooks/useComponentTranslations';
+
+interface SearchEverywhereTranslations {
+    placeholder: string;
+    noResults: string;
+    emptyTitle: string;
+    emptyDescription: string;
+}
 
 interface SearchEverywhereProps {
     isOpen: boolean;
@@ -9,7 +16,7 @@ interface SearchEverywhereProps {
 }
 
 export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
-    const { t } = useTranslation('common');
+    const t = useComponentTranslations<SearchEverywhereTranslations>('components.SearchEverywhere');
     const [query, setQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -100,7 +107,7 @@ export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
                     <input
                         ref={inputRef}
                         type="text"
-                        placeholder={t('search.placeholder')}
+                        placeholder={t.placeholder}
                         value={query}
                         onChange={(e) => {
                             setQuery(e.target.value);
@@ -125,14 +132,14 @@ export function SearchEverywhere({ isOpen, onClose }: SearchEverywhereProps) {
                 >
                     {results.length === 0 && query && (
                         <div className="p-8 text-center" style={{ color: '#6b7280' }}>
-                            {t('search.noResults')}
+                            {t.noResults}
                         </div>
                     )}
 
                     {results.length === 0 && !query && (
                         <div className="p-8 text-center" style={{ color: '#6b7280' }}>
-                            <p className="text-base mb-2">{t('search.emptyTitle')}</p>
-                            <p className="text-xs opacity-75">{t('search.emptyDescription')}</p>
+                            <p className="text-base mb-2">{t.emptyTitle}</p>
+                            <p className="text-xs opacity-75">{t.emptyDescription}</p>
                         </div>
                     )}
 

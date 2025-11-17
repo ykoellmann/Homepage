@@ -2,7 +2,20 @@ import { useRef } from 'react';
 import {InteractiveBackground} from "../layout/InteractiveBackground.tsx";
 import {SearchBar} from './SearchBar';
 import { keymapService } from '../../lib/keymapService';
-import { useCommonTranslations } from '../../hooks/useCommonTranslations';
+import { useComponentTranslations } from '../../hooks/useComponentTranslations';
+
+interface EmptyStateTranslations {
+    shortcuts: {
+        search: string;
+        navigationBar: string;
+        settings: string;
+    };
+    runControls: {
+        title: string;
+        description: string;
+    };
+    info: string;
+}
 
 interface TabContentProps {
     activeComponent: React.ComponentType | null | undefined;
@@ -11,7 +24,7 @@ interface TabContentProps {
 
 export function TabContent({activeComponent: ActiveComponent, hasNoTabs}: TabContentProps) {
     const contentRef = useRef<HTMLDivElement>(null);
-    const translations = useCommonTranslations();
+    const t = useComponentTranslations<EmptyStateTranslations>('pages.emptyState');
 
     // Get current shortcuts dynamically
     const getShortcut = (actionId: string): string => {
@@ -34,25 +47,25 @@ export function TabContent({activeComponent: ActiveComponent, hasNoTabs}: TabCon
                             <div className="text-left space-y-6 max-w-2xl px-6">
                                 <div className="space-y-2">
                                     <p className="font-mono text-sm">
-                                        {translations.emptyState.shortcuts.search}: {searchShortcut}
+                                        {t.shortcuts.search}: {searchShortcut}
                                     </p>
                                     <p className="font-mono text-sm">
-                                        {translations.emptyState.shortcuts.navigationBar}: {navigationBarShortcut}
+                                        {t.shortcuts.navigationBar}: {navigationBarShortcut}
                                     </p>
                                     <p className="font-mono text-sm">
-                                        {translations.emptyState.shortcuts.settings}: {settingsShortcut}
+                                        {t.shortcuts.settings}: {settingsShortcut}
                                     </p>
                                 </div>
                                 <div className="border-t border-gray-700 pt-4">
                                     <p className="font-semibold text-gray-300 mb-2">
-                                        {translations.emptyState.runControls.title}
+                                        {t.runControls.title}
                                     </p>
                                     <p className="text-sm text-gray-400">
-                                        {translations.emptyState.runControls.description}
+                                        {t.runControls.description}
                                     </p>
                                 </div>
                                 <p className="text-sm leading-relaxed border-t border-gray-700 pt-4">
-                                    {translations.emptyState.info}
+                                    {t.info}
                                 </p>
                             </div>
                         </div>

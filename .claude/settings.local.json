@@ -6,7 +6,9 @@
       "Bash(timeout /t 3)",
       "Bash(npm install:*)",
       "Bash(dir /B \"C:\\Users\\Yannik\\WebstormProjects\\homepage\")",
-      "Bash(dir /B \"C:\\Users\\Yannik\\WebstormProjects\\homepage\\src\\pages\\src\")"
+      "Bash(dir /B \"C:\\Users\\Yannik\\WebstormProjects\\homepage\\src\\pages\\src\")",
+      "Bash(dir /B \"C:\\Users\\Yannik\\WebstormProjects\\homepage\\src\\pages\\src\\*\\useTranslations.ts\")",
+      "Bash(del:*)"
     ],
     "deny": [],
     "ask": []

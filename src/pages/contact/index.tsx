@@ -1,17 +1,23 @@
 import {contactPageMeta} from "./meta.ts";
-import { Mail } from 'lucide-react';
+import { Mail, MapPin } from 'lucide-react';
 import { GithubIcon } from '../../components/icons/GithubIcon';
 import { LinkedinIcon } from '../../components/icons/LinkedinIcon';
-import { useTranslation } from 'react-i18next';
+import { useComponentTranslations } from '../../hooks/useComponentTranslations';
+
+interface ContactTranslations {
+    title: string;
+    subtitle: string;
+}
 
 const iconMap = {
     'Mail': Mail,
     'Github': GithubIcon,
     'Linkedin': LinkedinIcon,
+    'MapPin': MapPin,
 };
 
 export default function ContactPage() {
-    const { t } = useTranslation('common');
+    const t = useComponentTranslations<ContactTranslations>('pages.contact');
 
     return (
         <div className="flex items-center justify-center min-h-[60vh] p-8">
@@ -19,10 +25,10 @@ export default function ContactPage() {
                 {/* Header */}
                 <div className="text-center space-y-3">
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-                        {t('contact.title')}
+                        {t.title}
                     </h1>
                     <p className="text-lg text-gray-600 dark:text-gray-400">
-                        {t('contact.subtitle')}
+                        {t.subtitle}
                     </p>
                 </div>
 

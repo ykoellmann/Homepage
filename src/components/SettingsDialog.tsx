@@ -3,6 +3,36 @@ import { useTranslation } from 'react-i18next';
 import { X, Globe, Palette, Keyboard } from 'lucide-react';
 import { useViewMode } from '../contexts/ViewModeContext';
 import { KeymapSettings } from './KeymapSettings';
+import { useComponentTranslations } from '../hooks/useComponentTranslations';
+
+interface SettingsTranslations {
+    title: string;
+    categories: {
+        appearance: string;
+        language: string;
+        keymap: string;
+    };
+    appearance: {
+        viewMode: string;
+        viewModeDescription: string;
+        ideView: string;
+        ideViewDescription: string;
+        modernView: string;
+        modernViewDescription: string;
+        applyNote: string;
+    };
+    language: {
+        title: string;
+        description: string;
+        interfaceLanguage: string;
+        applyNote: string;
+    };
+    buttons: {
+        cancel: string;
+        apply: string;
+        ok: string;
+    };
+}
 
 interface SettingsDialogProps {
     isOpen: boolean;
@@ -12,16 +42,17 @@ interface SettingsDialogProps {
 type SettingsCategory = 'appearance' | 'language' | 'keymap';
 
 export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
-    const { i18n, t } = useTranslation('common');
+    const { i18n } = useTranslation();
+    const t = useComponentTranslations<SettingsTranslations>('components.SettingsDialog');
     const { viewMode, setViewMode } = useViewMode();
     const [selectedCategory, setSelectedCategory] = useState<SettingsCategory>('appearance');
     const [tempLanguage, setTempLanguage] = useState(i18n.language);
     const [tempViewMode, setTempViewMode] = useState(viewMode);
 
     const categories = [
-        { id: 'appearance' as const, label: t('settings.categories.appearance'), icon: Palette },
-        { id: 'language' as const, label: t('settings.categories.language'), icon: Globe },
-        { id: 'keymap' as const, label: t('settings.categories.keymap'), icon: Keyboard },
+        { id: 'appearance' as const, label: t.categories.appearance, icon: Palette },
+        { id: 'language' as const, label: t.categories.language, icon: Globe },
+        { id: 'keymap' as const, label: t.categories.keymap, icon: Keyboard },
     ];
 
     const languages = [
@@ -81,7 +112,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-3 border-b" style={{ borderColor: '#393B40' }}>
                     <h2 className="text-lg font-semibold" style={{ color: '#BCBEC4' }}>
-                        {t('settings.title')}
+                        {t.title}
                     </h2>
                     <button
                         onClick={handleCancel}
@@ -136,10 +167,10 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-base font-semibold mb-4" style={{ color: '#BCBEC4' }}>
-                                        {t('settings.appearance.viewMode')}
+                                        {t.appearance.viewMode}
                                     </h3>
                                     <p className="text-sm mb-4" style={{ color: '#808080' }}>
-                                        {t('settings.appearance.viewModeDescription')}
+                                        {t.appearance.viewModeDescription}
                                     </p>
 
                                     <div className="space-y-2">
@@ -170,10 +201,10 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                             />
                                             <div className="flex-1">
                                                 <div className="text-sm font-medium mb-1" style={{ color: '#BCBEC4' }}>
-                                                    {t('settings.appearance.ideView')}
+                                                    {t.appearance.ideView}
                                                 </div>
                                                 <div className="text-xs" style={{ color: '#808080' }}>
-                                                    {t('settings.appearance.ideViewDescription')}
+                                                    {t.appearance.ideViewDescription}
                                                 </div>
                                             </div>
                                             {tempViewMode === 'ide' && (
@@ -210,10 +241,10 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                             />
                                             <div className="flex-1">
                                                 <div className="text-sm font-medium mb-1" style={{ color: '#BCBEC4' }}>
-                                                    {t('settings.appearance.modernView')}
+                                                    {t.appearance.modernView}
                                                 </div>
                                                 <div className="text-xs" style={{ color: '#808080' }}>
-                                                    {t('settings.appearance.modernViewDescription')}
+                                                    {t.appearance.modernViewDescription}
                                                 </div>
                                             </div>
                                             {tempViewMode === 'modern' && (
@@ -227,7 +258,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                     {tempViewMode !== viewMode && (
                                         <div className="mt-4 p-3 border rounded-lg" style={{ background: '#3C3F41', borderColor: '#6B7280' }}>
                                             <p className="text-sm" style={{ color: '#FCD34D' }}>
-                                                {t('settings.appearance.applyNote')}
+                                                {t.appearance.applyNote}
                                             </p>
                                         </div>
                                     )}
@@ -239,15 +270,15 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-base font-semibold mb-4" style={{ color: '#BCBEC4' }}>
-                                        {t('settings.language.title')}
+                                        {t.language.title}
                                     </h3>
                                     <p className="text-sm mb-4" style={{ color: '#808080' }}>
-                                        {t('settings.language.description')}
+                                        {t.language.description}
                                     </p>
 
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium" style={{ color: '#BCBEC4' }}>
-                                            {t('settings.language.interfaceLanguage')}
+                                            {t.language.interfaceLanguage}
                                         </label>
                                         <div className="space-y-2">
                                             {languages.map((lang) => (
@@ -296,7 +327,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                                     {tempLanguage !== i18n.language && (
                                         <div className="mt-4 p-3 border rounded-lg" style={{ background: '#3C3F41', borderColor: '#6B7280' }}>
                                             <p className="text-sm" style={{ color: '#FCD34D' }}>
-                                                {t('settings.language.applyNote')}
+                                                {t.language.applyNote}
                                             </p>
                                         </div>
                                     )}
@@ -319,7 +350,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                         onMouseEnter={(e) => e.currentTarget.style.background = '#3C3F41'}
                         onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                     >
-                        {t('settings.buttons.cancel')}
+                        {t.buttons.cancel}
                     </button>
                     <button
                         onClick={handleApply}
@@ -333,7 +364,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                         onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         disabled={tempLanguage === i18n.language && tempViewMode === viewMode}
                     >
-                        {t('settings.buttons.apply')}
+                        {t.buttons.apply}
                     </button>
                     <button
                         onClick={handleOk}
@@ -342,7 +373,7 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                         onMouseEnter={(e) => e.currentTarget.style.background = '#1e40af'}
                         onMouseLeave={(e) => e.currentTarget.style.background = '#1d4ed8'}
                     >
-                        {t('settings.buttons.ok')}
+                        {t.buttons.ok}
                     </button>
                 </div>
             </div>

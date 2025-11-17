@@ -1,11 +1,30 @@
-import type {BasePageMeta, Searchable} from "../../lib/basePage.ts";
+/**
+ * About Page Data
+ *
+ * This file contains:
+ * - Static data (experiences, config)
+ * - Translation interface (name, description)
+ */
 
-// Experience ist durchsuchbar
+import type { Searchable } from "../../lib/basePage.ts";
+import type { BasePageData } from "../../lib/pageTypes.ts";
+
+// ============================================================================
+// Translation Interface (loaded from JSON)
+// ============================================================================
+
+export interface AboutPageTranslations {
+    name: string;
+    description: string;
+}
+
+// ============================================================================
+// Static Data (not translated)
+// ============================================================================
+
 export interface Experience extends Searchable {
     _searchableId: string;
     _searchWeight?: number;
-
-    // Deine eigenen Felder - komplett frei!
     type: 'work' | 'education';
     company: string;
     logoUrl?: string;
@@ -19,27 +38,19 @@ export interface Experience extends Searchable {
     achievements?: string[];
 }
 
-// About Page Meta - erweitert BasePageMeta
-export interface AboutPageMeta extends BasePageMeta {
-    // Deine eigenen durchsuchbaren Collections
-    experiences: Experience[];
-}
+export const aboutPageData: BasePageData & {
+    readonly experiences: readonly Experience[];
+} = {
+    slug: 'about',
+    category: 'About',
+    icon: '👤',
+    keywords: ['Lebenslauf', 'CV', 'Karriere', 'Ausbildung', 'Entwickler'],
 
-export const aboutPageMeta: AboutPageMeta = {
-    // BasePageMeta Pflichtfelder
-    name: "About Me",
-    slug: "about",
-    description: "Mein beruflicher Werdegang als Fachinformatiker und Informatik-Student",
-    keywords: ["Lebenslauf", "CV", "Karriere", "Ausbildung", "Entwickler"],
-    category: "About",
-    icon: "👤",
-
-    // Deine Experiences
     experiences: [
         {
             _searchableId: 'exp-monari-aushilfe-2024',
-            _searchWeight: 10, // Aktueller Job = wichtiger
-            type: 'work',
+            _searchWeight: 10,
+            type: 'work' as const,
             company: 'monari GmbH',
             logoUrl: '/logos/monari.png',
             startMonth: 'Okt. 2024',
@@ -52,7 +63,7 @@ export const aboutPageMeta: AboutPageMeta = {
         {
             _searchableId: 'exp-monari-entwickler-2024',
             _searchWeight: 9,
-            type: 'work',
+            type: 'work' as const,
             company: 'monari GmbH',
             logoUrl: '/logos/monari.png',
             startMonth: 'Jan. 2024',
@@ -66,7 +77,7 @@ export const aboutPageMeta: AboutPageMeta = {
         {
             _searchableId: 'exp-monari-ausbildung-2021',
             _searchWeight: 8,
-            type: 'work',
+            type: 'work' as const,
             company: 'monari GmbH',
             logoUrl: '/logos/monari.png',
             startMonth: 'Aug. 2021',
@@ -74,13 +85,13 @@ export const aboutPageMeta: AboutPageMeta = {
             position: 'Fachinformatiker Fachrichtung Anwendungsentwicklung',
             location: 'Gronau (Westfalen)',
             employmentType: 'Azubi',
-            skills: ['ASP.NET Core', 'API-Entwicklung', 'Entity Framework Core', 'SQL'],
+            skills: ['C#', 'ASP.NET Core', 'API-Entwicklung', 'Entity Framework Core', 'SQL'],
             description: 'Ausbildung zum Fachinformatiker mit Schwerpunkt auf Backend-Entwicklung',
         },
         {
             _searchableId: 'exp-uni-jena-2024',
             _searchWeight: 10,
-            type: 'education',
+            type: 'education' as const,
             company: 'Friedrich-Schiller-Universität Jena',
             startMonth: 'Okt. 2024',
             endMonth: 'Sept. 2027',
@@ -91,7 +102,7 @@ export const aboutPageMeta: AboutPageMeta = {
         {
             _searchableId: 'exp-hermann-emanuel-2018',
             _searchWeight: 5,
-            type: 'education',
+            type: 'education' as const,
             company: 'Hermann-Emanuel-Berufskolleg des Kreises Steinfurt',
             startMonth: 'Aug. 2018',
             endMonth: 'Aug. 2021',
@@ -103,10 +114,16 @@ export const aboutPageMeta: AboutPageMeta = {
     ],
 };
 
-// Export for backward compatibility with existing runConfig usage
-export const runConfig = {
-    name: aboutPageMeta.name,
-    slug: aboutPageMeta.slug,
-    description: aboutPageMeta.description,
-    icon: aboutPageMeta.icon,
+export type AboutPageData = typeof aboutPageData;
+
+// For backward compatibility
+export interface AboutPageMeta extends AboutPageData, AboutPageTranslations {
+    name: string;
+    description: string;
+}
+
+export const aboutPageMeta: AboutPageMeta = {
+    ...aboutPageData,
+    name: "About Me",  // Default fallback
+    description: "Mein beruflicher Werdegang als Fachinformatiker und Informatik-Student",
 };

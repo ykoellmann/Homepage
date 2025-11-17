@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useViewMode } from '../contexts/ViewModeContext';
-import { Monitor, ExternalLink, ChevronDown, Sparkles, Mail, Zap } from 'lucide-react';
-import { aboutPageMeta, type Experience } from '../pages/about/meta';
-import { contactPageMeta } from '../pages/contact/meta';
+import { Monitor, ExternalLink, ChevronDown, Sparkles, Mail, Zap, MapPin } from 'lucide-react';
+import { aboutPageData, type Experience } from '../pages/about/meta';
+import { contactPageData } from '../pages/contact/meta';
 import { useTranslation } from 'react-i18next';
-import { getCryptborneMeta, getSatTrackMeta, getCteXecutorMeta } from '../lib/i18nMetaHelpers';
+import { cryptborneData } from '../pages/src/cryptborne/meta';
+import { homepageData } from '../pages/src/homepage/meta';
+import { satTrackData } from '../pages/src/SatTrack/meta';
+import { cteXecutorData } from '../pages/src/cteXecutor/meta';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { GithubIcon } from './icons/GithubIcon';
 import { LinkedinIcon } from './icons/LinkedinIcon';
@@ -13,6 +16,7 @@ const iconMap = {
   'Mail': Mail,
   'Github': GithubIcon,
   'Linkedin': LinkedinIcon,
+  'MapPin': MapPin,
 };
 
 // Hook für Intersection Observer Animationen
@@ -71,14 +75,20 @@ export const ModernView: React.FC = () => {
   const navRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
   const [indicatorStyle, setIndicatorStyle] = useState<{ width: string; left: string }>({ width: '0px', left: '0px' });
 
-  const cryptborne = getCryptborneMeta(t);
-  const sattrack = getSatTrackMeta(t);
-  const ctexecutor = getCteXecutorMeta(t);
+  // Build projects with translations
+  const allProjectData = [cryptborneData, homepageData, satTrackData, cteXecutorData];
+  const projects = allProjectData.map(projectData => {
+    const translations = t(`projects:${projectData.slug}`, { returnObjects: true }) as any;
+    return { ...projectData, ...translations };
+  });
 
-  const projects = [cryptborne, sattrack, ctexecutor];
+  // Get about page translations
+  const aboutTranslations = t('pages.about', { returnObjects: true }) as any;
+  const aboutPage = { ...aboutPageData, ...aboutTranslations };
+
 
   // Sort experiences by date (DESC)
-  const sortedExperiences = [...aboutPageMeta.experiences].sort((a, b) => {
+  const sortedExperiences = [...aboutPageData.experiences].sort((a, b) => {
     const getYear = (exp: Experience) => {
       if (exp.endMonth.toLowerCase().includes('heute') || exp.endMonth.toLowerCase().includes('today')) {
         return 9999;
@@ -287,7 +297,7 @@ export const ModernView: React.FC = () => {
               {i18n.language === 'de' ? 'Full-Stack Entwickler & Informatik-Student' : 'Full-Stack Developer & Computer Science Student'}
             </p>
             <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 animate-fade-in-up">
-              {aboutPageMeta.description}
+              {aboutPage.description}
             </p>
             <button
                 onClick={() => scrollToSection('projects')}
@@ -447,7 +457,7 @@ export const ModernView: React.FC = () => {
                             {i18n.language === 'de' ? 'Features:' : 'Features:'}
                           </h4>
                           <div className="space-y-2">
-                            {project.features.slice(0, 3).map((feature, featureIndex) => (
+                            {Object.values(project.features).slice(0, 3).map((feature: any, featureIndex) => (
                                 <div
                                     key={feature._searchableId}
                                     className={`flex items-start gap-2 transition-all duration-500 ${
@@ -514,7 +524,7 @@ export const ModernView: React.FC = () => {
             </p>
 
             <div className="grid gap-6 max-w-2xl mx-auto">
-              {contactPageMeta.contactMethods.map((method, index) => {
+              {contactPageData.contactMethods.map((method, index) => {
                 const IconComponent = iconMap[method.icon as keyof typeof iconMap];
                 return (
                     <a
@@ -574,7 +584,7 @@ export const ModernView: React.FC = () => {
           background-size: 200% 200%;
           animation: gradient 8s ease infinite;
         }
-        
+
         @keyframes shimmer {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(100%); }
@@ -582,7 +592,7 @@ export const ModernView: React.FC = () => {
         .animate-shimmer {
           animation: shimmer 2s infinite;
         }
-        
+
         @keyframes fade-in {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
@@ -590,7 +600,7 @@ export const ModernView: React.FC = () => {
         .animate-fade-in {
           animation: fade-in 1s ease-out;
         }
-        
+
         @keyframes slide-up {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
@@ -601,7 +611,7 @@ export const ModernView: React.FC = () => {
         .animate-slide-up-delayed {
           animation: slide-up 0.8s ease-out 0.5s both;
         }
-        
+
         @keyframes fade-in-up {
           from { opacity: 0; transform: translateY(40px); }
           to { opacity: 1; transform: translateY(0); }
@@ -609,7 +619,7 @@ export const ModernView: React.FC = () => {
         .animate-fade-in-up {
           animation: fade-in-up 1s ease-out 0.7s both;
         }
-        
+
         @keyframes float {
           0%, 100% { transform: translate(0, 0); }
           33% { transform: translate(30px, -30px); }
@@ -624,7 +634,7 @@ export const ModernView: React.FC = () => {
         .animate-float-slow {
           animation: float 30s ease-in-out infinite 5s;
         }
-        
+
         @keyframes spin-slow {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
@@ -632,7 +642,7 @@ export const ModernView: React.FC = () => {
         .animate-spin-slow {
           animation: spin-slow 10s linear infinite;
         }
-        
+
         @keyframes bounce-subtle {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-5px); }
@@ -640,15 +650,15 @@ export const ModernView: React.FC = () => {
         .animate-bounce-subtle {
           animation: bounce-subtle 2s ease-in-out infinite;
         }
-        
+
         @keyframes pulse-slow {
           0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.7; }
+          50% { opacity: 0.7%; }
         }
         .animate-pulse-slow {
           animation: pulse-slow 3s ease-in-out infinite;
         }
-        
+
         @keyframes scale-in {
           from { opacity: 0; transform: scale(0.9); }
           to { opacity: 1; transform: scale(1); }
@@ -656,7 +666,7 @@ export const ModernView: React.FC = () => {
         .animate-scale-in {
           animation: scale-in 0.3s ease-out;
         }
-        
+
         /* CINEMATIC 3D PARALLAX DIVIDER */
         .cinematic-divider {
           position: relative;
@@ -665,7 +675,7 @@ export const ModernView: React.FC = () => {
           perspective: 1500px;
           transform-style: preserve-3d;
         }
-        
+
         .divider-depth-layer {
           position: absolute;
           inset: 0;
@@ -677,13 +687,13 @@ export const ModernView: React.FC = () => {
           );
           transform-style: preserve-3d;
         }
-        
+
         /* Layer 1 - Closest, most dramatic */
         @keyframes depth-wave-1 {
           0%, 100% {
             transform: translateZ(150px) translateX(0%) rotateX(15deg) scaleY(1.2);
             clip-path: polygon(
-              0% 45%, 10% 35%, 20% 50%, 30% 30%, 40% 45%, 50% 25%, 
+              0% 45%, 10% 35%, 20% 50%, 30% 30%, 40% 45%, 50% 25%,
               60% 40%, 70% 30%, 80% 45%, 90% 35%, 100% 40%,
               100% 100%, 0% 100%
             );
@@ -697,14 +707,14 @@ export const ModernView: React.FC = () => {
             );
           }
         }
-        
+
         .depth-1 {
           animation: depth-wave-1 10s ease-in-out infinite;
           opacity: 0.8;
           filter: blur(1px) brightness(1.3);
           z-index: 5;
         }
-        
+
         /* Layer 2 */
         @keyframes depth-wave-2 {
           0%, 100% {
@@ -724,14 +734,14 @@ export const ModernView: React.FC = () => {
             );
           }
         }
-        
+
         .depth-2 {
           animation: depth-wave-2 12s ease-in-out infinite 0.5s;
           opacity: 0.6;
           filter: blur(2px) brightness(1.2);
           z-index: 4;
         }
-        
+
         /* Layer 3 */
         @keyframes depth-wave-3 {
           0%, 100% {
@@ -749,14 +759,14 @@ export const ModernView: React.FC = () => {
             );
           }
         }
-        
+
         .depth-3 {
           animation: depth-wave-3 14s ease-in-out infinite 1s;
           opacity: 0.45;
           filter: blur(4px) brightness(1.1);
           z-index: 3;
         }
-        
+
         /* Layer 4 */
         @keyframes depth-wave-4 {
           0%, 100% {
@@ -774,14 +784,14 @@ export const ModernView: React.FC = () => {
             );
           }
         }
-        
+
         .depth-4 {
           animation: depth-wave-4 16s ease-in-out infinite 1.5s;
           opacity: 0.3;
           filter: blur(6px) brightness(1.05);
           z-index: 2;
         }
-        
+
         /* Layer 5 - Farthest */
         @keyframes depth-wave-5 {
           0%, 100% {
@@ -799,14 +809,14 @@ export const ModernView: React.FC = () => {
             );
           }
         }
-        
+
         .depth-5 {
           animation: depth-wave-5 18s ease-in-out infinite 2s;
           opacity: 0.2;
           filter: blur(10px);
           z-index: 1;
         }
-        
+
         /* Cinematic Glows */
         @keyframes cinematic-glow-top {
           0%, 100% {
@@ -818,7 +828,7 @@ export const ModernView: React.FC = () => {
             transform: translateY(-10%) scaleX(1.3);
           }
         }
-        
+
         .cinematic-glow-top {
           position: absolute;
           top: 10%;
@@ -837,7 +847,7 @@ export const ModernView: React.FC = () => {
           z-index: 6;
           pointer-events: none;
         }
-        
+
         @keyframes cinematic-glow-bottom {
           0%, 100% {
             opacity: 0.3;
@@ -848,7 +858,7 @@ export const ModernView: React.FC = () => {
             transform: translateY(10%) scaleX(1.4);
           }
         }
-        
+
         .cinematic-glow-bottom {
           position: absolute;
           bottom: 15%;
@@ -866,7 +876,7 @@ export const ModernView: React.FC = () => {
           z-index: 6;
           pointer-events: none;
         }
-        
+
         /* Floating Particles */
         .cinematic-particles {
           position: absolute;
@@ -874,7 +884,7 @@ export const ModernView: React.FC = () => {
           z-index: 7;
           pointer-events: none;
         }
-        
+
         @keyframes particle-float {
           0% {
             transform: translateY(120%) translateX(0) scale(0);
@@ -891,7 +901,7 @@ export const ModernView: React.FC = () => {
             opacity: 0;
           }
         }
-        
+
         .particle {
           position: absolute;
           bottom: 0;
@@ -902,17 +912,17 @@ export const ModernView: React.FC = () => {
           animation: particle-float 8s ease-in infinite;
           --drift: calc((var(--index, 1) - 7) * 15px);
         }
-        
+
         .particle:nth-child(3n) {
           background: radial-gradient(circle, rgba(59, 130, 246, 1) 0%, transparent 70%);
           animation-duration: 9s;
         }
-        
+
         .particle:nth-child(3n+1) {
           background: radial-gradient(circle, rgba(236, 72, 153, 1) 0%, transparent 70%);
           animation-duration: 10s;
         }
-        
+
         /* Performance optimization */
         * {
           will-change: auto;

@@ -1,57 +1,85 @@
-import type {BasePageMeta} from "../../lib/basePage.ts";
+/**
+ * Contact Page Data
+ *
+ * This file contains:
+ * - Static data (contact methods)
+ * - Translation interface (title, subtitle)
+ */
 
-export interface ContactMethod {
+import type { BasePageData, BasePageTranslations } from "../../lib/pageTypes";
+
+// ============================================================================
+// Translation Interface (loaded from common.json -> pages.contact)
+// ============================================================================
+
+export interface ContactPageTranslations extends BasePageTranslations {
+    title: string;
+    subtitle: string;
+}
+
+// ============================================================================
+// Static Data (NOT translated)
+// ============================================================================
+
+interface ContactMethod {
     id: string;
     icon: string;
     label: string;
     value: string;
     href: string;
-    color: string;
 }
 
-export interface ContactPageMeta extends BasePageMeta {
-    contactMethods: ContactMethod[];
-}
-
-export const contactPageMeta: ContactPageMeta = {
-    name: "Contact",
-    slug: "contact",
-    description: "Lass uns in Kontakt treten",
-    keywords: ["Contact", "Email", "GitHub", "LinkedIn"],
-    category: "Contact",
-    icon: "📬",
+/**
+ * Contact page data.
+ * Extends BasePageData (includes RunConfig).
+ *
+ * No url/debugUrl, so this page is NOT runnable in IDE controls.
+ */
+export const contactPageData: BasePageData & {
+    readonly contactMethods: readonly ContactMethod[];
+} = {
+    slug: 'contact',
+    category: 'Pages',
+    icon: '📧',
+    keywords: ['Email', 'LinkedIn', 'GitHub', 'Contact', 'Reach out'],
 
     contactMethods: [
         {
             id: 'email',
             icon: 'Mail',
             label: 'Email',
-            value: 'ykoellmann@icloud.com',
-            href: 'mailto:ykoellmann@icloud.com',
-            color: 'blue',
+            value: 'yankoe@outlook.de',
+            href: 'mailto:yankoe@outlook.de',
+        },
+        {
+            id: 'location',
+            icon: 'MapPin',
+            label: 'Standort',
+            value: '07747 Jena, Deutschland',
+            href: 'https://www.google.com/maps/place/07747+Jena',
         },
         {
             id: 'github',
             icon: 'Github',
             label: 'GitHub',
-            value: '@ykoellmann',
+            value: 'github.com/ykoellmann',
             href: 'https://github.com/ykoellmann',
-            color: 'gray',
         },
         {
             id: 'linkedin',
             icon: 'Linkedin',
             label: 'LinkedIn',
-            value: 'Yannik Köllmann',
-            href: 'https://linkedin.com/in/yannikkoellmann',
-            color: 'indigo',
+            value: 'linkedin.com/in/yannikkoellmann',
+            href: 'https://www.linkedin.com/in/yannikkoellmann/',
         },
     ],
 };
 
-export const runConfig = {
-    name: contactPageMeta.name,
-    slug: contactPageMeta.slug,
-    description: contactPageMeta.description,
-    icon: contactPageMeta.icon,
+export type ContactPageData = typeof contactPageData;
+
+// For backward compatibility
+export const contactPageMeta = {
+    ...contactPageData,
+    name: "Contact",  // Default fallback
+    description: "Get in touch with me",
 };
