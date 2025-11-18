@@ -1,4 +1,5 @@
 import type { PageEntry } from './buildFileTree';
+import projectsEn from '../i18n/locales/en/projects.json';
 
 export interface TerminalFile {
     name: string;
@@ -36,10 +37,9 @@ export class TerminalFileSystem {
     private buildFileSystem(pages: PageEntry[]) {
         // Create home directory
         const home = this.createDirectory(this.root, 'home');
-        const user = this.createDirectory(home, 'user');
 
-        // Create projects directory
-        const projects = this.createDirectory(user, 'projects');
+        // Create projects directory directly in home
+        const projects = this.createDirectory(home, 'projects');
 
         pages.forEach(page => {
             const pathParts = page.path.split('/').filter(p => p);
@@ -60,8 +60,8 @@ export class TerminalFileSystem {
             this.createFile(current, fileName, this.generateFileContent(page), page);
         });
 
-        // Set initial path to /home/user
-        this.currentPath = ['home', 'user'];
+        // Set initial path to /home
+        this.currentPath = ['home'];
     }
 
     private createDirectory(parent: FileSystemNode, name: string): FileSystemNode {
@@ -97,39 +97,143 @@ export class TerminalFileSystem {
         const meta = page.meta;
 
         if (!meta) {
-            return `# ${page.name}\n\nNo metadata available.\nPath: ${page.path}\n`;
+            return this.generateBasicContent(page);
         }
+
+        // Try to get translation data
+        const projectKey = page.name.toLowerCase();
+        const translations = (projectsEn as any)[projectKey];
 
         let content = '';
 
-        // Title and description
-        content += `# ${meta.title || page.name}\n\n`;
+        // Header with title
+        const title = translations?.name || meta.title || page.name;
+        content += `╔═══════════════════════════════════════════════════════════════════╗\n`;
+        content += `║  ${title.padEnd(63)}║\n`;
+        content += `╚═══════════════════════════════════════════════════════════════════╝\n\n`;
 
-        if (meta.description) {
-            content += `${meta.description}\n\n`;
+        // Description
+        const description = translations?.description || meta.description;
+        if (description) {
+            content += `DESCRIPTION\n`;
+            content += `───────────────────────────────────────────────────────────────────\n`;
+            content += this.wrapText(description, 67);
+            content += `\n\n`;
+        }
+
+        // About section
+        if (translations?.about) {
+            content += `${translations.about.title}\n`;
+            content += `───────────────────────────────────────────────────────────────────\n`;
+            if (translations.about.paragraph1) {
+                content += this.wrapText(translations.about.paragraph1, 67) + '\n\n';
+            }
+            if (translations.about.paragraph2) {
+                content += this.wrapText(translations.about.paragraph2, 67) + '\n\n';
+            }
+        }
+
+        // Features section
+        if (translations?.features) {
+            content += `${translations.features.title || '✨ Features'}\n`;
+            content += `───────────────────────────────────────────────────────────────────\n`;
+
+            Object.entries(translations.features).forEach(([key, feature]: [string, any]) => {
+                if (key === 'title') return;
+                if (feature.title && feature.description) {
+                    content += `\n• ${feature.title}\n`;
+                    content += `  ${this.wrapText(feature.description, 65).split('\n').join('\n  ')}\n`;
+                }
+            });
+            content += `\n`;
+        }
+
+        // Tech Stack
+        if (translations?.techStack) {
+            content += `${translations.techStack.title || '🛠️ Tech Stack'}\n`;
+            content += `───────────────────────────────────────────────────────────────────\n`;
+
+            Object.entries(translations.techStack).forEach(([key, value]: [string, any]) => {
+                if (key === 'title') return;
+                if (typeof value === 'string') {
+                    content += `  • ${value}\n`;
+                }
+            });
+            content += `\n`;
         }
 
         // Run Configuration
         if (meta.runConfig) {
-            content += `## Configuration\n\n`;
-            if (meta.runConfig.name) {
-                content += `**Name:** ${meta.runConfig.name}\n`;
-            }
+            content += `PROJECT LINKS\n`;
+            content += `───────────────────────────────────────────────────────────────────\n`;
+
             if (meta.runConfig.url) {
-                content += `**URL:** ${meta.runConfig.url}\n`;
+                content += `🌐 Live Demo:\n   ${meta.runConfig.url}\n\n`;
             }
+
             if (meta.runConfig.debugUrl) {
-                content += `**Debug URL:** ${meta.runConfig.debugUrl}\n`;
+                content += `💻 Source Code:\n   ${meta.runConfig.debugUrl}\n\n`;
             }
-            content += '\n';
         }
 
-        // Metadata footer
-        content += `---\n\n`;
-        content += `**Path:** ${page.path}\n`;
-        content += `**File:** ${page.name}.md\n`;
+        // Keywords
+        if (translations?.keywords && Array.isArray(translations.keywords)) {
+            content += `KEYWORDS\n`;
+            content += `───────────────────────────────────────────────────────────────────\n`;
+            content += translations.keywords.join(', ') + '\n\n';
+        }
+
+        // Technical Information
+        content += `FILE INFORMATION\n`;
+        content += `───────────────────────────────────────────────────────────────────\n`;
+        content += `📁 Path:     ${page.path}\n`;
+        content += `📄 Filename: ${page.name}.md\n`;
+
+        if (meta.runConfig?.name) {
+            content += `🏷️  Project:  ${meta.runConfig.name}\n`;
+        }
+
+        content += `\n`;
+
+        // Footer with hints
+        content += `───────────────────────────────────────────────────────────────────\n`;
+        content += `💡 TIP: Use 'grep' to search within files\n`;
+        content += `   Example: cat ${page.name}.md | grep "Unity"\n`;
 
         return content;
+    }
+
+    private generateBasicContent(page: PageEntry): string {
+        let content = '';
+        content += `╔═══════════════════════════════════════════════════════════════════╗\n`;
+        content += `║  ${page.name.padEnd(63)}║\n`;
+        content += `╚═══════════════════════════════════════════════════════════════════╝\n\n`;
+        content += `No detailed information available for this page.\n\n`;
+        content += `Path: ${page.path}\n`;
+        return content;
+    }
+
+    private wrapText(text: string, maxWidth: number): string {
+        const words = text.split(' ');
+        const lines: string[] = [];
+        let currentLine = '';
+
+        for (const word of words) {
+            if (currentLine.length + word.length + 1 > maxWidth) {
+                if (currentLine) {
+                    lines.push(currentLine);
+                }
+                currentLine = word;
+            } else {
+                currentLine += (currentLine ? ' ' : '') + word;
+            }
+        }
+
+        if (currentLine) {
+            lines.push(currentLine);
+        }
+
+        return lines.join('\n');
     }
 
     // Navigation methods

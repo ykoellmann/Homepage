@@ -10,20 +10,24 @@ interface SidebarProps {
 export function Sidebar({onToggleExplorer, onToggleTerminal, terminalOpen}: SidebarProps) {
     return (
         <div className="sidebar">
-            <HoverButton
-                active
-                title="Project"
-                onClick={onToggleExplorer}
-            >
-                <Folder className="icon"/>
-            </HoverButton>
-            <HoverButton
-                active={terminalOpen}
-                title="Terminal"
-                onClick={onToggleTerminal}
-            >
-                <Terminal className="icon"/>
-            </HoverButton>
+            <div>
+                <HoverButton
+                    active
+                    title="Project"
+                    onClick={onToggleExplorer}
+                >
+                    <Folder className="icon"/>
+                </HoverButton>
+            </div>
+            <div style={{ marginTop: 'auto' }}>
+                <HoverButton
+                    active={terminalOpen}
+                    title="Terminal"
+                    onClick={onToggleTerminal}
+                >
+                    <Terminal className="icon"/>
+                </HoverButton>
+            </div>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useViewMode } from '../contexts/ViewModeContext';
-import { ExternalLink, Zap, Mail, MapPin, ChevronDown } from 'lucide-react';
+import { ExternalLink, Zap, Mail, MapPin } from 'lucide-react';
 import { aboutPageData, type Experience } from '../pages/about/meta';
 import { contactPageData } from '../pages/contact/meta';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ import { AnimatedBackground } from './AnimatedBackground';
 import { ScrollProgressBar } from './ScrollProgressBar';
 import { MobileWarningDialog } from './MobileWarningDialog';
 import { CinematicDivider } from './CinematicDivider';
+import { HeroSection } from './modernview-sections/HeroSection';
 import './ModernView.css';
 
 const iconMap = {
@@ -218,28 +219,13 @@ export const ModernView: React.FC = () => {
       />
 
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative px-6" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 animate-slide-up drop-shadow-2xl">
-            <span className="bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 dark:from-blue-400 dark:via-blue-500 dark:to-blue-600 bg-clip-text text-transparent animate-gradient">
-              Yannik Köllmann
-            </span>
-          </h1>
-          <p className="text-2xl md:text-4xl text-slate-800 dark:text-slate-200 mb-8 animate-slide-up-delayed font-bold">
-            {i18n.language === 'de' ? 'Full-Stack Entwickler & Informatik-Student' : 'Full-Stack Developer & Computer Science Student'}
-          </p>
-          <p className="text-lg md:text-xl text-slate-700 dark:text-slate-300 max-w-2xl mx-auto mb-12 animate-fade-in-up font-medium">
-            {aboutPage.description}
-          </p>
-          <button
-            onClick={() => scrollToSection('projects')}
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-full transition-all hover:scale-110 shadow-xl shadow-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/70 animate-fade-in-up font-bold"
-          >
-            <span>{i18n.language === 'de' ? 'Meine Projekte' : 'View My Work'}</span>
-            <ChevronDown className="group-hover:translate-y-1 transition-transform animate-bounce-subtle" size={20} />
-          </button>
-        </div>
-      </section>
+      <HeroSection
+        name="Yannik Köllmann"
+        title={i18n.language === 'de' ? 'Full-Stack Entwickler & Informatik-Student' : 'Full-Stack Developer & Computer Science Student'}
+        description={aboutPage.description}
+        buttonText={i18n.language === 'de' ? 'Meine Projekte' : 'View My Work'}
+        onNavigate={scrollToSection}
+      />
 
       {/* Cinematic 3D Divider */}
       <CinematicDivider />

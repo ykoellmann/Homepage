@@ -22,7 +22,7 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
                                      onOpenFolder,
                                      tree
                                  }, ref) => {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
 
     // Remove /ide prefix for display purposes
     const displayPath = path.replace(/^\/ide/, '');
@@ -150,10 +150,18 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
                 style={{
                     marginLeft: 'auto',
                     paddingLeft: '16px',
+                    paddingRight: '8px',
                     fontSize: '11px',
                     opacity: 0.7,
                     textDecoration: 'none',
-                    color: 'inherit'
+                    color: 'inherit',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0
+                }}
+                onClick={(e) => {
+                    e.preventDefault();
+                    // Always navigate to /impressum (outside IDE view)
+                    window.location.href = '/impressum';
                 }}
             >
                 {i18n.language === 'de' ? 'Impressum' : 'Legal Notice'}

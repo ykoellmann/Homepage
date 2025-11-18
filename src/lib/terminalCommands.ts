@@ -144,7 +144,7 @@ export class TerminalCommands {
 
     private cd(args: string[]): CommandResult {
         const path = args[0] || '~';
-        const actualPath = path === '~' ? '/home/user' : path;
+        const actualPath = path === '~' ? '/home' : path;
 
         const result = this.fs.changeDirectory(actualPath);
 
@@ -297,12 +297,13 @@ export class TerminalCommands {
             else files.push(args[i]);
         }
 
-        const regex = new RegExp(pattern, ignoreCase ? 'gi' : 'g');
         const results: string[] = [];
 
         if (pipeInput) {
             const lines = pipeInput.split('\n');
             lines.forEach((line, index) => {
+                // Create new regex for each line to avoid state issues
+                const regex = new RegExp(pattern, ignoreCase ? 'i' : '');
                 if (regex.test(line)) {
                     if (lineNumbers) {
                         results.push(`${index + 1}:${line}`);
@@ -320,6 +321,8 @@ export class TerminalCommands {
 
                 const lines = result.content!.split('\n');
                 lines.forEach((line, index) => {
+                    // Create new regex for each line to avoid state issues
+                    const regex = new RegExp(pattern, ignoreCase ? 'i' : '');
                     if (regex.test(line)) {
                         const prefix = files.length > 1 ? `${file}:` : '';
                         const lineNum = lineNumbers ? `${index + 1}:` : '';
@@ -420,56 +423,90 @@ export class TerminalCommands {
     }
 
     private help(_args: string[]): CommandResult {
-        const helpText = `
-Available Commands:
+        const helpText = `╔═══════════════════════════════════════════════════════════════════╗
+║                    Portfolio Terminal - Help                      ║
+╚═══════════════════════════════════════════════════════════════════╝
 
-NAVIGATION & DISPLAY:
-  ls [path] [-a] [-l]    List files and directories
-                         -a: Show all files including hidden
-                         -l: Long format with details
-  cd <path>              Change directory (use ~ for home, .. for parent)
-  pwd                    Print working directory
-  tree [path] [-L n]     Display directory tree
-                         -L n: Limit depth to n levels
+┌─ NAVIGATION & DISPLAY ────────────────────────────────────────────┐
+│                                                                    │
+│  ls [path] [-a] [-l]       List files and directories             │
+│                            -a: Show all files including hidden     │
+│                            -l: Long format with details            │
+│                                                                    │
+│  cd <path>                 Change directory                        │
+│                            Use ~ for home, .. for parent           │
+│                                                                    │
+│  pwd                       Print working directory                 │
+│                                                                    │
+│  tree [path] [-L n]        Display directory tree                 │
+│                            -L n: Limit depth to n levels           │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
 
-FILE CONTENT:
-  cat <file...>          Display file contents
-  head [-n num] <file>   Show first n lines (default: 10)
-  tail [-n num] <file>   Show last n lines (default: 10)
-  less <file>            View file with pagination
-  grep <pattern> <file>  Search for pattern in files
-       [-i]              Case insensitive search
-       [-n]              Show line numbers
+┌─ FILE CONTENT ────────────────────────────────────────────────────┐
+│                                                                    │
+│  cat <file...>             Display file contents                  │
+│                                                                    │
+│  head [-n num] <file>      Show first lines (default: 10)         │
+│                                                                    │
+│  tail [-n num] <file>      Show last lines (default: 10)          │
+│                                                                    │
+│  less <file>               View file with pagination              │
+│                                                                    │
+│  grep <pattern> <file>     Search for pattern in files            │
+│       [-i]                 Case insensitive search                │
+│       [-n]                 Show line numbers                      │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
 
-FILE SEARCH:
-  find [path] -name <pattern>  Search for files matching pattern
-                               Use * for wildcards
+┌─ FILE SEARCH ─────────────────────────────────────────────────────┐
+│                                                                    │
+│  find [path] -name <pat>   Search for files matching pattern      │
+│                            Use * for wildcards                     │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
 
-UTILITIES:
-  wc <file>              Count lines, words, and characters
-     [-l]                Count lines only
-     [-w]                Count words only
-     [-c]                Count characters only
-  history [n]            Show command history (last n commands)
-  clear                  Clear terminal screen
-  help                   Show this help message
+┌─ UTILITIES ───────────────────────────────────────────────────────┐
+│                                                                    │
+│  wc <file>                 Count lines, words, and characters     │
+│     [-l]                   Count lines only                       │
+│     [-w]                   Count words only                       │
+│     [-c]                   Count characters only                  │
+│                                                                    │
+│  history [n]               Show command history (last n commands) │
+│                                                                    │
+│  clear                     Clear terminal screen                  │
+│                                                                    │
+│  help                      Show this help message                 │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
 
-PIPE SUPPORT:
-  Use | to chain commands together
-  Examples:
-    cat file.md | grep "keyword"
-    ls -l | grep "projects"
-    cat file.md | head -5
-    find . -name "*.md" | wc -l
+┌─ PIPE SUPPORT ────────────────────────────────────────────────────┐
+│                                                                    │
+│  Use | to chain commands together                                 │
+│                                                                    │
+│  Examples:                                                         │
+│    cat file.md | grep "keyword"                                   │
+│    ls -l | grep "projects"                                        │
+│    cat file.md | head -5                                          │
+│    find . -name "*.md" | wc -l                                    │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
 
-TIPS:
-  - Paths can be absolute (/home/user/projects) or relative (../projects)
-  - Use Tab for auto-completion (coming soon)
-  - Press Ctrl+C to cancel current input
-  - Press Up/Down arrows for command history (coming soon)
-`;
+┌─ KEYBOARD SHORTCUTS ──────────────────────────────────────────────┐
+│                                                                    │
+│  Ctrl+C                    Cancel current input                   │
+│  Ctrl+L                    Clear terminal screen                  │
+│  Tab                       Auto-completion                        │
+│  ↑/↓                       Navigate command history               │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
 
-        return { output: helpText.trim() };
+TIP: Paths can be absolute (/home/user/projects) or relative (../src)
+     Type 'tree' to see the full directory structure
+     Type 'ls projects' to see all available projects`;
+
+        return { output: helpText };
     }
 
     getHistory(): string[] {

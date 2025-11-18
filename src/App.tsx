@@ -119,6 +119,14 @@ function App() {
         return () => window.removeEventListener('navigation:popstate', onNavigationPopState);
     }, [pages, navigateTo, setCurrentPage]);
 
+    // Close terminal when height is set to 0
+    useEffect(() => {
+        if (terminalHeight === 0 && showTerminal) {
+            setShowTerminal(false);
+            setTerminalHeight(300); // Reset to default height for next open
+        }
+    }, [terminalHeight, showTerminal]);
+
     function findPageCaseInsensitive(path: string, pagesObj: Record<string, PageEntry>): PageEntry | undefined {
         // First try exact match
         if (pagesObj[path]) {

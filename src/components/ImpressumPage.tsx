@@ -15,100 +15,103 @@ export const ImpressumPage = () => {
     };
 
     const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-        <section className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 border-b border-gray-300 dark:border-gray-700 pb-2">
+        <section>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 pb-3 border-b-2 border-blue-100 dark:border-slate-700">
                 {title}
             </h2>
-            <div className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+            <div className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
                 {children}
             </div>
         </section>
     );
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-900" style={{ position: 'fixed', inset: 0, overflow: 'auto', width: '100vw', height: '100vh' }}>
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900" style={{ position: 'fixed', inset: 0, overflow: 'auto', width: '100vw', height: '100vh' }}>
             {/* Header */}
-            <header className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                <div className="px-8 py-4 flex items-center gap-4">
+            <header className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-blue-100 dark:border-slate-700 shadow-sm">
+                <div className="max-w-4xl mx-auto px-8 py-5 flex items-center gap-4">
                     <button
                         onClick={handleGoBack}
-                        className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                        className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all hover:gap-3"
                     >
                         <ArrowLeft size={20} />
-                        <span>{t('common:buttons.back', 'Zurück')}</span>
+                        <span className="font-medium">{t('common:buttons.back', 'Zurück')}</span>
                     </button>
                 </div>
             </header>
 
             {/* Content */}
-            <main className="px-8 py-12">
+            <main className="max-w-4xl mx-auto px-8 py-16">
                 {/* Title */}
-                <div className="mb-10">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <div className="mb-16 text-center">
+                    <h1 className="text-5xl font-bold text-slate-900 dark:text-white mb-4 bg-gradient-to-r from-blue-600 to-slate-700 dark:from-blue-400 dark:to-slate-200 bg-clip-text text-transparent">
                         {t('pages.impressum.title')}
                     </h1>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-lg text-slate-500 dark:text-slate-400">
                         {t('pages.impressum.subtitle')}
                     </p>
                 </div>
 
-                {/* Angaben gemäß § 5 TMG */}
-                <Section title={t('pages.impressum.provider')}>
-                    <div className="space-y-1">
-                        <p>Yannik Köllmann</p>
-                        <p>{'{STRASSE_UND_HAUSNUMMER}'}</p>
-                        <p>{'{PLZ_UND_ORT}'}</p>
-                    </div>
-                </Section>
-
-                {/* Kontakt */}
-                <Section title={t('pages.impressum.contact')}>
-                    <div>
-                        <span className="font-medium">{t('pages.impressum.email')}:</span>{' '}
-                        <a
-                            href="mailto:ykoellmann@icloud.com"
-                            className="text-blue-600 dark:text-blue-400 hover:underline"
-                        >
-                            ykoellmann@icloud.com
-                        </a>
-                    </div>
-                </Section>
-
-                {/* Haftungsausschluss */}
-                <Section title={t('pages.impressum.disclaimer')}>
-                    <div className="space-y-6">
-                        <div>
-                            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
-                                {t('pages.impressum.disclaimerTitle')}
-                            </h3>
-                            <p className="text-sm">
-                                {t('pages.impressum.disclaimerContent')}
-                            </p>
+                {/* Content Card */}
+                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg shadow-blue-100/50 dark:shadow-slate-900/50 border border-slate-200 dark:border-slate-700 p-10 space-y-12">
+                    {/* Angaben gemäß § 5 TMG */}
+                    <Section title={t('pages.impressum.provider')}>
+                        <div className="space-y-2">
+                            <p className="font-semibold text-slate-900 dark:text-white">Yannik Köllmann</p>
+                            <p>{'{STRASSE_UND_HAUSNUMMER}'}</p>
+                            <p>{'{PLZ_UND_ORT}'}</p>
                         </div>
+                    </Section>
 
+                    {/* Kontakt */}
+                    <Section title={t('pages.impressum.contact')}>
                         <div>
-                            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
-                                {t('pages.impressum.disclaimerExternal')}
-                            </h3>
-                            <p className="text-sm">
-                                {t('pages.impressum.disclaimerExternalContent')}
-                            </p>
+                            <span className="font-medium">{t('pages.impressum.email')}:</span>{' '}
+                            <a
+                                href="mailto:ykoellmann@icloud.com"
+                                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-medium hover:underline decoration-2 underline-offset-2"
+                            >
+                                ykoellmann@icloud.com
+                            </a>
                         </div>
+                    </Section>
 
-                        <div>
-                            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
-                                {t('pages.impressum.disclaimerCopyright')}
-                            </h3>
-                            <p className="text-sm">
-                                {t('pages.impressum.disclaimerCopyrightContent')}
-                            </p>
+                    {/* Haftungsausschluss */}
+                    <Section title={t('pages.impressum.disclaimer')}>
+                        <div className="space-y-8">
+                            <div>
+                                <h3 className="font-semibold text-slate-900 dark:text-white mb-3 text-base">
+                                    {t('pages.impressum.disclaimerTitle')}
+                                </h3>
+                                <p className="text-sm leading-relaxed">
+                                    {t('pages.impressum.disclaimerContent')}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 className="font-semibold text-slate-900 dark:text-white mb-3 text-base">
+                                    {t('pages.impressum.disclaimerExternal')}
+                                </h3>
+                                <p className="text-sm leading-relaxed">
+                                    {t('pages.impressum.disclaimerExternalContent')}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 className="font-semibold text-slate-900 dark:text-white mb-3 text-base">
+                                    {t('pages.impressum.disclaimerCopyright')}
+                                </h3>
+                                <p className="text-sm leading-relaxed">
+                                    {t('pages.impressum.disclaimerCopyrightContent')}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                </Section>
+                    </Section>
+                </div>
 
                 {/* Footer note */}
-                <div className="mt-12 pt-6 border-t border-gray-300 dark:border-gray-700">
-                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                <div className="mt-12 pt-6">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
                         {t('common:legal.tmgNote', 'Diese Seite entspricht den Anforderungen des § 5 TMG (Telemediengesetz)')}
                     </p>
                 </div>
