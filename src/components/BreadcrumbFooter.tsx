@@ -3,6 +3,7 @@ import {ChevronRight, Folder, FileCode} from "lucide-react";
 import type {FileNode} from "./file-explorer.tsx";
 import {Popup, type PopupSection} from "./Popup";
 import {useClickOutside} from "../hooks/useClickOutside.ts";
+import {useTranslation} from "react-i18next";
 
 interface BreadcrumbFooterProps {
     path: string;
@@ -21,6 +22,8 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
                                      onOpenFolder,
                                      tree
                                  }, ref) => {
+    const { t, i18n } = useTranslation();
+
     // Remove /ide prefix for display purposes
     const displayPath = path.replace(/^\/ide/, '');
     const pathParts = displayPath.replace(/^\/+/, "").split("/").filter(Boolean);
@@ -111,34 +114,50 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
     }, [openIndex, parts, tree]);
 
     return (
-        <div className="footer-breadcrumb" ref={footerRef}>
-            {parts.map((part, i) => {
-                const currentPath = "/" + parts.slice(0, i + 1).join("/");
-                const node = getNode(parts.slice(0, i + 1), tree);
-                const entries = node?.children || [];
-                const hasChildren = entries.length > 0;
+        <div className="footer-breadcrumb" ref={footerRef} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                {parts.map((part, i) => {
+                    const currentPath = "/" + parts.slice(0, i + 1).join("/");
+                    const node = getNode(parts.slice(0, i + 1), tree);
+                    const entries = node?.children || [];
+                    const hasChildren = entries.length > 0;
 
-                return (
-                    <React.Fragment key={i}>
-                        <BreadcrumbItem
-                            part={part}
-                            index={i}
-                            currentPath={currentPath}
-                            hasChildren={hasChildren}
-                            isOpen={openIndex === i}
-                            entries={entries}
-                            parts={parts}
-                            onToggleDropdown={() => setOpenIndex(openIndex === i ? null : i)}
-                            onNavigate={onNavigate}
-                            onOpenFolder={onOpenFolder}
-                            setOpenIndex={setOpenIndex}
-                        />
-                        {i < parts.length - 1 && (
-                            <ChevronRight size={14} className="footer-chevron"/>
-                        )}
-                    </React.Fragment>
-                );
-            })}
+                    return (
+                        <React.Fragment key={i}>
+                            <BreadcrumbItem
+                                part={part}
+                                index={i}
+                                currentPath={currentPath}
+                                hasChildren={hasChildren}
+                                isOpen={openIndex === i}
+                                entries={entries}
+                                parts={parts}
+                                onToggleDropdown={() => setOpenIndex(openIndex === i ? null : i)}
+                                onNavigate={onNavigate}
+                                onOpenFolder={onOpenFolder}
+                                setOpenIndex={setOpenIndex}
+                            />
+                            {i < parts.length - 1 && (
+                                <ChevronRight size={14} className="footer-chevron"/>
+                            )}
+                        </React.Fragment>
+                    );
+                })}
+            </div>
+            <a
+                href="/impressum"
+                className="footer-breadcrumb-item clickable"
+                style={{
+                    marginLeft: 'auto',
+                    paddingLeft: '16px',
+                    fontSize: '11px',
+                    opacity: 0.7,
+                    textDecoration: 'none',
+                    color: 'inherit'
+                }}
+            >
+                {i18n.language === 'de' ? 'Impressum' : 'Legal Notice'}
+            </a>
         </div>
     );
 });

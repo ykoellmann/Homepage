@@ -15,6 +15,7 @@ import {handlePopState as syncHistoryState} from './hooks/useHistoryStatus';
 import {registerAllPages} from './lib/registerPages.ts';
 import {useViewMode} from './contexts/ViewModeContext';
 import {ModernView} from './components/ModernView';
+import {ImpressumPage} from './components/ImpressumPage';
 import SplashScreen from "./components/Splashscreen.tsx";
 import {registerAllShortcuts, unregisterAllShortcuts} from './lib/registerShortcuts.ts';
 import i18n from './i18n';
@@ -189,6 +190,12 @@ function App() {
     function handleFileOpen(path: string) {
         const cleanPath = path.replace(/\.(txt|md|html|tsx|ts|js)$/i, '').replace(/^\/+/, '');
         navigateTo(`/${cleanPath}`);
+    }
+
+    // Check if we're on the impressum page
+    const currentPath = window.location.pathname.toLowerCase();
+    if (currentPath === '/impressum' || currentPath === '/imprint') {
+        return <ImpressumPage />;
     }
 
     // If in modern view, render that instead (after all hooks)

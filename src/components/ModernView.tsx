@@ -565,12 +565,20 @@ export const ModernView: React.FC = () => {
         {/* Footer */}
         <footer className="py-8 px-6 border-t border-slate-700 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent opacity-50" />
-          <div className="max-w-7xl mx-auto text-center text-gray-400 relative z-10">
+          <div className="max-w-7xl mx-auto text-center text-gray-400 relative z-10 space-y-3">
             <p>
               {i18n.language === 'de'
                   ? '© 2025 Yannik Köllmann. Gemacht mit ❤️ und viel ☕'
                   : '© 2025 Yannik Köllmann. Made with ❤️ and lots of ☕'}
             </p>
+            <div className="flex items-center justify-center gap-4 text-sm">
+              <a
+                  href="/impressum"
+                  className="text-gray-400 hover:text-blue-400 transition-colors hover:underline"
+              >
+                {i18n.language === 'de' ? 'Impressum' : 'Legal Notice'}
+              </a>
+            </div>
           </div>
         </footer>
 

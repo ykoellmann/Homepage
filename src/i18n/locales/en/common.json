@@ -56,6 +56,23 @@
       "title": "Let's Talk",
       "subtitle": "I'd love to hear from you"
     },
+    "impressum": {
+      "name": "Imprint",
+      "description": "Legal notice according to § 5 TMG",
+      "title": "Legal Notice",
+      "subtitle": "Information according to § 5 TMG (German Telemedia Act)",
+      "provider": "Information according to § 5 TMG",
+      "contact": "Contact",
+      "email": "Email",
+      "phone": "Phone",
+      "disclaimer": "Disclaimer",
+      "disclaimerTitle": "Liability for Content",
+      "disclaimerContent": "The contents of our pages have been created with the utmost care. However, we cannot guarantee the accuracy, completeness, and timeliness of the content. As service providers, we are liable for our own content on these pages in accordance with general laws pursuant to Section 7, Paragraph 1 of the TMG (Telemediengesetz - German Telemedia Act). However, according to Sections 8 to 10 of the TMG, we are not obligated to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity.",
+      "disclaimerExternal": "Liability for Links",
+      "disclaimerExternalContent": "Our offer contains links to external websites of third parties, on whose contents we have no influence. Therefore, we cannot assume any liability for these external contents. The respective provider or operator of the sites is always responsible for the content of the linked sites. The linked sites were checked for possible legal violations at the time of linking. Illegal contents were not recognizable at the time of linking.",
+      "disclaimerCopyright": "Copyright",
+      "disclaimerCopyrightContent": "The content and works created by the site operators on these pages are subject to German copyright law. Duplication, processing, distribution, or any form of commercialization of such material beyond the scope of the copyright law shall require the prior written consent of its respective author or creator. Downloads and copies of this site are only permitted for private, non-commercial use."
+    },
     "emptyState": {
       "shortcuts": {
         "search": "Search Everywhere",
@@ -89,7 +106,11 @@
     "buttons": {
       "githubRepository": "GitHub Repository",
       "github": "GitHub",
-      "marketplace": "JetBrains Marketplace"
+      "marketplace": "JetBrains Marketplace",
+      "back": "Back"
+    },
+    "legal": {
+      "tmgNote": "This page complies with the requirements of § 5 TMG (German Telemedia Act)"
     }
   }
 }
