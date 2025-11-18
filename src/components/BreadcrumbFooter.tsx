@@ -115,7 +115,7 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
 
     return (
         <div className="footer-breadcrumb" ref={footerRef} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flex: 1, minWidth: 0, overflow: 'hidden' }}>
                 {parts.map((part, i) => {
                     const currentPath = "/" + parts.slice(0, i + 1).join("/");
                     const node = getNode(parts.slice(0, i + 1), tree);
@@ -145,12 +145,11 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
                 })}
             </div>
             <a
-                href="/impressum"
+                href="/imprint"
                 className="footer-breadcrumb-item clickable"
                 style={{
-                    marginLeft: 'auto',
-                    paddingLeft: '16px',
-                    paddingRight: '8px',
+                    paddingLeft: '12px',
+                    paddingRight: '4px',
                     fontSize: '11px',
                     opacity: 0.7,
                     textDecoration: 'none',
@@ -160,11 +159,11 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
                 }}
                 onClick={(e) => {
                     e.preventDefault();
-                    // Always navigate to /impressum (outside IDE view)
-                    window.location.href = '/impressum';
+                    // Always navigate to /imprint (outside IDE view)
+                    window.location.href = '/imprint';
                 }}
             >
-                {i18n.language === 'de' ? 'Impressum' : 'Legal Notice'}
+                {i18n.language === 'de' ? 'Impressum' : 'Imprint'}
             </a>
         </div>
     );

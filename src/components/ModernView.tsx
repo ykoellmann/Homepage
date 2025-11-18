@@ -190,7 +190,7 @@ export const ModernView: React.FC = () => {
   return (
     <div
       ref={scrollContainerRef}
-      className="fixed inset-0 w-full h-full overflow-y-auto bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-white"
+      className="fixed inset-0 w-full h-full overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white"
       style={{ scrollbarGutter: 'stable', overflowX: 'hidden' }}>
 
       {/* Global Animated Background */}
@@ -221,14 +221,14 @@ export const ModernView: React.FC = () => {
       <section id="home" className="min-h-screen flex items-center justify-center relative px-6" style={{ position: 'relative', zIndex: 1 }}>
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <h1 className="text-6xl md:text-8xl font-bold mb-6 animate-slide-up drop-shadow-2xl">
-            <span className="bg-gradient-to-r from-blue-600 via-blue-600 to-blue-700 dark:from-blue-400 dark:via-blue-500 dark:to-blue-600 bg-clip-text text-transparent animate-gradient">
+            <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent animate-gradient">
               Yannik Köllmann
             </span>
           </h1>
-          <p className="text-2xl md:text-4xl text-slate-800 dark:text-slate-200 mb-8 animate-slide-up-delayed font-bold">
+          <p className="text-2xl md:text-4xl text-slate-200 mb-8 animate-slide-up-delayed font-bold">
             {i18n.language === 'de' ? 'Full-Stack Entwickler & Informatik-Student' : 'Full-Stack Developer & Computer Science Student'}
           </p>
-          <p className="text-lg md:text-xl text-slate-700 dark:text-slate-300 max-w-2xl mx-auto mb-12 animate-fade-in-up font-medium">
+          <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-12 animate-fade-in-up font-medium">
             {aboutPage.description}
           </p>
           <button
@@ -255,22 +255,22 @@ export const ModernView: React.FC = () => {
       >
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4 mb-12">
-            <Zap className={`text-blue-600 dark:text-blue-500 transition-all duration-700 ${
+            <Zap className={`text-blue-500 transition-all duration-700 ${
               aboutSection.isInView ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 -rotate-180'
             }`} size={40} />
-            <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-slate-700 dark:from-blue-400 dark:to-slate-300 bg-clip-text text-transparent">
+            <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-slate-300 bg-clip-text text-transparent">
               {i18n.language === 'de' ? 'Über mich' : 'About Me'}
             </h2>
           </div>
-          <div className="space-y-6 text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-            <p className={`transition-all duration-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-blue-100 dark:border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02] ${
+          <div className="space-y-6 text-lg text-slate-300 leading-relaxed">
+            <p className={`transition-all duration-700 bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-600 hover:scale-[1.02] ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
             }`}>
               {i18n.language === 'de'
                 ? 'Ich bin ein leidenschaftlicher Softwareentwickler mit Fokus auf moderne Webtechnologien und Backend-Systeme.'
                 : 'I am a passionate software developer focused on modern web technologies and backend systems.'}
             </p>
-            <p className={`transition-all duration-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-blue-100 dark:border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02] ${
+            <p className={`transition-all duration-700 bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-600 hover:scale-[1.02] ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
             }`}
               style={{ transitionDelay: '150ms' }}>
@@ -278,7 +278,7 @@ export const ModernView: React.FC = () => {
                 ? 'Nach meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung studiere ich nun Informatik an der Friedrich-Schiller-Universität Jena.'
                 : 'After completing my training as an IT specialist for application development, I am now studying computer science at Friedrich Schiller University Jena.'}
             </p>
-            <p className={`transition-all duration-700 bg-white/80 dark:bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-blue-100 dark:border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-300 dark:hover:border-blue-600 hover:scale-[1.02] ${
+            <p className={`transition-all duration-700 bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-600 hover:scale-[1.02] ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
             }`}
               style={{ transitionDelay: '300ms' }}>
@@ -303,7 +303,7 @@ export const ModernView: React.FC = () => {
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-5xl font-bold mb-16 text-center bg-gradient-to-r from-blue-600 to-slate-700 dark:from-blue-400 dark:to-slate-300 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-bold mb-16 text-center bg-gradient-to-r from-blue-400 to-slate-300 bg-clip-text text-transparent">
             {i18n.language === 'de' ? 'Erfahrung' : 'Experience'}
           </h2>
 
@@ -311,7 +311,7 @@ export const ModernView: React.FC = () => {
             {sortedExperiences.map((exp, index) => (
               <div
                 key={exp.position}
-                className={`group relative bg-white/80 dark:bg-slate-800/60 backdrop-blur-md rounded-2xl p-8 border-2 border-blue-100 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-[1.02] overflow-hidden ${
+                className={`group relative bg-slate-800/60 backdrop-blur-md rounded-2xl p-8 border-2 border-slate-700 hover:border-blue-500 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-[1.02] overflow-hidden ${
                   experienceSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
@@ -322,17 +322,17 @@ export const ModernView: React.FC = () => {
                 <div className="relative z-10">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
                     <div>
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                      <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors duration-300">
                         {exp.position}
                       </h3>
-                      <p className="text-xl text-slate-700 dark:text-slate-300 mt-2 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{exp.company}</p>
+                      <p className="text-xl text-slate-300 mt-2 group-hover:text-slate-200 transition-colors">{exp.company}</p>
                     </div>
-                    <span className="text-blue-600 dark:text-blue-400 font-semibold whitespace-nowrap bg-blue-100 dark:bg-blue-500/10 px-4 py-2 rounded-lg group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20 transition-colors">
+                    <span className="text-blue-400 font-semibold whitespace-nowrap bg-blue-500/10 px-4 py-2 rounded-lg group-hover:bg-blue-500/20 transition-colors">
                       {exp.startMonth} - {exp.endMonth}
                     </span>
                   </div>
                   {exp.description && (
-                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">{exp.description}</p>
+                    <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">{exp.description}</p>
                   )}
                 </div>
               </div>
@@ -354,15 +354,15 @@ export const ModernView: React.FC = () => {
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-5xl font-bold mb-16 text-center bg-gradient-to-r from-blue-600 to-slate-700 dark:from-blue-400 dark:to-slate-300 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-bold mb-16 text-center bg-gradient-to-r from-blue-400 to-slate-300 bg-clip-text text-transparent">
             {i18n.language === 'de' ? 'Projekte' : 'Projects'}
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => {
               const colors = {
-                card: 'bg-white/85 dark:bg-slate-800/50 border-2 border-blue-100 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500',
-                title: 'group-hover:text-blue-600 dark:group-hover:text-blue-400',
+                card: 'bg-slate-800/50 border-2 border-slate-700 hover:border-blue-500',
+                title: 'group-hover:text-blue-400',
                 button: 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-500/50 hover:shadow-xl hover:shadow-blue-500/70'
               };
 
@@ -378,15 +378,15 @@ export const ModernView: React.FC = () => {
 
                   <div className="relative z-10">
                     <div className="text-4xl mb-4 group-hover:scale-110 transition-all duration-500">{project.icon}</div>
-                    <h3 className={`text-3xl font-bold mb-3 text-slate-900 dark:text-white transition-colors duration-300 ${colors.title}`}>
+                    <h3 className={`text-3xl font-bold mb-3 text-white transition-colors duration-300 ${colors.title}`}>
                       {project.name}
                     </h3>
-                    <p className="text-slate-700 dark:text-slate-300 mb-6 text-base leading-relaxed group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">
+                    <p className="text-slate-300 mb-6 text-base leading-relaxed group-hover:text-slate-200 transition-colors">
                       {project.description}
                     </p>
 
                     <div className="mb-6">
-                      <h4 className="text-sm font-semibold text-slate-600 dark:text-slate-400 mb-3">
+                      <h4 className="text-sm font-semibold text-slate-400 mb-3">
                         {i18n.language === 'de' ? 'Features:' : 'Features:'}
                       </h4>
                       <div className="space-y-2">
@@ -399,7 +399,7 @@ export const ModernView: React.FC = () => {
                             style={{ transitionDelay: `${(index * 150) + (featureIndex * 100)}ms` }}
                           >
                             <span className="text-base flex-shrink-0 group-hover:scale-110 transition-transform">{feature.icon}</span>
-                            <span className="text-slate-700 dark:text-slate-300 text-sm group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{feature.title}</span>
+                            <span className="text-slate-300 text-sm group-hover:text-slate-200 transition-colors">{feature.title}</span>
                           </div>
                         ))}
                       </div>
@@ -422,7 +422,7 @@ export const ModernView: React.FC = () => {
                           href={project.debugUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white rounded-lg transition-all text-sm font-semibold hover:scale-105"
+                          className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all text-sm font-semibold hover:scale-105"
                         >
                           <GithubIcon size={16} />
                           GitHub
@@ -450,10 +450,10 @@ export const ModernView: React.FC = () => {
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-slate-700 dark:from-blue-400 dark:to-slate-300 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-slate-300 bg-clip-text text-transparent">
             {i18n.language === 'de' ? 'Lass uns reden' : "Let's Talk"}
           </h2>
-          <p className="text-xl text-slate-700 dark:text-slate-300 mb-16">
+          <p className="text-xl text-slate-300 mb-16">
             {i18n.language === 'de' ? 'Ich freue mich von dir zu hören' : "I'd love to hear from you"}
           </p>
 
@@ -466,7 +466,7 @@ export const ModernView: React.FC = () => {
                   href={method.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group bg-white/85 dark:bg-slate-800/60 backdrop-blur-md rounded-2xl p-8 border-2 border-blue-100 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/30 transform hover:scale-[1.05] relative overflow-hidden ${
+                  className={`group bg-slate-800/60 backdrop-blur-md rounded-2xl p-8 border-2 border-slate-700 hover:border-blue-500 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/30 transform hover:scale-[1.05] relative overflow-hidden ${
                     contactSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
                   }`}
                   style={{
@@ -476,18 +476,18 @@ export const ModernView: React.FC = () => {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="flex items-center gap-6 relative z-10">
-                    <div className="text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-all duration-500">
+                    <div className="text-blue-400 group-hover:scale-110 transition-all duration-500">
                       <IconComponent size={48} />
                     </div>
                     <div className="flex-1 text-left">
-                      <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">
+                      <p className="text-sm font-medium text-slate-400 mb-1">
                         {method.label}
                       </p>
-                      <p className="text-xl font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                      <p className="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors duration-300">
                         {method.value}
                       </p>
                     </div>
-                    <ExternalLink className="text-slate-600 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-x-2 transition-all duration-300" size={24} />
+                    <ExternalLink className="text-slate-400 group-hover:text-blue-400 group-hover:translate-x-2 transition-all duration-300" size={24} />
                   </div>
                 </a>
               );
@@ -497,9 +497,9 @@ export const ModernView: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-slate-200 dark:border-slate-700 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-100 dark:from-slate-950 to-transparent opacity-50" />
-        <div className="max-w-7xl mx-auto text-center text-slate-600 dark:text-slate-400 relative z-10 space-y-3">
+      <footer className="py-8 px-6 border-t border-slate-700 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent opacity-50" />
+        <div className="max-w-7xl mx-auto text-center text-slate-400 relative z-10 space-y-3">
           <p>
             {i18n.language === 'de'
               ? '© 2025 Yannik Köllmann. Gemacht mit ❤️ und viel ☕'
@@ -507,8 +507,8 @@ export const ModernView: React.FC = () => {
           </p>
           <div className="flex items-center justify-center gap-4 text-sm">
             <a
-              href="/impressum"
-              className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors hover:underline"
+              href="/imprint"
+              className="text-slate-400 hover:text-blue-400 transition-colors hover:underline"
             >
               {i18n.language === 'de' ? 'Impressum' : 'Legal Notice'}
             </a>

@@ -1,3 +1,21 @@
+/* Color variables for dark mode only */
+:root {
+  --mv-shape-border: rgba(59, 130, 246, 0.3);
+  --mv-shape-bg-1: rgba(59, 130, 246, 0.12);
+  --mv-shape-bg-2: rgba(96, 165, 250, 0.08);
+  --mv-shape-bg-3: rgba(147, 197, 253, 0.12);
+  --mv-shape-bg-4: rgba(59, 130, 246, 0.11);
+  --mv-line-gradient: rgba(59, 130, 246, 0.35);
+  --mv-grid-line: rgba(59, 130, 246, 0.25);
+  --mv-divider-1: rgba(59, 130, 246, 0.25);
+  --mv-divider-2: rgba(96, 165, 250, 0.35);
+  --mv-divider-3: rgba(59, 130, 246, 0.28);
+  --mv-divider-4: rgba(96, 165, 250, 0.32);
+  --mv-glow-1: rgba(59, 130, 246, 0.6);
+  --mv-glow-2: rgba(96, 165, 250, 0.5);
+  --mv-glow-3: rgba(147, 197, 253, 0.3);
+}
+
 /* Optimized animations */
 @keyframes gradient {
   0%, 100% { background-position: 0% 50%; }
@@ -108,11 +126,11 @@
   top: -20%;
   bottom: -20%;
   background: linear-gradient(135deg,
-    rgba(59, 130, 246, 0.25) 0%,
-    rgba(96, 165, 250, 0.35) 25%,
-    rgba(59, 130, 246, 0.28) 50%,
-    rgba(96, 165, 250, 0.32) 75%,
-    rgba(59, 130, 246, 0.25) 100%
+    var(--mv-divider-1) 0%,
+    var(--mv-divider-2) 25%,
+    var(--mv-divider-3) 50%,
+    var(--mv-divider-4) 75%,
+    var(--mv-divider-1) 100%
   );
   transform-style: preserve-3d;
 }
@@ -268,9 +286,9 @@
   width: 85%;
   height: 140px;
   background: radial-gradient(ellipse at center,
-    rgba(59, 130, 246, 0.6) 0%,
-    rgba(96, 165, 250, 0.5) 30%,
-    rgba(147, 197, 253, 0.3) 60%,
+    var(--mv-glow-1) 0%,
+    var(--mv-glow-2) 30%,
+    var(--mv-glow-3) 60%,
     transparent 85%
   );
   filter: blur(45px);
@@ -298,9 +316,9 @@
   width: 90%;
   height: 130px;
   background: radial-gradient(ellipse at center,
-    rgba(59, 130, 246, 0.55) 0%,
-    rgba(96, 165, 250, 0.4) 40%,
-    rgba(147, 197, 253, 0.25) 65%,
+    var(--mv-glow-1) 0%,
+    var(--mv-glow-2) 40%,
+    var(--mv-glow-3) 65%,
     transparent 85%
   );
   filter: blur(50px);
@@ -328,8 +346,8 @@
   width: 60%;
   height: 180px;
   background: radial-gradient(ellipse at center,
-    rgba(96, 165, 250, 0.4) 0%,
-    rgba(59, 130, 246, 0.3) 50%,
+    var(--mv-glow-2) 0%,
+    var(--mv-glow-1) 50%,
     transparent 75%
   );
   filter: blur(60px);
@@ -350,8 +368,8 @@
   position: absolute;
   inset: -100%;
   background-image:
-    linear-gradient(to right, rgba(59, 130, 246, 0.25) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(59, 130, 246, 0.25) 1px, transparent 1px);
+    linear-gradient(to right, var(--mv-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--mv-grid-line) 1px, transparent 1px);
   background-size: 100px 100px;
   animation: grid-move 25s linear infinite;
   transform: perspective(1200px) rotateX(65deg);
@@ -376,7 +394,7 @@
 
 .shape {
   position: absolute;
-  border: 2px solid rgba(59, 130, 246, 0.3);
+  border: 2px solid var(--mv-shape-border);
 }
 
 .shape-interactive {
@@ -390,19 +408,19 @@
 
 /* Different shape styles - physics-based deformation, no static animations */
 .shape-style-1 {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(96, 165, 250, 0.08));
+  background: linear-gradient(135deg, var(--mv-shape-bg-1), var(--mv-shape-bg-2));
 }
 
 .shape-style-2 {
-  background: linear-gradient(225deg, rgba(96, 165, 250, 0.1), rgba(147, 197, 253, 0.08));
+  background: linear-gradient(225deg, var(--mv-shape-bg-2), var(--mv-shape-bg-3));
 }
 
 .shape-style-3 {
-  background: linear-gradient(315deg, rgba(147, 197, 253, 0.12), rgba(59, 130, 246, 0.07));
+  background: linear-gradient(315deg, var(--mv-shape-bg-3), var(--mv-shape-bg-4));
 }
 
 .shape-style-4 {
-  background: linear-gradient(45deg, rgba(59, 130, 246, 0.11), rgba(96, 165, 250, 0.09));
+  background: linear-gradient(45deg, var(--mv-shape-bg-4), var(--mv-shape-bg-2));
 }
 
 /* Animated Lines */
@@ -416,7 +434,7 @@
   position: absolute;
   background: linear-gradient(90deg,
     transparent,
-    rgba(59, 130, 246, 0.35),
+    var(--mv-line-gradient),
     transparent
   );
   height: 2px;

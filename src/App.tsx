@@ -91,7 +91,6 @@ function App() {
 
             syncHistoryState();
             const newPath = customEvent.detail.pathname;
-            setRoutePath(newPath);
 
             const actualPath = newPath.replace(/^\/ide/, '');
             const cleanedPath = actualPath.replace(/^\/+/, '').replace(/\/+$/, '');
@@ -101,17 +100,29 @@ function App() {
 
             if (!pageEntry) return;
 
+            // Get the matched key with correct case
+            const matchedKey = Object.keys(pages).find(
+                key => key.toLowerCase() === cleanedPath.toLowerCase()
+            ) || cleanedPath;
+
+            // Construct normalized path with correct case
+            const hasIdePrefix = newPath.startsWith('/ide');
+            const normalizedPath = hasIdePrefix
+                ? (matchedKey ? `/ide/${matchedKey}` : '/ide')
+                : (matchedKey ? `/${matchedKey}` : '/');
+
             const tabs = tabSystemRef.current?.getAllTabs() || [];
             const existingTab = tabs.find((t: Tab) => {
-                const tabActualPath = t.path.replace(/^\/ide/, '');
-                return tabActualPath === actualPath;
+                const tabActualPath = t.path.replace(/^\/ide/, '').replace(/^\/+/, '').replace(/\/+$/, '');
+                return tabActualPath.toLowerCase() === cleanedPath.toLowerCase();
             });
 
             if (existingTab) {
                 setCurrentPage(pageEntry);
-                tabSystemRef.current?.activateTabByPath(newPath);
+                setRoutePath(normalizedPath);
+                tabSystemRef.current?.activateTabByPath(existingTab.path);
             } else {
-                navigateTo(newPath, false);
+                navigateTo(normalizedPath, false);
             }
         };
 
@@ -200,9 +211,9 @@ function App() {
         navigateTo(`/${cleanPath}`);
     }
 
-    // Check if we're on the impressum page
+    // Check if we're on the imprint page
     const currentPath = window.location.pathname.toLowerCase();
-    if (currentPath === '/impressum' || currentPath === '/imprint') {
+    if (currentPath === '/imprint' || currentPath === '/impressum') {
         return <ImpressumPage />;
     }
 

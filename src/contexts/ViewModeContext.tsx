@@ -41,6 +41,15 @@ export const ViewModeProvider: React.FC<ViewModeProviderProps> = ({ children }) 
       return;
     }
 
+    // Don't redirect for special pages like imprint/impressum
+    const isSpecialPage = location.pathname === '/imprint' ||
+                          location.pathname === '/impressum';
+
+    if (isSpecialPage) {
+      setHasInitialized(true);
+      return;
+    }
+
     const preferredMode = localStorage.getItem(VIEW_MODE_KEY) as ViewMode | null;
     const isRootPath = location.pathname === '/' || location.pathname === '';
     const isProjectPath = location.pathname.startsWith('/src/') ||

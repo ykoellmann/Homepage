@@ -20,14 +20,6 @@ export function useNavigation({
 
     function navigateTo(path: string, updateHistory: boolean = true) {
         const fullPath = normalizePath(path);
-        if (updateHistory && window.location.pathname !== fullPath) {
-            // Use our custom pushHistoryState instead of navigate
-            // This way we control the history state tracking
-            pushHistoryState(fullPath);
-            setRoutePath(fullPath);
-        } else if (!updateHistory) {
-            setRoutePath(fullPath);
-        }
 
         // Extract the actual page path (remove /ide prefix if present)
         const actualPath = fullPath.replace(/^\/ide/, '');
@@ -36,20 +28,39 @@ export function useNavigation({
         // Case-insensitive page lookup
         const pageEntry = findPageCaseInsensitive(cleanedPath);
 
-        if (pageEntry) {
-            setCurrentPage(pageEntry);
-
-            const tab: Tab = {
-                id: cleanedPath || 'home',
-                title: getTabTitle(cleanedPath, pageEntry),
-                path: fullPath,
-                component: pageEntry.component,
-                scrollPosition: 0
-            };
-
-            tabSystemRef.current?.openTab(tab);
-        } else {
+        if (!pageEntry) {
+            return; // Page not found
         }
+
+        // Get the actual matched key with correct case
+        const matchedKey = getMatchedPageKey(cleanedPath);
+
+        // Reconstruct the path with correct case
+        const hasIdePrefix = fullPath.startsWith('/ide');
+        const normalizedFullPath = hasIdePrefix
+            ? (matchedKey ? `/ide/${matchedKey}` : '/ide')
+            : (matchedKey ? `/${matchedKey}` : '/');
+
+        if (updateHistory && window.location.pathname !== normalizedFullPath) {
+            // Use our custom pushHistoryState instead of navigate
+            // This way we control the history state tracking
+            pushHistoryState(normalizedFullPath);
+            setRoutePath(normalizedFullPath);
+        } else if (!updateHistory) {
+            setRoutePath(normalizedFullPath);
+        }
+
+        setCurrentPage(pageEntry);
+
+        const tab: Tab = {
+            id: matchedKey || 'home',
+            title: getTabTitle(matchedKey || '', pageEntry),
+            path: normalizedFullPath,
+            component: pageEntry.component,
+            scrollPosition: 0
+        };
+
+        tabSystemRef.current?.openTab(tab);
     }
 
     function findPageCaseInsensitive(path: string): PageEntry | undefined {
@@ -65,6 +76,19 @@ export function useNavigation({
         );
 
         return matchingKey ? pages[matchingKey] : undefined;
+    }
+
+    function getMatchedPageKey(path: string): string | undefined {
+        // First try exact match
+        if (pages[path]) {
+            return path;
+        }
+
+        // Then try case-insensitive match and return the actual key
+        const lowerPath = path.toLowerCase();
+        return Object.keys(pages).find(
+            key => key.toLowerCase() === lowerPath
+        );
     }
 
     function normalizePath(path: string): string {

@@ -175,12 +175,12 @@ const TabSystem = forwardRef<TabSystemRef, TabSystemProps>(({onTabChange}, ref) 
 
     function activateTabByPath(path: string): void {
         if (layout.group) {
-            // Normalize paths by removing /ide prefix for comparison
-            const normalizedSearchPath = path.replace(/^\/ide/, '');
+            // Normalize paths by removing /ide prefix for case-insensitive comparison
+            const normalizedSearchPath = path.replace(/^\/ide/, '').toLowerCase();
 
             const tab = layout.group.tabs.find(t => {
-                const normalizedTabPath = t.path.replace(/^\/ide/, '');
-                return normalizedTabPath === normalizedSearchPath || t.path === path;
+                const normalizedTabPath = t.path.replace(/^\/ide/, '').toLowerCase();
+                return normalizedTabPath === normalizedSearchPath || t.path.toLowerCase() === path.toLowerCase();
             });
             console.log(tab)
 

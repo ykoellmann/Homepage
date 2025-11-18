@@ -31,6 +31,22 @@ export function useTabPersistence({
                                       setCurrentPage
                                   }: UseTabPersistenceProps) {
 
+    // Helper function for case-insensitive page lookup
+    function findPageCaseInsensitive(path: string): PageEntry | undefined {
+        // First try exact match
+        if (pages[path]) {
+            return pages[path];
+        }
+
+        // Then try case-insensitive match
+        const lowerPath = path.toLowerCase();
+        const matchingKey = Object.keys(pages).find(
+            key => key.toLowerCase() === lowerPath
+        );
+
+        return matchingKey ? pages[matchingKey] : undefined;
+    }
+
     useEffect(() => {
         const timer = setTimeout(() => {
             const currentPath = window.location.pathname;
@@ -56,7 +72,7 @@ export function useTabPersistence({
 
             // Open all saved tabs
             for (const savedTab of savedTabs) {
-                const pageEntry = pages[savedTab.id];
+                const pageEntry = findPageCaseInsensitive(savedTab.id);
                 if (pageEntry) {
                     const tab: Tab = {
                         id: savedTab.id,
@@ -69,11 +85,13 @@ export function useTabPersistence({
                 }
             }
 
-            // Handle current route
-            const currentTab = savedTabs.find((t) => t.path === currentPath);
+            // Handle current route - case-insensitive path comparison
+            const currentTab = savedTabs.find((t) =>
+                t.path.toLowerCase() === currentPath.toLowerCase()
+            );
             if (currentTab) {
                 activateTab(currentTab.id, currentPath);
-            } else if (cleanedPath && pages[cleanedPath]) {
+            } else if (cleanedPath && findPageCaseInsensitive(cleanedPath)) {
                 navigateTo(currentPath, false);
             } else {
                 activateLastActiveTab(savedTabs, activeTabId);
@@ -86,7 +104,7 @@ export function useTabPersistence({
 
     function activateTab(tabId: string, path: string) {
         tabSystemRef.current?.activateTabByPath(path);
-        const pageEntry = pages[tabId];
+        const pageEntry = findPageCaseInsensitive(tabId);
         if (pageEntry) {
             setCurrentPage(pageEntry);
         }
@@ -97,7 +115,7 @@ export function useTabPersistence({
         if (activeTab) {
             window.history.replaceState({}, '', activeTab.path);
             tabSystemRef.current?.activateTabByPath(activeTab.path);
-            const pageEntry = pages[activeTab.id];
+            const pageEntry = findPageCaseInsensitive(activeTab.id);
             if (pageEntry) {
                 setCurrentPage(pageEntry);
             }
@@ -105,9 +123,9 @@ export function useTabPersistence({
     }
 
     function openInitialTab(cleanedPath: string, currentPath: string) {
-        if (pages[cleanedPath]) {
+        if (findPageCaseInsensitive(cleanedPath)) {
             navigateTo(currentPath, false);
-        } else if (pages['']) {
+        } else if (findPageCaseInsensitive('')) {
             navigateTo('/', false);
         }
     }
