@@ -1,0 +1,643 @@
+.retro-wave-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ========================================
+   SKY GRADIENT
+   ======================================== */
+.retro-sky-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #0a0015 0%,
+    #1a0033 5%,
+    #2d0052 12%,
+    #4a0080 20%,
+    #6b1199 28%,
+    #8b1a9e 36%,
+    #b8186b 45%,
+    #d4145a 54%,
+    #e64a19 63%,
+    #ff5f00 72%,
+    #ff7a00 80%,
+    #ff9500 88%,
+    #ffab00 96%,
+    #ffc850 100%
+  );
+  animation: sky-breathe 12s ease-in-out infinite;
+}
+
+@keyframes sky-breathe {
+  0%, 100% {
+    opacity: 1;
+    filter: saturate(1.1);
+  }
+  50% {
+    opacity: 0.95;
+    filter: saturate(1.3);
+  }
+}
+
+/* ========================================
+   STARS CANVAS (No flickering on scroll)
+   ======================================== */
+.stars-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ========================================
+   IMPROVED SUN DESIGN
+   ======================================== */
+.retro-sun-container {
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px;
+  height: 450px;
+  z-index: 3;
+  animation: sun-breathe 8s ease-in-out infinite;
+}
+
+@keyframes sun-breathe {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* Sun Rings (expanding circles) */
+.sun-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 2px solid;
+  animation: sun-ring-pulse 4s ease-in-out infinite;
+}
+
+.sun-ring-1 {
+  width: 320px;
+  height: 320px;
+  margin: -160px 0 0 -160px;
+  border-color: rgba(255, 150, 0, 0.4);
+  animation-delay: 0s;
+}
+
+.sun-ring-2 {
+  width: 380px;
+  height: 380px;
+  margin: -190px 0 0 -190px;
+  border-color: rgba(255, 100, 150, 0.3);
+  animation-delay: 0.5s;
+}
+
+.sun-ring-3 {
+  width: 440px;
+  height: 440px;
+  margin: -220px 0 0 -220px;
+  border-color: rgba(255, 50, 200, 0.2);
+  animation-delay: 1s;
+}
+
+@keyframes sun-ring-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Main Sun Body */
+.retro-sun {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow:
+    0 0 80px rgba(255, 150, 0, 0.8),
+    0 0 120px rgba(255, 100, 0, 0.6),
+    0 0 160px rgba(255, 50, 0, 0.4),
+    inset 0 0 60px rgba(255, 200, 100, 0.4);
+  animation: sun-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes sun-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 80px rgba(255, 150, 0, 0.8),
+      0 0 120px rgba(255, 100, 0, 0.6),
+      0 0 160px rgba(255, 50, 0, 0.4),
+      inset 0 0 60px rgba(255, 200, 100, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 100px rgba(255, 150, 0, 1),
+      0 0 150px rgba(255, 100, 0, 0.8),
+      0 0 200px rgba(255, 50, 0, 0.6),
+      inset 0 0 80px rgba(255, 200, 100, 0.6);
+  }
+}
+
+/* Sun Inner Glow */
+.sun-inner-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #fffbf0 0%,
+    #ffe680 15%,
+    #ffcc66 30%,
+    #ff9944 50%,
+    #ff6622 70%,
+    #ff3300 85%,
+    #cc0066 100%
+  );
+  animation: sun-rotate 40s linear infinite;
+}
+
+@keyframes sun-rotate {
+  from { transform: rotate(0deg) scale(1.1); }
+  to { transform: rotate(360deg) scale(1.1); }
+}
+
+/* Sun Stripes - More elegant */
+.sun-stripe {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(139, 26, 158, 0) 0%,
+    rgba(139, 26, 158, 0.8) 50%,
+    rgba(139, 26, 158, 0) 100%
+  );
+  border-top: 1px solid rgba(194, 24, 91, 0.6);
+  animation: stripe-flow 6s ease-in-out infinite;
+  mix-blend-mode: multiply;
+}
+
+@keyframes stripe-flow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scaleY(1.2);
+  }
+}
+
+/* Sun Reflection */
+.sun-reflection {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 500px;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(255, 150, 0, 0.5) 0%,
+    rgba(255, 100, 0, 0.3) 20%,
+    rgba(255, 50, 150, 0.2) 40%,
+    transparent 70%
+  );
+  filter: blur(40px);
+  animation: reflection-wave 5s ease-in-out infinite;
+}
+
+@keyframes reflection-wave {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scaleY(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scaleY(1.1);
+  }
+}
+
+/* ========================================
+   MOUNTAINS WITH CURVES (No more palms)
+   ======================================== */
+.mountains-container {
+  position: absolute;
+  bottom: 42%;
+  left: 0;
+  right: 0;
+  height: 350px;
+  z-index: 4;
+}
+
+.mountain-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.mountain-far {
+  z-index: 1;
+  opacity: 0.5;
+  filter: blur(4px);
+}
+
+.mountain-far path {
+  fill: #1a0033;
+  animation: mountain-float-far 30s ease-in-out infinite;
+}
+
+.mountain-mid {
+  z-index: 2;
+  opacity: 0.7;
+  filter: blur(2px);
+}
+
+.mountain-mid path {
+  fill: #2d0052;
+  animation: mountain-float-mid 25s ease-in-out infinite;
+}
+
+.mountain-near {
+  z-index: 3;
+  opacity: 0.9;
+}
+
+.mountain-near path {
+  fill: #4a0080;
+  animation: mountain-float-near 20s ease-in-out infinite;
+}
+
+@keyframes mountain-float-far {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(30px) translateY(-5px); }
+}
+
+@keyframes mountain-float-mid {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(-20px) translateY(-8px); }
+}
+
+@keyframes mountain-float-near {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50% { transform: translateX(15px) translateY(-10px); }
+}
+
+/* ========================================
+   FLOATING PARTICLES (NEW)
+   ======================================== */
+.floating-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(circle, rgba(255, 0, 255, 0.8), transparent);
+  border-radius: 50%;
+  animation: particle-float 15s ease-in-out infinite;
+  filter: blur(1px);
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-300px) translateX(50px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   DYNAMIC GRID WITH WAVES
+   ======================================== */
+.retro-grid-system {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  perspective: 1500px;
+  perspective-origin: 50% 35%;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.grid-svg {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 200%;
+  height: 100%;
+  transform: translateX(-50%) rotateX(75deg);
+  transform-style: preserve-3d;
+  animation: grid-perspective 25s ease-in-out infinite;
+}
+
+@keyframes grid-perspective {
+  0%, 100% { transform: translateX(-50%) rotateX(75deg) translateZ(0); }
+  50% { transform: translateX(-50%) rotateX(77deg) translateZ(20px); }
+}
+
+.grid-line {
+  fill: none;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+}
+
+.grid-vertical {
+  stroke: rgba(255, 0, 255, 0.6);
+  filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8));
+  animation: grid-vertical-flow 20s linear infinite;
+}
+
+.grid-horizontal {
+  stroke: rgba(255, 100, 0, 0.5);
+  filter: drop-shadow(0 0 8px rgba(255, 100, 0, 0.6));
+  animation: grid-horizontal-flow 25s linear infinite;
+}
+
+@keyframes grid-vertical-flow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 100; }
+}
+
+@keyframes grid-horizontal-flow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 100; }
+}
+
+/* Grid Glow Effects */
+.grid-glow-bottom {
+  position: absolute;
+  bottom: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 30%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 0, 255, 0.4) 0%,
+    rgba(255, 100, 0, 0.3) 30%,
+    transparent 60%
+  );
+  filter: blur(80px);
+  animation: grid-glow-pulse 6s ease-in-out infinite;
+}
+
+.grid-intersection-glow {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 40%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 150, 200, 0.2) 0%,
+    transparent 50%
+  );
+  filter: blur(60px);
+  animation: intersection-pulse 4s ease-in-out infinite;
+}
+
+@keyframes grid-glow-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+@keyframes intersection-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+/* ========================================
+   ENERGY WAVES (NEW - Dynamic movement)
+   ======================================== */
+.energy-waves {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+}
+
+.energy-wave {
+  position: absolute;
+  left: -100%;
+  width: 300%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 0, 255, 0) 20%,
+    rgba(255, 0, 255, 0.6) 40%,
+    rgba(255, 100, 0, 0.8) 50%,
+    rgba(255, 0, 255, 0.6) 60%,
+    rgba(255, 0, 255, 0) 80%,
+    transparent 100%
+  );
+  filter: blur(2px);
+  animation: energy-wave-flow 12s linear infinite;
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.6);
+}
+
+@keyframes energy-wave-flow {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* ========================================
+   ATMOSPHERIC LAYERS (More dynamic)
+   ======================================== */
+.atmosphere-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 7;
+}
+
+.atmosphere-1 {
+  top: 25%;
+  height: 30%;
+  background: radial-gradient(
+    ellipse at 30% 50%,
+    rgba(139, 26, 158, 0.3) 0%,
+    transparent 60%
+  );
+  animation: atmosphere-drift-1 20s ease-in-out infinite;
+}
+
+.atmosphere-2 {
+  top: 45%;
+  height: 35%;
+  background: radial-gradient(
+    ellipse at 70% 50%,
+    rgba(255, 100, 0, 0.25) 0%,
+    transparent 60%
+  );
+  animation: atmosphere-drift-2 25s ease-in-out infinite;
+}
+
+.atmosphere-3 {
+  bottom: 15%;
+  height: 40%;
+  background: radial-gradient(
+    ellipse at 50% 80%,
+    rgba(194, 24, 91, 0.3) 0%,
+    rgba(255, 150, 0, 0.2) 40%,
+    transparent 70%
+  );
+  animation: atmosphere-drift-3 30s ease-in-out infinite;
+}
+
+@keyframes atmosphere-drift-1 {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateX(80px) scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+@keyframes atmosphere-drift-2 {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateX(-60px) scale(1.15);
+    opacity: 0.5;
+  }
+}
+
+@keyframes atmosphere-drift-3 {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(40px) scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+/* ========================================
+   SCAN LINES
+   ======================================== */
+.retro-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    transparent 1px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 3px
+  );
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.3;
+  animation: scanlines-slide 0.15s linear infinite;
+}
+
+@keyframes scanlines-slide {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(3px); }
+}
+
+/* ========================================
+   CHROMATIC ABERRATION
+   ======================================== */
+.chromatic-effect {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 25%, rgba(255, 0, 255, 0.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 75%, rgba(0, 255, 255, 0.04) 0%, transparent 40%);
+  mix-blend-mode: screen;
+  z-index: 9;
+  animation: chromatic-drift 6s ease-in-out infinite;
+}
+
+@keyframes chromatic-drift {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.6;
+  }
+  33% {
+    transform: translate(2px, -1px);
+    opacity: 0.8;
+  }
+  66% {
+    transform: translate(-1px, 2px);
+    opacity: 0.7;
+  }
+}
+
+/* ========================================
+   VIGNETTE
+   ======================================== */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 30%,
+    rgba(0, 0, 0, 0.3) 80%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  z-index: 11;
+  pointer-events: none;
+}

@@ -43,8 +43,17 @@ export function LanguageSwitcher() {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg transition-all hover:scale-105"
                 aria-label="Change language"
+                style={{
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'blur(30px) saturate(120%)',
+                    WebkitBackdropFilter: 'blur(30px) saturate(120%)',
+                    border: '1.5px solid var(--glass-border)',
+                    color: 'var(--text-on-glass)',
+                    textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)',
+                    boxShadow: '0 4px 16px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.4)'
+                }}
             >
                 <span className="text-lg">{currentLanguage.flag}</span>
                 <span className="hidden sm:inline">{currentLanguage.name}</span>
@@ -59,16 +68,39 @@ export function LanguageSwitcher() {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                <div
+                    className="absolute right-0 mt-2 w-48 rounded-lg overflow-hidden z-50"
+                    style={{
+                        background: 'var(--glass-bg-hover)',
+                        backdropFilter: 'blur(40px) saturate(120%)',
+                        WebkitBackdropFilter: 'blur(40px) saturate(120%)',
+                        border: '1.5px solid var(--glass-border)',
+                        boxShadow: '0 8px 32px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.4)'
+                    }}
+                >
                     {languages.map((lang) => (
                         <button
                             key={lang.code}
                             onClick={() => changeLanguage(lang.code)}
-                            className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                                lang.code === i18n.language
-                                    ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400'
-                                    : 'text-gray-700 dark:text-gray-300'
-                            }`}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-all"
+                            style={{
+                                background: lang.code === i18n.language
+                                    ? 'rgba(255, 255, 255, 0.15)'
+                                    : 'transparent',
+                                color: 'var(--text-on-glass)',
+                                fontWeight: lang.code === i18n.language ? '600' : '400',
+                                textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
+                            }}
+                            onMouseEnter={(e) => {
+                                if (lang.code !== i18n.language) {
+                                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (lang.code !== i18n.language) {
+                                    e.currentTarget.style.background = 'transparent';
+                                }
+                            }}
                         >
                             <span className="text-xl">{lang.flag}</span>
                             <span className="font-medium">{lang.name}</span>

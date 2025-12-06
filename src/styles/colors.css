@@ -1,0 +1,70 @@
+:root {
+  /* === HAUPTPALETTE - Apple-inspired Gradient === */
+  --color-gradient-1: #1e3a8a;      /* Deep Blue */
+  --color-gradient-2: #7c3aed;      /* Vibrant Purple */
+  --color-gradient-3: #ec4899;      /* Soft Pink */
+  --color-teal: #14b8a6;            /* Accent Teal */
+  --color-blue: #3b82f6;            /* Accent Blue */
+
+  /* === BACKGROUNDS === */
+  --bg-primary: transparent;
+  --bg-secondary: rgba(30, 58, 138, 0.2);
+  --bg-tertiary: rgba(124, 58, 237, 0.15);
+  --bg-elevated: rgba(255, 255, 255, 0.05);
+
+  /* === GLASS SYSTEM === */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-border-hover: rgba(255, 255, 255, 0.18);
+  --glass-border-top: rgba(255, 255, 255, 0.25);
+  --glass-border-bottom: rgba(255, 255, 255, 0.05);
+  --glass-shadow: rgba(0, 0, 0, 0.15);
+  --glass-shadow-hover: rgba(0, 0, 0, 0.25);
+  --glass-reflection: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+
+  /* === TEXT === */
+  --text-primary: #ffffff;
+  --text-secondary: #e0e7ff;        /* Light Indigo */
+  --text-tertiary: #c7d2fe;         /* Lighter Indigo */
+  --text-muted: #a5b4fc;            /* Muted Indigo */
+  --text-on-glass: #ffffff;
+  --text-on-dark: #ffffff;
+
+  /* === SEMANTIC COLORS === */
+  --color-success: #10b981;
+  --color-info: #3b82f6;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* === GRADIENTS === */
+  --gradient-hero: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  --gradient-accent-1: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+  --gradient-accent-2: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+  --gradient-accent-3: linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+
+  /* === BACKGROUND GRADIENTS - Apple-inspired === */
+  --gradient-bg-main: radial-gradient(
+    ellipse at 20% 20%,
+    rgba(30, 58, 138, 0.7) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    ellipse at 80% 50%,
+    rgba(124, 58, 237, 0.65) 0%,
+    transparent 50%
+  ),
+  radial-gradient(
+    ellipse at 40% 80%,
+    rgba(236, 72, 153, 0.6) 0%,
+    transparent 50%
+  ),
+  linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+
+  /* === GLASS TINTS === */
+  --glass-tint-blue: rgba(59, 130, 246, 0.1);
+  --glass-tint-purple: rgba(124, 58, 237, 0.1);
+  --glass-tint-pink: rgba(236, 72, 153, 0.1);
+  --glass-tint-teal: rgba(20, 184, 166, 0.1);
+}

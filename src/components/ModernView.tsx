@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useViewMode } from '../contexts/ViewModeContext';
-import { ExternalLink, Zap, Mail, MapPin, ChevronDown } from 'lucide-react';
+import { ExternalLink, Mail, MapPin, ChevronDown } from 'lucide-react';
 import { aboutPageData, type Experience } from '../pages/about/meta';
 import { contactPageData } from '../pages/contact/meta';
+import { awardsData } from '../pages/awards/meta';
 import { useTranslation } from 'react-i18next';
 import { cryptborneData } from '../pages/src/cryptborne/meta';
 import { homepageData } from '../pages/src/homepage/meta';
@@ -10,12 +11,12 @@ import { satTrackData } from '../pages/src/SatTrack/meta';
 import { cteXecutorData } from '../pages/src/cteXecutor/meta';
 import { GithubIcon } from './icons/GithubIcon';
 import { LinkedinIcon } from './icons/LinkedinIcon';
-import { useShapePhysics } from '../hooks/useShapePhysics';
 import { ModernViewNavigation } from './ModernViewNavigation';
-import { AnimatedBackground } from './AnimatedBackground';
 import { ScrollProgressBar } from './ScrollProgressBar';
 import { MobileWarningDialog } from './MobileWarningDialog';
 import { CinematicDivider } from './CinematicDivider';
+import { GlassButton } from './ui/Button/GlassButton';
+import { GlassCard } from './ui/Card/GlassCard';
 import './ModernView.css';
 
 const iconMap = {
@@ -62,10 +63,6 @@ export const ModernView: React.FC = () => {
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const navRefs = React.useRef<Record<string, HTMLButtonElement | null>>({});
   const [indicatorStyle, setIndicatorStyle] = useState<{ width: string; left: string }>({ width: '0px', left: '0px' });
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  // Use shape physics hook
-  const shapes = useShapePhysics({ enabled: !isMobile, mousePosition });
 
   // Build projects with translations
   const allProjectData = [cryptborneData, homepageData, satTrackData, cteXecutorData];
@@ -113,7 +110,7 @@ export const ModernView: React.FC = () => {
       setScrollProgress(progress);
       setScrolled(scrollTop > 50);
 
-      const sections = ['home', 'about', 'experience', 'projects', 'contact'];
+      const sections = ['home', 'about', 'experience', 'awards', 'projects', 'contact'];
       const scrollPosition = scrollTop + 100;
 
       for (const section of sections) {
@@ -145,16 +142,6 @@ export const ModernView: React.FC = () => {
     }
   }, [activeSection]);
 
-  // Track mouse position for interactive orbs
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   const scrollToSection = (id: string) => {
     const container = scrollContainerRef.current;
     const element = document.getElementById(id);
@@ -177,6 +164,7 @@ export const ModernView: React.FC = () => {
     { id: 'home', label: i18n.language === 'de' ? 'Home' : 'Home' },
     { id: 'about', label: i18n.language === 'de' ? 'Über mich' : 'About' },
     { id: 'experience', label: i18n.language === 'de' ? 'Erfahrung' : 'Experience' },
+    { id: 'awards', label: i18n.language === 'de' ? 'Auszeichnungen' : 'Awards' },
     { id: 'projects', label: i18n.language === 'de' ? 'Projekte' : 'Projects' },
     { id: 'contact', label: i18n.language === 'de' ? 'Kontakt' : 'Contact' },
   ];
@@ -184,17 +172,19 @@ export const ModernView: React.FC = () => {
   // Hooks für InView Animationen
   const aboutSection = useInView();
   const experienceSection = useInView();
+  const awardsSection = useInView();
   const projectsSection = useInView();
   const contactSection = useInView();
 
   return (
     <div
       ref={scrollContainerRef}
-      className="fixed inset-0 w-full h-full overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white"
-      style={{ scrollbarGutter: 'stable', overflowX: 'hidden' }}>
-
-      {/* Global Animated Background */}
-      <AnimatedBackground shapes={shapes} isMobile={isMobile} />
+      className="fixed inset-0 w-full h-full overflow-y-auto text-primary"
+      style={{
+        scrollbarGutter: 'stable',
+        overflowX: 'hidden',
+        background: 'var(--gradient-bg-main)'
+      }}>
 
       {/* Animated Scroll Progress Bar */}
       <ScrollProgressBar progress={scrollProgress} />
@@ -221,23 +211,37 @@ export const ModernView: React.FC = () => {
       <section id="home" className="min-h-screen flex items-center justify-center relative px-6" style={{ position: 'relative', zIndex: 1 }}>
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <h1 className="text-6xl md:text-8xl font-bold mb-6 animate-slide-up drop-shadow-2xl">
-            <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent animate-gradient">
+            <span style={{
+              background: 'var(--gradient-hero)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }} className="animate-gradient">
               Yannik Köllmann
             </span>
           </h1>
-          <p className="text-2xl md:text-4xl text-slate-200 mb-8 animate-slide-up-delayed font-bold">
+          <p className="text-2xl md:text-4xl mb-8 animate-slide-up-delayed font-bold" style={{ color: 'var(--text-secondary)' }}>
             {i18n.language === 'de' ? 'Full-Stack Entwickler & Informatik-Student' : 'Full-Stack Developer & Computer Science Student'}
           </p>
-          <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto mb-12 animate-fade-in-up font-medium">
+          <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 animate-fade-in-up font-medium" style={{ color: 'var(--text-muted)' }}>
             {aboutPage.description}
           </p>
-          <button
+          <GlassButton
             onClick={() => scrollToSection('projects')}
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-full transition-all hover:scale-110 shadow-xl shadow-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/70 animate-fade-in-up font-bold"
+            variant="primary"
+            size="lg"
+            glassIntensity="intense"
+            enableBloom={true}
+            className="group inline-flex items-center gap-2 rounded-full animate-fade-in-up font-bold"
+            style={{
+              color: 'var(--text-on-glass)',
+              border: '2px solid var(--glass-border-hover)',
+              textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
+            }}
           >
             <span>{i18n.language === 'de' ? 'Meine Projekte' : 'View My Work'}</span>
             <ChevronDown className="group-hover:translate-y-1 transition-transform animate-bounce-subtle" size={20} />
-          </button>
+          </GlassButton>
         </div>
       </section>
 
@@ -255,33 +259,58 @@ export const ModernView: React.FC = () => {
       >
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-4 mb-12">
-            <Zap className={`text-blue-500 transition-all duration-700 ${
-              aboutSection.isInView ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 -rotate-180'
-            }`} size={40} />
-            <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-slate-300 bg-clip-text text-transparent">
+            <h2 className="text-5xl font-bold" style={{
+              color: 'var(--text-primary)'
+            }}>
               {i18n.language === 'de' ? 'Über mich' : 'About Me'}
             </h2>
           </div>
-          <div className="space-y-6 text-lg text-slate-300 leading-relaxed">
-            <p className={`transition-all duration-700 bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-600 hover:scale-[1.02] ${
+          <div className="space-y-6 text-lg leading-relaxed">
+            <p className={`transition-all duration-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
-            }`}>
+            }`} style={{
+              background: 'var(--glass-bg)',
+              backdropFilter: 'blur(10px) saturate(110%)',
+              WebkitBackdropFilter: 'blur(10px) saturate(110%)',
+              border: '1px solid var(--glass-border)',
+              boxShadow: '0 4px 24px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
+              color: 'var(--text-on-glass)',
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
+            }}>
               {i18n.language === 'de'
                 ? 'Ich bin ein leidenschaftlicher Softwareentwickler mit Fokus auf moderne Webtechnologien und Backend-Systeme.'
                 : 'I am a passionate software developer focused on modern web technologies and backend systems.'}
             </p>
-            <p className={`transition-all duration-700 bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-600 hover:scale-[1.02] ${
+            <p className={`transition-all duration-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
             }`}
-              style={{ transitionDelay: '150ms' }}>
+              style={{
+                transitionDelay: '150ms',
+                background: 'var(--glass-bg)',
+                backdropFilter: 'blur(10px) saturate(110%)',
+                WebkitBackdropFilter: 'blur(10px) saturate(110%)',
+                border: '1px solid var(--glass-border)',
+                boxShadow: '0 4px 24px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
+                color: 'var(--text-on-glass)',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
+              }}>
               {i18n.language === 'de'
                 ? 'Nach meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung studiere ich nun Informatik an der Friedrich-Schiller-Universität Jena.'
                 : 'After completing my training as an IT specialist for application development, I am now studying computer science at Friedrich Schiller University Jena.'}
             </p>
-            <p className={`transition-all duration-700 bg-slate-800/50 backdrop-blur-md rounded-xl p-6 border-2 border-slate-700 shadow-lg hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-600 hover:scale-[1.02] ${
+            <p className={`transition-all duration-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
             }`}
-              style={{ transitionDelay: '300ms' }}>
+              style={{
+                transitionDelay: '300ms',
+                background: 'var(--glass-bg)',
+                backdropFilter: 'blur(10px) saturate(110%)',
+                WebkitBackdropFilter: 'blur(10px) saturate(110%)',
+                border: '1px solid var(--glass-border)',
+                boxShadow: '0 4px 24px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
+                color: 'var(--text-on-glass)',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
+              }}>
               {i18n.language === 'de'
                 ? 'Meine Expertise liegt in der Entwicklung skalierbarer Backend-Architekturen mit C# und ASP.NET Core sowie in modernen Frontend-Technologien.'
                 : 'My expertise lies in developing scalable backend architectures with C# and ASP.NET Core as well as modern frontend technologies.'}
@@ -303,39 +332,110 @@ export const ModernView: React.FC = () => {
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-5xl font-bold mb-16 text-center bg-gradient-to-r from-blue-400 to-slate-300 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-bold mb-16 text-center" style={{
+            color: 'var(--text-primary)'
+          }}>
             {i18n.language === 'de' ? 'Erfahrung' : 'Experience'}
           </h2>
 
           <div className="space-y-6">
             {sortedExperiences.map((exp, index) => (
-              <div
+              <GlassCard
                 key={exp.position}
-                className={`group relative bg-slate-800/60 backdrop-blur-md rounded-2xl p-8 border-2 border-slate-700 hover:border-blue-500 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-[1.02] overflow-hidden ${
+                glassType="frosted"
+                elevation={2}
+                className={`group transition-all duration-700 transform hover:scale-[1.02] overflow-hidden ${
                   experienceSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
                 }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{
+                  transitionDelay: `${index * 100}ms`,
+                  padding: '2rem'
+                } as React.CSSProperties}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-600 to-blue-500 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:w-3 shadow-lg shadow-blue-500/50" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 <div className="relative z-10">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
                     <div>
-                      <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors duration-300">
+                      <h3
+                        className="text-2xl font-bold transition-colors duration-300"
+                        style={{
+                          color: 'var(--text-primary)'
+                        }}
+                      >
                         {exp.position}
                       </h3>
-                      <p className="text-xl text-slate-300 mt-2 group-hover:text-slate-200 transition-colors">{exp.company}</p>
+                      <p className="text-xl mt-2 transition-colors" style={{ color: 'var(--text-secondary)' }}>{exp.company}</p>
                     </div>
-                    <span className="text-blue-400 font-semibold whitespace-nowrap bg-blue-500/10 px-4 py-2 rounded-lg group-hover:bg-blue-500/20 transition-colors">
+                    <span
+                      className="font-semibold whitespace-nowrap px-4 py-2 rounded-lg transition-all"
+                      style={{
+                        background: 'rgba(59, 130, 246, 0.15)',
+                        color: 'var(--text-secondary)',
+                        border: '1px solid rgba(59, 130, 246, 0.2)'
+                      }}
+                    >
                       {exp.startMonth} - {exp.endMonth}
                     </span>
                   </div>
                   {exp.description && (
-                    <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">{exp.description}</p>
+                    <p className="leading-relaxed transition-colors" style={{ color: 'var(--text-muted)' }}>{exp.description}</p>
                   )}
                 </div>
-              </div>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cinematic 3D Divider */}
+      <CinematicDivider />
+
+      {/* Awards Section */}
+      <section
+        id="awards"
+        ref={awardsSection.ref}
+        className={`py-32 px-6 relative transition-all duration-1000 ${
+          awardsSection.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+        style={{ position: 'relative', zIndex: 1 }}
+      >
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-5xl font-bold mb-16 text-center" style={{
+            color: 'var(--text-primary)'
+          }}>
+            {i18n.language === 'de' ? 'Auszeichnungen' : 'Awards'}
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {awardsData.map((award, index) => (
+              <GlassCard
+                key={`${award.organization}-${award.date}`}
+                glassType="frosted"
+                elevation={2}
+                className={`group transition-all duration-700 transform hover:scale-[1.03] ${
+                  awardsSection.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                }`}
+                style={{
+                  transitionDelay: `${index * 100}ms`,
+                  padding: '1.5rem'
+                } as React.CSSProperties}
+              >
+                <div>
+                  <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+                    {award.title}
+                  </h3>
+                  <p className="text-sm mb-1" style={{ color: 'var(--text-secondary)' }}>
+                    {award.organization}
+                  </p>
+                  <p className="text-sm mb-2" style={{ color: 'var(--text-muted)' }}>
+                    {award.date}
+                  </p>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                    {award.description}
+                  </p>
+                </div>
+              </GlassCard>
             ))}
           </div>
         </div>
@@ -354,7 +454,9 @@ export const ModernView: React.FC = () => {
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-5xl font-bold mb-16 text-center bg-gradient-to-r from-blue-400 to-slate-300 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-bold mb-16 text-center" style={{
+            color: 'var(--text-primary)'
+          }}>
             {i18n.language === 'de' ? 'Projekte' : 'Projects'}
           </h2>
 
@@ -367,17 +469,16 @@ export const ModernView: React.FC = () => {
               };
 
               return (
-                <div
+                <GlassCard
                   key={project.slug}
-                  className={`group rounded-2xl p-8 border transition-all duration-700 hover:shadow-2xl hover:shadow-blue-500/30 backdrop-blur-md transform hover:scale-[1.08] hover:-translate-y-3 ${colors.card} ${
+                  glassType="frosted"
+                  elevation={3}
+                  className={`group transition-all duration-700 transform hover:scale-[1.08] hover:-translate-y-3 ${
                     projectsSection.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                  } relative overflow-hidden`}
-                  style={{ transitionDelay: `${index * 150}ms` }}
+                  }`}
+                  style={{ transitionDelay: `${index * 150}ms` } as React.CSSProperties}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-blue-500/10 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
                   <div className="relative z-10">
-                    <div className="text-4xl mb-4 group-hover:scale-110 transition-all duration-500">{project.icon}</div>
                     <h3 className={`text-3xl font-bold mb-3 text-white transition-colors duration-300 ${colors.title}`}>
                       {project.name}
                     </h3>
@@ -392,7 +493,7 @@ export const ModernView: React.FC = () => {
                       <div className="space-y-2">
                         {Object.values(project.features).slice(0, 3).map((feature: any, featureIndex) => (
                           <div
-                            key={feature._searchableId}
+                            key={feature._searchableId || `${project.slug}-feature-${featureIndex}`}
                             className={`flex items-start gap-2 transition-all duration-500 ${
                               projectsSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-3'
                             }`}
@@ -430,7 +531,7 @@ export const ModernView: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </GlassCard>
               );
             })}
           </div>
@@ -450,10 +551,15 @@ export const ModernView: React.FC = () => {
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-slate-300 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-bold mb-8" style={{
+            background: 'var(--gradient-hero)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}>
             {i18n.language === 'de' ? 'Lass uns reden' : "Let's Talk"}
           </h2>
-          <p className="text-xl text-slate-300 mb-16">
+          <p className="text-xl mb-16" style={{ color: 'var(--text-muted)' }}>
             {i18n.language === 'de' ? 'Ich freue mich von dir zu hören' : "I'd love to hear from you"}
           </p>
 
@@ -466,29 +572,46 @@ export const ModernView: React.FC = () => {
                   href={method.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`group bg-slate-800/60 backdrop-blur-md rounded-2xl p-8 border-2 border-slate-700 hover:border-blue-500 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/30 transform hover:scale-[1.05] relative overflow-hidden ${
-                    contactSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
-                  }`}
-                  style={{
-                    transitionDelay: `${index * 100}ms`,
-                    transitionDuration: '700ms'
-                  }}
+                  style={{ textDecoration: 'none' }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="flex items-center gap-6 relative z-10">
-                    <div className="text-blue-400 group-hover:scale-110 transition-all duration-500">
-                      <IconComponent size={48} />
+                  <GlassCard
+                    glassType="frosted"
+                    elevation={2}
+                    className={`group transition-all duration-700 transform hover:scale-[1.03] ${
+                      contactSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+                    }`}
+                    style={{
+                      transitionDelay: `${index * 100}ms`,
+                      padding: '2rem',
+                      cursor: 'pointer'
+                    } as React.CSSProperties}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="flex items-center gap-6 relative z-10">
+                      <div
+                        className="group-hover:scale-110 transition-all duration-500"
+                        style={{
+                          color: 'var(--text-primary)',
+                          filter: 'drop-shadow(0 0 4px rgba(255, 255, 255, 0.3))'
+                        }}
+                      >
+                        <IconComponent size={48} />
+                      </div>
+                      <div className="flex-1 text-left">
+                        <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-muted)' }}>
+                          {method.label}
+                        </p>
+                        <p className="text-xl font-semibold transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>
+                          {method.value}
+                        </p>
+                      </div>
+                      <ExternalLink
+                        className="group-hover:translate-x-2 transition-all duration-300"
+                        style={{ color: 'var(--text-secondary)' }}
+                        size={24}
+                      />
                     </div>
-                    <div className="flex-1 text-left">
-                      <p className="text-sm font-medium text-slate-400 mb-1">
-                        {method.label}
-                      </p>
-                      <p className="text-xl font-semibold text-white group-hover:text-blue-400 transition-colors duration-300">
-                        {method.value}
-                      </p>
-                    </div>
-                    <ExternalLink className="text-slate-400 group-hover:text-blue-400 group-hover:translate-x-2 transition-all duration-300" size={24} />
-                  </div>
+                  </GlassCard>
                 </a>
               );
             })}

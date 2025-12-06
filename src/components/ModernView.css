@@ -1,19 +1,15 @@
-/* Color variables for dark mode only */
+/* Color variables for ModernView - Clean Apple-inspired */
 :root {
-  --mv-shape-border: rgba(59, 130, 246, 0.3);
-  --mv-shape-bg-1: rgba(59, 130, 246, 0.12);
-  --mv-shape-bg-2: rgba(96, 165, 250, 0.08);
-  --mv-shape-bg-3: rgba(147, 197, 253, 0.12);
-  --mv-shape-bg-4: rgba(59, 130, 246, 0.11);
-  --mv-line-gradient: rgba(59, 130, 246, 0.35);
-  --mv-grid-line: rgba(59, 130, 246, 0.25);
-  --mv-divider-1: rgba(59, 130, 246, 0.25);
-  --mv-divider-2: rgba(96, 165, 250, 0.35);
-  --mv-divider-3: rgba(59, 130, 246, 0.28);
-  --mv-divider-4: rgba(96, 165, 250, 0.32);
-  --mv-glow-1: rgba(59, 130, 246, 0.6);
-  --mv-glow-2: rgba(96, 165, 250, 0.5);
-  --mv-glow-3: rgba(147, 197, 253, 0.3);
+  /* Divider layers - Soft gradient transitions */
+  --mv-divider-1: rgba(59, 130, 246, 0.25);   /* Blue */
+  --mv-divider-2: rgba(124, 58, 237, 0.25);   /* Purple */
+  --mv-divider-3: rgba(236, 72, 153, 0.25);   /* Pink */
+  --mv-divider-4: rgba(20, 184, 166, 0.25);   /* Teal */
+
+  /* Glow effects - Subtle and elegant */
+  --mv-glow-1: rgba(59, 130, 246, 0.4);       /* Blue */
+  --mv-glow-2: rgba(124, 58, 237, 0.4);       /* Purple */
+  --mv-glow-3: rgba(236, 72, 153, 0.4);       /* Pink */
 }
 
 /* Optimized animations */
