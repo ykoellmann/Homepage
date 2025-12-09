@@ -1,0 +1,57 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "Über mich",
+    "experience": "Erfahrung",
+    "awards": "Auszeichnungen",
+    "projects": "Projekte",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "name": "Yannik Köllmann",
+    "title": "Full-Stack Entwickler & Informatik-Student",
+    "cta": "Meine Projekte"
+  },
+  "about": {
+    "title": "Über mich",
+    "paragraphs": [
+      "Ich bin ein leidenschaftlicher Softwareentwickler mit Fokus auf moderne Webtechnologien und Backend-Systeme.",
+      "Nach meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung studiere ich nun Informatik an der Friedrich-Schiller-Universität Jena.",
+      "Meine Expertise liegt in der Entwicklung skalierbarer Backend-Architekturen mit C# und ASP.NET Core sowie in modernen Frontend-Technologien."
+    ]
+  },
+  "experience": {
+    "title": "Erfahrung"
+  },
+  "awards": {
+    "title": "Auszeichnungen",
+    "items": [
+      {
+        "title": "Beste Auszubildende",
+        "organization": "IHK Nord Westfalen",
+        "date": "2024",
+        "description": "Auszeichnung im Kreis Borken - Fachinformatiker Anwendungsentwicklung"
+      },
+      {
+        "title": "1. Platz IT-Projekttage 2023",
+        "organization": "Berufskolleg Wirtschaft und Verwaltung Ahaus",
+        "date": "Oktober 2023",
+        "description": "Siegerprojekt \"PawPal\" - Web-App zur Vermittlung von Haustieren"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projekte",
+    "features": "Features",
+    "liveDemo": "Live Demo",
+    "github": "GitHub"
+  },
+  "contact": {
+    "title": "Lass uns reden",
+    "subtitle": "Ich freue mich von dir zu hören"
+  },
+  "footer": {
+    "madeWith": "© 2025 Yannik Köllmann. Gemacht mit ❤️ und viel ☕",
+    "legalNotice": "Impressum"
+  }
+}

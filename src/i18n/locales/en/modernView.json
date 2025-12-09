@@ -1,0 +1,57 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "experience": "Experience",
+    "awards": "Awards",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "hero": {
+    "name": "Yannik Köllmann",
+    "title": "Full-Stack Developer & Computer Science Student",
+    "cta": "View My Work"
+  },
+  "about": {
+    "title": "About Me",
+    "paragraphs": [
+      "I am a passionate software developer focused on modern web technologies and backend systems.",
+      "After completing my training as an IT specialist for application development, I am now studying computer science at Friedrich Schiller University Jena.",
+      "My expertise lies in developing scalable backend architectures with C# and ASP.NET Core as well as modern frontend technologies."
+    ]
+  },
+  "experience": {
+    "title": "Experience"
+  },
+  "awards": {
+    "title": "Awards",
+    "items": [
+      {
+        "title": "Best Trainee",
+        "organization": "IHK Nord Westfalen",
+        "date": "2024",
+        "description": "Award in Kreis Borken - IT Specialist Application Development"
+      },
+      {
+        "title": "1st Place IT Project Days 2023",
+        "organization": "Berufskolleg Wirtschaft und Verwaltung Ahaus",
+        "date": "October 2023",
+        "description": "Winner Project \"PawPal\" - Web App for Pet Adoption"
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projects",
+    "features": "Features",
+    "liveDemo": "Live Demo",
+    "github": "GitHub"
+  },
+  "contact": {
+    "title": "Let's Talk",
+    "subtitle": "I'd love to hear from you"
+  },
+  "footer": {
+    "madeWith": "© 2025 Yannik Köllmann. Made with ❤️ and lots of ☕",
+    "legalNotice": "Legal Notice"
+  }
+}

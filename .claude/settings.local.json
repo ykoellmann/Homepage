@@ -12,7 +12,8 @@
       "Bash(move:*)",
       "Bash(mkdir:*)",
       "Bash(dir /B \"C:\\Users\\Yannik\\WebstormProjects\\homepage\\node_modules\")",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(dir /B /S \"C:\\Users\\Yannik\\WebstormProjects\\homepage\")"
     ],
     "deny": [],
     "ask": []

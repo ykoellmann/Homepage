@@ -12,21 +12,23 @@ export default function HomepagePage() {
         'projects'
     );
 
-    // Convert features object to array
+    // Convert features object to array (all data now from translations)
     const featuresArray = Object.entries(pageData.features)
         .filter(([key]) => key !== 'title')
         .map(([key, value]: [string, any]) => ({
             _searchableId: key,
-            icon: homepageData.features[key as keyof typeof homepageData.features]?.icon || '📦',
+            icon: value.icon || '📦',
             title: value.title,
             description: value.description,
+            searchWeight: value.searchWeight,
         }));
 
-    // Use static tech stack data (translations don't include tech stack items)
-    const techStackArray = homepageData.techStack.map((item, index) => ({
+    // Tech stack array (all data from translations)
+    const techStackArray = pageData.techStack.items.map((item: any, index: number) => ({
         _searchableId: `tech-${index}`,
         name: item.name,
         category: item.category,
+        searchWeight: item.searchWeight,
     }));
 
     return (

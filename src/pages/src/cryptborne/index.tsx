@@ -12,25 +12,24 @@ export default function CryptbornePage() {
         'projects'
     );
 
-    // Convert features object to array (from translations)
+    // Convert features object to array (all data now from translations)
     const featuresArray = Object.entries(pageData.features)
         .filter(([key]) => key !== 'title')
         .map(([key, value]: [string, any]) => ({
             _searchableId: key,
-            icon: cryptborneData.features[key as keyof typeof cryptborneData.features]?.icon || '📦',
+            icon: value.icon || '📦',
             title: value.title,
             description: value.description,
+            searchWeight: value.searchWeight,
         }));
 
-    // Convert tech stack object to array (from translations)
-    // Tech stack in translations is an object like: { unity6: "Unity 6", csharp: "C#", ... }
-    const techStackArray = Object.entries(pageData.techStack)
-        .filter(([key]) => key !== 'title')
-        .map(([key, value]: [string, any]) => ({
-            _searchableId: key,
-            name: value,
-            category: cryptborneData.techStack[key as keyof typeof cryptborneData.techStack]?.category || 'other',
-        }));
+    // Tech stack array (all data from translations)
+    const techStackArray = pageData.techStack.items.map((item: any, index: number) => ({
+        _searchableId: `tech-${index}`,
+        name: item.name,
+        category: item.category,
+        searchWeight: item.searchWeight,
+    }));
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">

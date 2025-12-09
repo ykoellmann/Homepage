@@ -3,7 +3,6 @@ import { useViewMode } from '../contexts/ViewModeContext';
 import { ExternalLink, Mail, MapPin, ChevronDown } from 'lucide-react';
 import { aboutPageData, type Experience } from '../pages/about/meta';
 import { contactPageData } from '../pages/contact/meta';
-import { awardsData } from '../pages/awards/meta';
 import { useTranslation } from 'react-i18next';
 import { cryptborneData } from '../pages/src/cryptborne/meta';
 import { homepageData } from '../pages/src/homepage/meta';
@@ -74,6 +73,10 @@ export const ModernView: React.FC = () => {
   // Get about page translations
   const aboutTranslations = t('pages.about', { returnObjects: true }) as any;
   const aboutPage = { ...aboutPageData, ...aboutTranslations };
+
+  // Get awards from translations
+  const awardsTranslations = t('modernView:awards.items', { returnObjects: true }) as any[];
+  const awardsData = Array.isArray(awardsTranslations) ? awardsTranslations : [];
 
   // Sort experiences by date (DESC)
   const sortedExperiences = [...aboutPageData.experiences].sort((a, b) => {
@@ -161,12 +164,12 @@ export const ModernView: React.FC = () => {
   };
 
   const navItems = [
-    { id: 'home', label: i18n.language === 'de' ? 'Home' : 'Home' },
-    { id: 'about', label: i18n.language === 'de' ? 'Über mich' : 'About' },
-    { id: 'experience', label: i18n.language === 'de' ? 'Erfahrung' : 'Experience' },
-    { id: 'awards', label: i18n.language === 'de' ? 'Auszeichnungen' : 'Awards' },
-    { id: 'projects', label: i18n.language === 'de' ? 'Projekte' : 'Projects' },
-    { id: 'contact', label: i18n.language === 'de' ? 'Kontakt' : 'Contact' },
+    { id: 'home', label: t('modernView:navigation.home') },
+    { id: 'about', label: t('modernView:navigation.about') },
+    { id: 'experience', label: t('modernView:navigation.experience') },
+    { id: 'awards', label: t('modernView:navigation.awards') },
+    { id: 'projects', label: t('modernView:navigation.projects') },
+    { id: 'contact', label: t('modernView:navigation.contact') },
   ];
 
   // Hooks für InView Animationen
@@ -185,6 +188,11 @@ export const ModernView: React.FC = () => {
         overflowX: 'hidden',
         background: 'var(--gradient-bg-main)'
       }}>
+
+      {/* Animated Background Blobs */}
+      <div className="animated-bg-blob blob-orange" />
+      <div className="animated-bg-blob blob-pink" />
+      <div className="animated-bg-blob blob-lightblue" />
 
       {/* Animated Scroll Progress Bar */}
       <ScrollProgressBar progress={scrollProgress} />
@@ -217,11 +225,11 @@ export const ModernView: React.FC = () => {
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }} className="animate-gradient">
-              Yannik Köllmann
+              {t('modernView:hero.name')}
             </span>
           </h1>
           <p className="text-2xl md:text-4xl mb-8 animate-slide-up-delayed font-bold" style={{ color: 'var(--text-secondary)' }}>
-            {i18n.language === 'de' ? 'Full-Stack Entwickler & Informatik-Student' : 'Full-Stack Developer & Computer Science Student'}
+            {t('modernView:hero.title')}
           </p>
           <p className="text-lg md:text-xl max-w-2xl mx-auto mb-12 animate-fade-in-up font-medium" style={{ color: 'var(--text-muted)' }}>
             {aboutPage.description}
@@ -239,7 +247,7 @@ export const ModernView: React.FC = () => {
               textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
             }}
           >
-            <span>{i18n.language === 'de' ? 'Meine Projekte' : 'View My Work'}</span>
+            <span>{t('modernView:hero.cta')}</span>
             <ChevronDown className="group-hover:translate-y-1 transition-transform animate-bounce-subtle" size={20} />
           </GlassButton>
         </div>
@@ -262,7 +270,7 @@ export const ModernView: React.FC = () => {
             <h2 className="text-5xl font-bold" style={{
               color: 'var(--text-primary)'
             }}>
-              {i18n.language === 'de' ? 'Über mich' : 'About Me'}
+              {t('modernView:about.title')}
             </h2>
           </div>
           <div className="space-y-6 text-lg leading-relaxed">
@@ -277,9 +285,7 @@ export const ModernView: React.FC = () => {
               color: 'var(--text-on-glass)',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
             }}>
-              {i18n.language === 'de'
-                ? 'Ich bin ein leidenschaftlicher Softwareentwickler mit Fokus auf moderne Webtechnologien und Backend-Systeme.'
-                : 'I am a passionate software developer focused on modern web technologies and backend systems.'}
+              {t('modernView:about.paragraphs.0')}
             </p>
             <p className={`transition-all duration-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
@@ -294,9 +300,7 @@ export const ModernView: React.FC = () => {
                 color: 'var(--text-on-glass)',
                 textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
               }}>
-              {i18n.language === 'de'
-                ? 'Nach meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung studiere ich nun Informatik an der Friedrich-Schiller-Universität Jena.'
-                : 'After completing my training as an IT specialist for application development, I am now studying computer science at Friedrich Schiller University Jena.'}
+              {t('modernView:about.paragraphs.1')}
             </p>
             <p className={`transition-all duration-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
@@ -311,9 +315,7 @@ export const ModernView: React.FC = () => {
                 color: 'var(--text-on-glass)',
                 textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
               }}>
-              {i18n.language === 'de'
-                ? 'Meine Expertise liegt in der Entwicklung skalierbarer Backend-Architekturen mit C# und ASP.NET Core sowie in modernen Frontend-Technologien.'
-                : 'My expertise lies in developing scalable backend architectures with C# and ASP.NET Core as well as modern frontend technologies.'}
+              {t('modernView:about.paragraphs.2')}
             </p>
           </div>
         </div>
@@ -335,7 +337,7 @@ export const ModernView: React.FC = () => {
           <h2 className="text-5xl font-bold mb-16 text-center" style={{
             color: 'var(--text-primary)'
           }}>
-            {i18n.language === 'de' ? 'Erfahrung' : 'Experience'}
+            {t('modernView:experience.title')}
           </h2>
 
           <div className="space-y-6">
@@ -404,7 +406,7 @@ export const ModernView: React.FC = () => {
           <h2 className="text-5xl font-bold mb-16 text-center" style={{
             color: 'var(--text-primary)'
           }}>
-            {i18n.language === 'de' ? 'Auszeichnungen' : 'Awards'}
+            {t('modernView:awards.title')}
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -457,7 +459,7 @@ export const ModernView: React.FC = () => {
           <h2 className="text-5xl font-bold mb-16 text-center" style={{
             color: 'var(--text-primary)'
           }}>
-            {i18n.language === 'de' ? 'Projekte' : 'Projects'}
+            {t('modernView:projects.title')}
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -488,7 +490,7 @@ export const ModernView: React.FC = () => {
 
                     <div className="mb-6">
                       <h4 className="text-sm font-semibold text-slate-400 mb-3">
-                        {i18n.language === 'de' ? 'Features:' : 'Features:'}
+                        {t('modernView:projects.features')}
                       </h4>
                       <div className="space-y-2">
                         {Object.values(project.features).slice(0, 3).map((feature: any, featureIndex) => (
@@ -515,7 +517,7 @@ export const ModernView: React.FC = () => {
                           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-semibold hover:scale-105 ${colors.button}`}
                         >
                           <ExternalLink size={16} />
-                          {i18n.language === 'de' ? 'Live Demo' : 'Live Demo'}
+                          {t('modernView:projects.liveDemo')}
                         </a>
                       )}
                       {project.debugUrl && (
@@ -526,7 +528,7 @@ export const ModernView: React.FC = () => {
                           className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all text-sm font-semibold hover:scale-105"
                         >
                           <GithubIcon size={16} />
-                          GitHub
+                          {t('modernView:projects.github')}
                         </a>
                       )}
                     </div>
@@ -557,10 +559,10 @@ export const ModernView: React.FC = () => {
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text'
           }}>
-            {i18n.language === 'de' ? 'Lass uns reden' : "Let's Talk"}
+            {t('modernView:contact.title')}
           </h2>
           <p className="text-xl mb-16" style={{ color: 'var(--text-muted)' }}>
-            {i18n.language === 'de' ? 'Ich freue mich von dir zu hören' : "I'd love to hear from you"}
+            {t('modernView:contact.subtitle')}
           </p>
 
           <div className="grid gap-6 max-w-2xl mx-auto">
@@ -624,16 +626,14 @@ export const ModernView: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 to-transparent opacity-50" />
         <div className="max-w-7xl mx-auto text-center text-slate-400 relative z-10 space-y-3">
           <p>
-            {i18n.language === 'de'
-              ? '© 2025 Yannik Köllmann. Gemacht mit ❤️ und viel ☕'
-              : '© 2025 Yannik Köllmann. Made with ❤️ and lots of ☕'}
+            {t('modernView:footer.madeWith')}
           </p>
           <div className="flex items-center justify-center gap-4 text-sm">
             <a
               href="/imprint"
               className="text-slate-400 hover:text-blue-400 transition-colors hover:underline"
             >
-              {i18n.language === 'de' ? 'Impressum' : 'Legal Notice'}
+              {t('modernView:footer.legalNotice')}
             </a>
           </div>
         </div>

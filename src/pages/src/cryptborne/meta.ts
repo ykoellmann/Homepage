@@ -24,12 +24,12 @@ export interface CryptborneTranslations extends BasePageTranslations {
     };
     features: {
         title: string;
-        proceduralDungeons: { title: string; description: string };
-        weaponVariety: { title: string; description: string };
-        enemyAi: { title: string; description: string };
-        inventory: { title: string; description: string };
-        smoothMovement: { title: string; description: string };
-        medievalAesthetic: { title: string; description: string };
+        proceduralDungeons: { title: string; description: string; searchWeight: number; icon: string };
+        weaponVariety: { title: string; description: string; searchWeight: number; icon: string };
+        enemyAi: { title: string; description: string; searchWeight: number; icon: string };
+        inventory: { title: string; description: string; searchWeight: number; icon: string };
+        smoothMovement: { title: string; description: string; searchWeight: number; icon: string };
+        medievalAesthetic: { title: string; description: string; searchWeight: number; icon: string };
     };
     gameplayHighlights: {
         title: string;
@@ -40,10 +40,7 @@ export interface CryptborneTranslations extends BasePageTranslations {
     };
     techStack: {
         title: string;
-        unity6: string;
-        csharp: string;
-        kaykit: string;
-        proceduralGen: string;
+        items: Array<{ name: string; searchWeight: number; category: string }>;
     };
 }
 
@@ -51,35 +48,14 @@ export interface CryptborneTranslations extends BasePageTranslations {
 // Static Data (NOT translated)
 // ============================================================================
 
-// Feature search configuration (icons, search weights)
-const features = {
-    proceduralDungeons: { searchWeight: 10, icon: '🏰' },
-    weaponVariety: { searchWeight: 9, icon: '⚔️' },
-    enemyAi: { searchWeight: 8, icon: '👾' },
-    inventory: { searchWeight: 7, icon: '🎒' },
-    smoothMovement: { searchWeight: 8, icon: '🎮' },
-    medievalAesthetic: { searchWeight: 6, icon: '🎨' },
-} as const;
-
-// Tech stack search configuration (categories, weights)
-const techStack = {
-    unity6: { searchWeight: 10, category: 'engine' as const },
-    csharp: { searchWeight: 9, category: 'engine' as const },
-    kaykit: { searchWeight: 7, category: 'assets' as const },
-    proceduralGen: { searchWeight: 8, category: 'library' as const },
-} as const;
-
 /**
  * Static page data for Cryptborne.
  * Extends BasePageData which includes RunConfig.
  *
+ * All feature/techStack data is now in translation files (projects.json)
  * Since this has url/debugUrl, it's automatically "runnable" in IDE controls!
- * No need for separate runConfig export.
  */
-export const cryptborneData: BasePageData & {
-    readonly features: typeof features;
-    readonly techStack: typeof techStack;
-} = {
+export const cryptborneData: BasePageData = {
     // Base page info
     slug: 'cryptborne',
     category: 'Projects',
@@ -89,10 +65,6 @@ export const cryptborneData: BasePageData & {
     // Having url/debugUrl makes this project appear in IDE run controls automatically
     url: 'https://jy-studios.github.io/cryptborne/',
     debugUrl: 'https://github.com/JY-Studios/cryptborne',
-
-    // Project-specific data
-    features,
-    techStack,
 };
 
 export type CryptborneData = typeof cryptborneData;

@@ -1,15 +1,15 @@
 :root {
   /* === HAUPTPALETTE - Apple-inspired Gradient === */
-  --color-gradient-1: #1e3a8a;      /* Deep Blue */
-  --color-gradient-2: #7c3aed;      /* Vibrant Purple */
-  --color-gradient-3: #ec4899;      /* Soft Pink */
+  --color-gradient-1: #f97316;      /* Orange */
+  --color-gradient-2: #ec4899;      /* Pink/Rosa */
+  --color-gradient-3: #60a5fa;      /* Light Blue/Hellblau */
   --color-teal: #14b8a6;            /* Accent Teal */
   --color-blue: #3b82f6;            /* Accent Blue */
 
   /* === BACKGROUNDS === */
   --bg-primary: transparent;
-  --bg-secondary: rgba(30, 58, 138, 0.2);
-  --bg-tertiary: rgba(124, 58, 237, 0.15);
+  --bg-secondary: rgba(249, 115, 22, 0.2);    /* Orange */
+  --bg-tertiary: rgba(236, 72, 153, 0.15);    /* Pink */
   --bg-elevated: rgba(255, 255, 255, 0.05);
 
   /* === GLASS SYSTEM === */
@@ -38,33 +38,121 @@
   --color-error: #ef4444;
 
   /* === GRADIENTS === */
-  --gradient-hero: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
-  --gradient-accent-1: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
-  --gradient-accent-2: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
-  --gradient-accent-3: linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%);
-  --gradient-subtle: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+  --gradient-hero: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #60a5fa 100%);       /* Orange → Pink → Light Blue */
+  --gradient-accent-1: linear-gradient(135deg, #f97316 0%, #ec4899 100%);                /* Orange → Pink */
+  --gradient-accent-2: linear-gradient(135deg, #ec4899 0%, #60a5fa 100%);                /* Pink → Light Blue */
+  --gradient-accent-3: linear-gradient(135deg, #60a5fa 0%, #f97316 100%);                /* Light Blue → Orange */
+  --gradient-subtle: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
 
-  /* === BACKGROUND GRADIENTS - Apple-inspired === */
-  --gradient-bg-main: radial-gradient(
-    ellipse at 20% 20%,
-    rgba(30, 58, 138, 0.7) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    ellipse at 80% 50%,
-    rgba(124, 58, 237, 0.65) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    ellipse at 40% 80%,
-    rgba(236, 72, 153, 0.6) 0%,
-    transparent 50%
-  ),
-  linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  /* === BACKGROUND GRADIENTS - Solid base === */
+  --gradient-bg-main: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
 
   /* === GLASS TINTS === */
-  --glass-tint-blue: rgba(59, 130, 246, 0.1);
-  --glass-tint-purple: rgba(124, 58, 237, 0.1);
+  --glass-tint-orange: rgba(249, 115, 22, 0.1);
   --glass-tint-pink: rgba(236, 72, 153, 0.1);
+  --glass-tint-lightblue: rgba(96, 165, 250, 0.1);
   --glass-tint-teal: rgba(20, 184, 166, 0.1);
+}
+
+/* === ANIMATED BACKGROUND BLOBS === */
+.animated-bg-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: screen;
+}
+
+.blob-orange {
+  width: 1200px;
+  height: 1200px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 1) 0%, rgba(249, 115, 22, 0.8) 30%, rgba(249, 115, 22, 0.3) 50%, transparent 70%);
+  animation: blob-float-1 25s ease-in-out infinite;
+}
+
+.blob-pink {
+  width: 1100px;
+  height: 1100px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 1) 0%, rgba(236, 72, 153, 0.8) 30%, rgba(236, 72, 153, 0.3) 50%, transparent 70%);
+  animation: blob-float-2 30s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+.blob-lightblue {
+  width: 1300px;
+  height: 1300px;
+  background: radial-gradient(circle, rgba(96, 165, 250, 1) 0%, rgba(96, 165, 250, 0.8) 30%, rgba(96, 165, 250, 0.3) 50%, transparent 70%);
+  animation: blob-float-3 28s ease-in-out infinite;
+  animation-delay: -10s;
+}
+
+@keyframes blob-float-1 {
+  0%, 100% {
+    top: 10%;
+    left: 15%;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  25% {
+    top: 20%;
+    left: 25%;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  50% {
+    top: 15%;
+    left: 20%;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  75% {
+    top: 12%;
+    left: 18%;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+@keyframes blob-float-2 {
+  0%, 100% {
+    top: 40%;
+    right: 10%;
+    transform: translate(50%, -50%) scale(1);
+  }
+  25% {
+    top: 45%;
+    right: 15%;
+    transform: translate(50%, -50%) scale(0.95);
+  }
+  50% {
+    top: 50%;
+    right: 12%;
+    transform: translate(50%, -50%) scale(1.08);
+  }
+  75% {
+    top: 42%;
+    right: 18%;
+    transform: translate(50%, -50%) scale(1.02);
+  }
+}
+
+@keyframes blob-float-3 {
+  0%, 100% {
+    bottom: 15%;
+    left: 35%;
+    transform: translate(-50%, 50%) scale(1);
+  }
+  25% {
+    bottom: 20%;
+    left: 40%;
+    transform: translate(-50%, 50%) scale(1.05);
+  }
+  50% {
+    bottom: 18%;
+    left: 32%;
+    transform: translate(-50%, 50%) scale(0.92);
+  }
+  75% {
+    bottom: 22%;
+    left: 38%;
+    transform: translate(-50%, 50%) scale(1.03);
+  }
 }

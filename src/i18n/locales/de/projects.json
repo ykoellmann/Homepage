@@ -12,27 +12,39 @@
       "title": "✨ Features",
       "proceduralDungeons": {
         "title": "Prozedural generierte Dungeons",
-        "description": "Jedes Spiel bietet neue, zufällig generierte Dungeon-Layouts für endlosen Wiederspielwert"
+        "description": "Jedes Spiel bietet neue, zufällig generierte Dungeon-Layouts für endlosen Wiederspielwert",
+        "searchWeight": 10,
+        "icon": "🏰"
       },
       "weaponVariety": {
         "title": "Vielfältige Waffensysteme",
-        "description": "Verschiedene Waffen mit einzigartigen Schussmustern und Spielstilen"
+        "description": "Verschiedene Waffen mit einzigartigen Schussmustern und Spielstilen",
+        "searchWeight": 9,
+        "icon": "⚔️"
       },
       "enemyAi": {
         "title": "Dynamische Gegner-KI",
-        "description": "Intelligente Feinde mit anpassungsfähigem Verhalten und verschiedenen Angriffsmustern"
+        "description": "Intelligente Feinde mit anpassungsfähigem Verhalten und verschiedenen Angriffsmustern",
+        "searchWeight": 8,
+        "icon": "👾"
       },
       "inventory": {
         "title": "Waffen-Hotbar & Inventar",
-        "description": "Intuitives Inventarsystem mit schnellem Waffenwechsel über Hotbar"
+        "description": "Intuitives Inventarsystem mit schnellem Waffenwechsel über Hotbar",
+        "searchWeight": 7,
+        "icon": "🎒"
       },
       "smoothMovement": {
         "title": "Flüssige Charaktersteuerung",
-        "description": "Responsive Bewegungsmechaniken und präzises Combat-System"
+        "description": "Responsive Bewegungsmechaniken und präzises Combat-System",
+        "searchWeight": 8,
+        "icon": "🎮"
       },
       "medievalAesthetic": {
         "title": "Medieval Fantasy Ästhetik",
-        "description": "Kohärente visuelle Gestaltung mit KayKit Assets im Low-Poly-Stil"
+        "description": "Kohärente visuelle Gestaltung mit KayKit Assets im Low-Poly-Stil",
+        "searchWeight": 6,
+        "icon": "🎨"
       }
     },
     "gameplayHighlights": {
@@ -56,10 +68,12 @@
     },
     "techStack": {
       "title": "🛠️ Tech Stack",
-      "unity6": "Unity 6",
-      "csharp": "C#",
-      "kaykit": "KayKit Assets",
-      "proceduralGen": "Procedural Generation"
+      "items": [
+        { "name": "Unity 6", "searchWeight": 10, "category": "engine" },
+        { "name": "C#", "searchWeight": 9, "category": "engine" },
+        { "name": "KayKit Assets", "searchWeight": 7, "category": "assets" },
+        { "name": "Procedural Generation", "searchWeight": 8, "category": "library" }
+      ]
     }
   },
   "sattrack": {
@@ -81,39 +95,57 @@
       "title": "✨ Features",
       "realtimeTracking": {
         "title": "Echtzeit-Satellitenverfolgung",
-        "description": "Visualisierung von über 5000 aktiven Satelliten mit TLE-Daten von Celestrak"
+        "description": "Visualisierung von über 5000 aktiven Satelliten mit TLE-Daten von Celestrak",
+        "searchWeight": 10,
+        "icon": "🛰️"
       },
       "interactiveCamera": {
         "title": "Interaktive Kamerasteuerung",
-        "description": "Nahtloser Übergang zwischen Weltraum- und Erdansicht mit Zoom-Slider"
+        "description": "Nahtloser Übergang zwischen Weltraum- und Erdansicht mit Zoom-Slider",
+        "searchWeight": 9,
+        "icon": "📹"
       },
       "famousSatellites": {
         "title": "Famous Satellites",
-        "description": "Spezielle 3D-Modelle für berühmte Satelliten wie ISS, Hubble Teleskop"
+        "description": "Spezielle 3D-Modelle für berühmte Satelliten wie ISS, Hubble Teleskop",
+        "searchWeight": 8,
+        "icon": "⭐"
       },
       "orbitVisualization": {
         "title": "Orbit-Visualisierung",
-        "description": "Darstellung von Satelliten-Orbits mit verschiedenen Farben (bis zu 9 gleichzeitig)"
+        "description": "Darstellung von Satelliten-Orbits mit verschiedenen Farben (bis zu 9 gleichzeitig)",
+        "searchWeight": 9,
+        "icon": "🌍"
       },
       "heatmap": {
         "title": "Heatmap-Visualisierung",
-        "description": "GPU-basierte Darstellung der Satellitendichte auf der Erdoberfläche"
+        "description": "GPU-basierte Darstellung der Satellitendichte auf der Erdoberfläche",
+        "searchWeight": 7,
+        "icon": "🔥"
       },
       "dayNight": {
         "title": "Tag/Nacht-System",
-        "description": "Realistische Beleuchtung mit dynamischem Tag/Nacht-Zyklus"
+        "description": "Realistische Beleuchtung mit dynamischem Tag/Nacht-Zyklus",
+        "searchWeight": 8,
+        "icon": "🌓"
       },
       "locationSearch": {
         "title": "Ortssuche",
-        "description": "Schnelle Navigation zu über 1000 Städten weltweit mit GeoNames-Datenbank"
+        "description": "Schnelle Navigation zu über 1000 Städten weltweit mit GeoNames-Datenbank",
+        "searchWeight": 7,
+        "icon": "🔍"
       },
       "timeControl": {
         "title": "Zeitsteuerung",
-        "description": "Zeitraffer (0x - 1000x) mit Zeit-Slider und Zoom-Funktion"
+        "description": "Zeitraffer (0x - 1000x) mit Zeit-Slider und Zoom-Funktion",
+        "searchWeight": 8,
+        "icon": "⏱️"
       },
       "performance": {
         "title": "Performance-optimiert",
-        "description": "GPU-Instancing und Unity Job-System für flüssige Darstellung"
+        "description": "GPU-Instancing und Unity Job-System für flüssige Darstellung",
+        "searchWeight": 7,
+        "icon": "⚡"
       }
     },
     "team": {
@@ -122,7 +154,17 @@
       "university": "FSU Jena • Universitätsprojekt"
     },
     "techStack": {
-      "title": "🛠️ Tech Stack"
+      "title": "🛠️ Tech Stack",
+      "items": [
+        { "name": "Unity 2022.3 LTS", "searchWeight": 10, "category": "engine" },
+        { "name": "Cesium for Unity", "searchWeight": 10, "category": "library" },
+        { "name": "Universal Render Pipeline", "searchWeight": 7, "category": "engine" },
+        { "name": "SGP4 Orbit Propagation", "searchWeight": 9, "category": "library" },
+        { "name": "Unity Job System", "searchWeight": 8, "category": "engine" },
+        { "name": "CelesTrak TLE Data", "searchWeight": 8, "category": "data" },
+        { "name": "GeoNames Database", "searchWeight": 6, "category": "data" },
+        { "name": "Git LFS", "searchWeight": 5, "category": "tool" }
+      ]
     }
   },
   "homepage": {
@@ -145,47 +187,77 @@
       "title": "✨ Features",
       "ideInterface": {
         "title": "IDE-ähnliche Benutzeroberfläche",
-        "description": "VS Code-inspirierte Oberfläche mit Datei-Explorer, Tab-System und Breadcrumb-Navigation"
+        "description": "VS Code-inspirierte Oberfläche mit Datei-Explorer, Tab-System und Breadcrumb-Navigation",
+        "searchWeight": 10,
+        "icon": "🖥️"
       },
       "tabSystem": {
         "title": "Tab-basierte Navigation",
-        "description": "Vollständig funktionales Tab-System mit Drag-and-Drop, Tab-Persistenz und Browser-History-Integration"
+        "description": "Vollständig funktionales Tab-System mit Drag-and-Drop, Tab-Persistenz und Browser-History-Integration",
+        "searchWeight": 10,
+        "icon": "📑"
       },
       "searchEverywhere": {
         "title": "Search Everywhere",
-        "description": "Globale Suche mit Fuzzy-Matching über alle Seiten, Features und Tech-Stack-Elemente"
+        "description": "Globale Suche mit Fuzzy-Matching über alle Seiten, Features und Tech-Stack-Elemente",
+        "searchWeight": 9,
+        "icon": "🔍"
       },
       "customizableKeymaps": {
         "title": "Anpassbare Tastenkombinationen",
-        "description": "Vollständig konfigurierbares Keymap-System mit benutzerdefinierten Shortcuts"
+        "description": "Vollständig konfigurierbares Keymap-System mit benutzerdefinierten Shortcuts",
+        "searchWeight": 8,
+        "icon": "⌨️"
       },
       "dualViewModes": {
         "title": "Dual View Modes",
-        "description": "Umschalten zwischen moderner Webseite und IDE-Ansicht mit separaten Routing-Pfaden"
+        "description": "Umschalten zwischen moderner Webseite und IDE-Ansicht mit separaten Routing-Pfaden",
+        "searchWeight": 9,
+        "icon": "🎨"
       },
       "i18n": {
         "title": "Internationalisierung",
-        "description": "Vollständige Mehrsprachigkeit (Deutsch/Englisch) mit react-i18next"
+        "description": "Vollständige Mehrsprachigkeit (Deutsch/Englisch) mit react-i18next",
+        "searchWeight": 7,
+        "icon": "🌍"
       },
       "interactiveBackground": {
         "title": "Interaktiver Hintergrund",
-        "description": "Dynamische Partikel-Animation die auf Mausbewegung und Klicks reagiert"
+        "description": "Dynamische Partikel-Animation die auf Mausbewegung und Klicks reagiert",
+        "searchWeight": 6,
+        "icon": "✨"
       },
       "breadcrumbNavigation": {
         "title": "Breadcrumb-Navigation",
-        "description": "Intelligente Pfad-Anzeige mit Dropdown-Navigation durch die Dateistruktur"
+        "description": "Intelligente Pfad-Anzeige mit Dropdown-Navigation durch die Dateistruktur",
+        "searchWeight": 7,
+        "icon": "🧭"
       },
       "responsiveDesign": {
         "title": "Responsive Design",
-        "description": "Optimiert für Desktop, Tablet und Mobile mit Tailwind CSS"
+        "description": "Optimiert für Desktop, Tablet und Mobile mit Tailwind CSS",
+        "searchWeight": 6,
+        "icon": "📱"
       },
       "githubPages": {
         "title": "GitHub Pages Deployment",
-        "description": "Automatisches Deployment mit CI/CD und SPA-Routing-Unterstützung"
+        "description": "Automatisches Deployment mit CI/CD und SPA-Routing-Unterstützung",
+        "searchWeight": 5,
+        "icon": "🚀"
       }
     },
     "techStack": {
-      "title": "🛠️ Tech Stack"
+      "title": "🛠️ Tech Stack",
+      "items": [
+        { "name": "React 18", "searchWeight": 10, "category": "library" },
+        { "name": "TypeScript", "searchWeight": 10, "category": "library" },
+        { "name": "Vite", "searchWeight": 9, "category": "tool" },
+        { "name": "Tailwind CSS 4", "searchWeight": 9, "category": "library" },
+        { "name": "React Router", "searchWeight": 8, "category": "library" },
+        { "name": "react-i18next", "searchWeight": 7, "category": "library" },
+        { "name": "Lucide Icons", "searchWeight": 5, "category": "assets" },
+        { "name": "GitHub Pages", "searchWeight": 6, "category": "tool" }
+      ]
     },
     "architecture": {
       "title": "🏗️ Architektur",
@@ -216,19 +288,27 @@
         "title": "🎯 CTE Management",
         "cteDetection": {
           "title": "Automatische CTE-Erkennung",
-          "description": "Erkennt alle CTEs in deiner SQL WITH-Klausel automatisch und zeigt sie in einem interaktiven Popup an."
+          "description": "Erkennt alle CTEs in deiner SQL WITH-Klausel automatisch und zeigt sie in einem interaktiven Popup an.",
+          "searchWeight": 10,
+          "icon": "▶️"
         },
         "visualHighlighting": {
           "title": "Visuelle Hervorhebung",
-          "description": "Hebt ausgewählte CTEs im Editor visuell hervor für bessere Übersichtlichkeit beim Arbeiten."
+          "description": "Hebt ausgewählte CTEs im Editor visuell hervor für bessere Übersichtlichkeit beim Arbeiten.",
+          "searchWeight": 7,
+          "icon": "🎨"
         },
         "smartExecution": {
           "title": "Intelligente Ausführung",
-          "description": "Führt die gewählte SQL-Query direkt in der Datenbank-Konsole aus mit automatischer Bereinigung."
+          "description": "Führt die gewählte SQL-Query direkt in der Datenbank-Konsole aus mit automatischer Bereinigung.",
+          "searchWeight": 9,
+          "icon": "🌐"
         },
         "copyClipboard": {
           "title": "In Zwischenablage kopieren",
-          "description": "Kopiere jede CTE-Query schnell in die Zwischenablage zur Verwendung an anderer Stelle."
+          "description": "Kopiere jede CTE-Query schnell in die Zwischenablage zur Verwendung an anderer Stelle.",
+          "searchWeight": 7,
+          "icon": "📝"
         }
       },
       "executeFromHere": {
@@ -236,34 +316,48 @@
         "badge": "(v2.0.0)",
         "executeFromHere": {
           "title": "Execute from Here (NEU!)",
-          "description": "Führe SQL von überall aus - nicht nur CTEs! Funktioniert mit jedem Subselect in deinem SQL."
+          "description": "Führe SQL von überall aus - nicht nur CTEs! Funktioniert mit jedem Subselect in deinem SQL.",
+          "searchWeight": 8,
+          "icon": "⚙️"
         },
         "dependencyResolution": {
           "title": "Automatische Abhängigkeitsauflösung",
-          "description": "Inkludiert automatisch alle benötigten CTEs - erkennt Abhängigkeiten in CTEs, Subqueries und SELECT-Statements."
+          "description": "Inkludiert automatisch alle benötigten CTEs - erkennt Abhängigkeiten in CTEs, Subqueries und SELECT-Statements.",
+          "searchWeight": 6,
+          "icon": "🚨"
         },
         "smartDetection": {
           "title": "Intelligente Erkennung",
-          "description": "Findet Abhängigkeiten automatisch in CTEs, Subqueries und finalen SELECT-Statements."
+          "description": "Findet Abhängigkeiten automatisch in CTEs, Subqueries und finalen SELECT-Statements.",
+          "searchWeight": 7,
+          "icon": "🪟"
         }
       },
       "productivity": {
         "title": "⚡ Developer Productivity",
         "keyboardShortcuts": {
           "title": "Keyboard Shortcuts",
-          "description": "Blitzschneller Workflow mit praktischen Tastenkombinationen für alle wichtigen Funktionen."
+          "description": "Blitzschneller Workflow mit praktischen Tastenkombinationen für alle wichtigen Funktionen.",
+          "searchWeight": 9,
+          "icon": "📄"
         },
         "minimalUi": {
           "title": "Minimales UI",
-          "description": "Bleibt aus dem Weg - stört nicht beim Arbeiten und integriert sich nahtlos in deine IDE."
+          "description": "Bleibt aus dem Weg - stört nicht beim Arbeiten und integriert sich nahtlos in deine IDE.",
+          "searchWeight": 8,
+          "icon": "⌨️"
         },
         "autoCleanup": {
           "title": "Automatische Bereinigung",
-          "description": "Eingefügtes SQL wird nach der Ausführung automatisch entfernt - kein manuelles Aufräumen nötig."
+          "description": "Eingefügtes SQL wird nach der Ausführung automatisch entfernt - kein manuelles Aufräumen nötig.",
+          "searchWeight": 7,
+          "icon": "🧹"
         },
         "lightweight": {
           "title": "Leichtgewichtig",
-          "description": "Keine Performance-Einbußen - das Plugin läuft effizient im Hintergrund ohne die IDE zu verlangsamen."
+          "description": "Keine Performance-Einbußen - das Plugin läuft effizient im Hintergrund ohne die IDE zu verlangsamen.",
+          "searchWeight": 6,
+          "icon": "⚡"
         }
       }
     },
@@ -272,22 +366,26 @@
       "runCtQuery": {
         "action": "Run CT-Query",
         "keys": "Ctrl+# → Space",
-        "description": "CTE auswählen und ausführen"
+        "description": "CTE auswählen und ausführen",
+        "searchWeight": 10
       },
       "executeFromHere": {
         "action": "Execute from Here",
         "keys": "Ctrl+# → Enter",
-        "description": "Von aktueller Position aus mit Abhängigkeiten ausführen"
+        "description": "Von aktueller Position aus mit Abhängigkeiten ausführen",
+        "searchWeight": 9
       },
       "copySql": {
         "action": "Copy CT-Query SQL",
         "keys": "Ctrl+# → C",
-        "description": "SQL in Zwischenablage kopieren"
+        "description": "SQL in Zwischenablage kopieren",
+        "searchWeight": 7
       },
       "editAndRun": {
         "action": "Edit and Run SQL",
         "keys": "Ctrl+# → W",
-        "description": "Query bearbeiten und ausführen (z.B. WHERE-Klauseln hinzufügen)"
+        "description": "Query bearbeiten und ausführen (z.B. WHERE-Klauseln hinzufügen)",
+        "searchWeight": 8
       }
     },
     "installation": {
