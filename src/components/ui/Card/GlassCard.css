@@ -4,66 +4,31 @@
   flex-direction: column;
   isolation: isolate;
   border-radius: 20px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
-  border: 1px solid transparent;
-  box-shadow:
-    0 8px 32px var(--glass-shadow),
-    inset 0 1px 1px var(--glass-border-top),
-    inset 0 -1px 1px var(--glass-border-bottom);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 12px var(--glass-shadow);
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  will-change: auto;
 }
 
 /* Glass type variants */
 .glass-card-frosted {
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .glass-card-crystal {
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
   background: rgba(255, 255, 255, 0.06);
 }
 
 .glass-card-tinted {
-  backdrop-filter: blur(20px) saturate(130%);
-  -webkit-backdrop-filter: blur(20px) saturate(130%);
   background: rgba(255, 255, 255, 0.04);
 }
 
-/* Subtle border gradient */
-.glass-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    var(--glass-border-top) 0%,
-    transparent 40%,
-    transparent 60%,
-    var(--glass-border-bottom) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  z-index: 0;
-}
-
 .glass-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow:
-    0 16px 48px var(--glass-shadow-hover),
-    inset 0 1px 1px rgba(255, 255, 255, 0.3),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.05);
-  background: var(--glass-bg-hover);
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--glass-shadow-hover);
+  border-color: var(--glass-border-hover);
 }
 
 .glass-card .card-content {

@@ -3,7 +3,6 @@ import {ChevronRight, Folder, FileCode} from "lucide-react";
 import type {FileNode} from "./file-explorer.tsx";
 import {Popup, type PopupSection} from "./Popup";
 import {useClickOutside} from "../hooks/useClickOutside.ts";
-import {useTranslation} from "react-i18next";
 
 interface BreadcrumbFooterProps {
     path: string;
@@ -22,8 +21,6 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
                                      onOpenFolder,
                                      tree
                                  }, ref) => {
-    const { i18n } = useTranslation();
-
     // Remove /ide prefix for display purposes
     const displayPath = path.replace(/^\/ide/, '');
     const pathParts = displayPath.replace(/^\/+/, "").split("/").filter(Boolean);
@@ -144,27 +141,6 @@ export const BreadcrumbFooter = forwardRef<BreadcrumbFooterRef, BreadcrumbFooter
                     );
                 })}
             </div>
-            <a
-                href="/imprint"
-                className="footer-breadcrumb-item clickable"
-                style={{
-                    paddingLeft: '12px',
-                    paddingRight: '4px',
-                    fontSize: '11px',
-                    opacity: 0.7,
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    whiteSpace: 'nowrap',
-                    flexShrink: 0
-                }}
-                onClick={(e) => {
-                    e.preventDefault();
-                    // Always navigate to /imprint (outside IDE view)
-                    window.location.href = '/imprint';
-                }}
-            >
-                {i18n.language === 'de' ? 'Impressum' : 'Imprint'}
-            </a>
         </div>
     );
 });

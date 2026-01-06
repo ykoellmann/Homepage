@@ -100,37 +100,46 @@ export const ModernView: React.FC = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Real-time scroll tracking
+  // Real-time scroll tracking with throttling
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
+    let rafId: number | null = null;
+
     const handleScroll = () => {
-      const scrollTop = container.scrollTop;
-      const scrollHeight = container.scrollHeight - container.clientHeight;
-      const progress = (scrollTop / scrollHeight) * 100;
+      if (rafId) return; // Already scheduled
 
-      setScrollProgress(progress);
-      setScrolled(scrollTop > 50);
+      rafId = requestAnimationFrame(() => {
+        const scrollTop = container.scrollTop;
+        const scrollHeight = container.scrollHeight - container.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
 
-      const sections = ['home', 'about', 'experience', 'awards', 'projects', 'contact'];
-      const scrollPosition = scrollTop + 100;
+        setScrollProgress(progress);
+        setScrolled(scrollTop > 50);
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
+        const sections = ['home', 'about', 'experience', 'awards', 'projects', 'contact'];
+        const scrollPosition = scrollTop + 100;
+
+        for (const section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const { offsetTop, offsetHeight } = element;
+            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+              setActiveSection(section);
+              break;
+            }
           }
         }
-      }
+
+        rafId = null;
+      });
     };
 
     container.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       container.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -274,46 +283,37 @@ export const ModernView: React.FC = () => {
             </h2>
           </div>
           <div className="space-y-6 text-lg leading-relaxed">
-            <p className={`transition-all duration-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] ${
+            <p className={`transition-all duration-500 rounded-xl p-6 shadow-lg hover:shadow-xl ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
             }`} style={{
-              background: 'var(--glass-bg)',
-              backdropFilter: 'blur(10px) saturate(110%)',
-              WebkitBackdropFilter: 'blur(10px) saturate(110%)',
+              background: 'rgba(255, 255, 255, 0.05)',
               border: '1px solid var(--glass-border)',
-              boxShadow: '0 4px 24px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-              color: 'var(--text-on-glass)',
-              textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
+              boxShadow: '0 4px 12px var(--glass-shadow)',
+              color: 'var(--text-on-glass)'
             }}>
               {t('modernView:about.paragraphs.0')}
             </p>
-            <p className={`transition-all duration-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] ${
+            <p className={`transition-all duration-500 rounded-xl p-6 shadow-lg hover:shadow-xl ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
             }`}
               style={{
                 transitionDelay: '150ms',
-                background: 'var(--glass-bg)',
-                backdropFilter: 'blur(10px) saturate(110%)',
-                WebkitBackdropFilter: 'blur(10px) saturate(110%)',
+                background: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid var(--glass-border)',
-                boxShadow: '0 4px 24px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-                color: 'var(--text-on-glass)',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
+                boxShadow: '0 4px 12px var(--glass-shadow)',
+                color: 'var(--text-on-glass)'
               }}>
               {t('modernView:about.paragraphs.1')}
             </p>
-            <p className={`transition-all duration-700 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] ${
+            <p className={`transition-all duration-500 rounded-xl p-6 shadow-lg hover:shadow-xl ${
               aboutSection.isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-5'
             }`}
               style={{
                 transitionDelay: '300ms',
-                background: 'var(--glass-bg)',
-                backdropFilter: 'blur(10px) saturate(110%)',
-                WebkitBackdropFilter: 'blur(10px) saturate(110%)',
+                background: 'rgba(255, 255, 255, 0.05)',
                 border: '1px solid var(--glass-border)',
-                boxShadow: '0 4px 24px var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
-                color: 'var(--text-on-glass)',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
+                boxShadow: '0 4px 12px var(--glass-shadow)',
+                color: 'var(--text-on-glass)'
               }}>
               {t('modernView:about.paragraphs.2')}
             </p>

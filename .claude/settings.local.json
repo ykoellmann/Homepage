@@ -13,7 +13,8 @@
       "Bash(mkdir:*)",
       "Bash(dir /B \"C:\\Users\\Yannik\\WebstormProjects\\homepage\\node_modules\")",
       "Bash(findstr:*)",
-      "Bash(dir /B /S \"C:\\Users\\Yannik\\WebstormProjects\\homepage\")"
+      "Bash(dir /B /S \"C:\\Users\\Yannik\\WebstormProjects\\homepage\")",
+      "Bash(dir /B \"C:\\Users\\Yannik\\WebstormProjects\\homepage\\src\\components\\LiquidGlass\")"
     ],
     "deny": [],
     "ask": []
