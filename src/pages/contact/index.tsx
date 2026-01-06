@@ -20,8 +20,8 @@ export default function ContactPage() {
     const t = useComponentTranslations<ContactTranslations>('pages.contact');
 
     return (
-        <div className="flex items-center justify-center min-h-[60vh] p-8">
-            <div className="w-full max-w-2xl space-y-8">
+        <div className="flex items-center justify-center min-h-[60vh] p-4 md:p-8">
+            <div className="w-full max-w-2xl space-y-6 md:space-y-8">
                 {/* Header */}
                 <div className="text-center space-y-3">
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
@@ -42,22 +42,22 @@ export default function ContactPage() {
                                 href={method.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 transition-all duration-200 hover:shadow-lg"
+                                className="group bg-white dark:bg-gray-800 rounded-xl p-4 md:p-6 border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 transition-all duration-200 hover:shadow-lg"
                             >
-                                <div className="flex items-center gap-4">
-                                    <div className="text-blue-600 dark:text-blue-400">
-                                        <IconComponent size={32} />
+                                <div className="flex items-center gap-3 md:gap-4">
+                                    <div className="text-blue-600 dark:text-blue-400 flex-shrink-0">
+                                        <IconComponent size={28} className="md:w-8 md:h-8" />
                                     </div>
-                                    <div className="flex-1">
+                                    <div className="flex-1 min-w-0">
                                         <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
                                             {method.label}
                                         </p>
-                                        <p className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                        <p className="text-base md:text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors break-words">
                                             {method.value}
                                         </p>
                                     </div>
                                     <svg
-                                        className="w-5 h-5 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors group-hover:translate-x-1 transform duration-200"
+                                        className="w-4 h-4 md:w-5 md:h-5 text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors group-hover:translate-x-1 transform duration-200 flex-shrink-0"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
