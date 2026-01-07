@@ -84,7 +84,6 @@ export function Header({
             <div className="flex items-center gap-2">
                 <RunControls
                     configs={runConfigs}
-                    currentConfig="cryptborne"
                     currentPage={currentPage}
                     onRun={onRun}
                     onDebug={onDebug}
