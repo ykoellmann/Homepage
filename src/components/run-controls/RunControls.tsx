@@ -14,7 +14,6 @@ export type RunConfig = {
 
 interface RunControlsProps {
     configs: RunConfig[];
-    currentConfig?: string;
     currentPage?: PageEntry | undefined | null;
     onSelect?: (cfg: RunConfig) => void;
     onRun?: (cfg: RunConfig) => void;
@@ -24,7 +23,6 @@ interface RunControlsProps {
 
 export function RunControls({
                                 configs,
-                                currentConfig,
                                 currentPage = null,
                                 onSelect,
                                 onRun,
