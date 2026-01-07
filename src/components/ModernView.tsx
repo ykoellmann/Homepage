@@ -551,13 +551,13 @@ export const ModernView: React.FC = () => {
       <section
         id="contact"
         ref={contactSection.ref}
-        className={`py-32 px-6 relative w-full transition-all duration-1000 ${
+        className={`py-20 md:py-32 px-4 md:px-6 relative w-full transition-all duration-1000 ${
           contactSection.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-bold mb-8" style={{
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 md:mb-8" style={{
             background: 'var(--gradient-hero)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -565,11 +565,11 @@ export const ModernView: React.FC = () => {
           }}>
             {t('modernView:contact.title')}
           </h2>
-          <p className="text-xl mb-16" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-base md:text-xl mb-10 md:mb-16 px-2" style={{ color: 'var(--text-muted)' }}>
             {t('modernView:contact.subtitle')}
           </p>
 
-          <div className="grid gap-6 max-w-2xl mx-auto">
+          <div className="grid gap-4 md:gap-6 max-w-2xl mx-auto">
             {contactPageData.contactMethods.map((method, index) => {
               const IconComponent = iconMap[method.icon as keyof typeof iconMap];
               return (
@@ -588,33 +588,33 @@ export const ModernView: React.FC = () => {
                     }`}
                     style={{
                       transitionDelay: `${index * 100}ms`,
-                      padding: '2rem',
+                      padding: 'clamp(1rem, 4vw, 2rem)',
                       cursor: 'pointer'
                     } as React.CSSProperties}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="flex items-center gap-6 relative z-10">
+                    <div className="flex items-center gap-3 md:gap-6 relative z-10">
                       <div
-                        className="group-hover:scale-110 transition-all duration-500"
+                        className="group-hover:scale-110 transition-all duration-500 flex-shrink-0"
                         style={{
                           color: 'var(--text-primary)',
                           filter: 'drop-shadow(0 0 4px rgba(255, 255, 255, 0.3))'
                         }}
                       >
-                        <IconComponent size={48} />
+                        <IconComponent size={36} className="md:w-12 md:h-12" />
                       </div>
-                      <div className="flex-1 text-left">
-                        <p className="text-sm font-medium mb-1" style={{ color: 'var(--text-muted)' }}>
+                      <div className="flex-1 text-left min-w-0">
+                        <p className="text-xs md:text-sm font-medium mb-1" style={{ color: 'var(--text-muted)' }}>
                           {method.label}
                         </p>
-                        <p className="text-xl font-semibold transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>
+                        <p className="text-base md:text-xl font-semibold transition-colors duration-300 break-words" style={{ color: 'var(--text-primary)' }}>
                           {method.value}
                         </p>
                       </div>
                       <ExternalLink
-                        className="group-hover:translate-x-2 transition-all duration-300"
+                        className="group-hover:translate-x-2 transition-all duration-300 flex-shrink-0"
                         style={{ color: 'var(--text-secondary)' }}
-                        size={24}
+                        size={20}
                       />
                     </div>
                   </GlassCard>
