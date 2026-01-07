@@ -357,18 +357,8 @@ export const ModernView: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 <div className="relative z-10">
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                    <div>
-                      <h3
-                        className="text-2xl font-bold transition-colors duration-300"
-                        style={{
-                          color: 'var(--text-primary)'
-                        }}
-                      >
-                        {exp.position}
-                      </h3>
-                      <p className="text-xl mt-2 transition-colors" style={{ color: 'var(--text-secondary)' }}>{exp.company}</p>
-                    </div>
+                  {/* Date Badge - Positioned Absolutely */}
+                  <div className="absolute top-0 right-0 max-w-[45%]">
                     <span
                       className="font-semibold whitespace-nowrap px-4 py-2 rounded-lg transition-all"
                       style={{
@@ -380,8 +370,22 @@ export const ModernView: React.FC = () => {
                       {exp.startMonth} - {exp.endMonth}
                     </span>
                   </div>
+
+                  {/* Header: Position & Company - All Left Aligned */}
+                  <div className="flex flex-col gap-2 mb-4 pr-[48%]">
+                    <h3
+                      className="text-2xl font-bold transition-colors duration-300 break-words"
+                      style={{
+                        color: 'var(--text-primary)'
+                      }}
+                    >
+                      {exp.position}
+                    </h3>
+                    <p className="text-xl transition-colors break-words" style={{ color: 'var(--text-secondary)' }}>{exp.company}</p>
+                  </div>
+
                   {exp.description && (
-                    <p className="leading-relaxed transition-colors" style={{ color: 'var(--text-muted)' }}>{exp.description}</p>
+                    <p className="leading-relaxed transition-colors text-left break-words" style={{ color: 'var(--text-muted)' }}>{exp.description}</p>
                   )}
                 </div>
               </GlassCard>

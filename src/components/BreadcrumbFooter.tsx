@@ -213,8 +213,10 @@ function BreadcrumbItem({
         }
     ];
 
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
     return (
-        <div className="footer-breadcrumb-item-wrapper">
+        <div className="footer-breadcrumb-item-wrapper" ref={wrapperRef}>
             <span
                 className="footer-breadcrumb-item clickable"
                 onClick={handleClick}
@@ -222,15 +224,25 @@ function BreadcrumbItem({
                 {part}
             </span>
 
-            <Popup
-                isOpen={isOpen && hasChildren}
-                onClose={() => setOpenIndex(null)}
-                sections={popupSections}
-                position="top"
-                align="start"
-                width="12rem"
-                itemSpacing="compact"
-            />
+            {isOpen && hasChildren && (
+                <div
+                    className="fixed z-[200]"
+                    style={{
+                        bottom: '28px', // Exactly at the top edge of the footer
+                        left: wrapperRef.current?.getBoundingClientRect().left || 0,
+                    }}
+                >
+                    <Popup
+                        isOpen={true}
+                        onClose={() => setOpenIndex(null)}
+                        sections={popupSections}
+                        position="top"
+                        align="start"
+                        width="12rem"
+                        itemSpacing="compact"
+                    />
+                </div>
+            )}
         </div>
     );
 }

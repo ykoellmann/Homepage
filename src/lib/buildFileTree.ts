@@ -35,10 +35,39 @@ export function buildFileTreeFromGlob(basePrefix = "../pages/") {
       pages[relative] = { name: relative.split("/").pop()!, path: "/" + relative };
     }
     const meta = metaModules[path] as any;
+
+    // Try to find exported data that extends BasePageData
+    // Look for exports ending with "Data" (cryptborneData, satTrackData, aboutPageData, etc.)
+    let pageData: any = null;
+
+    for (const key in meta) {
+      if ((key.endsWith('Data') || key.endsWith('data')) && meta[key] && typeof meta[key] === 'object') {
+        pageData = meta[key];
+        break;
+      }
+    }
+
+    // Build runConfig from pageData if it has url/debugUrl
+    let runConfig = undefined;
+    if (pageData && (pageData.url || pageData.debugUrl)) {
+      // Generate a readable name from slug (e.g., "cryptborne" → "Cryptborne")
+      const namePart = relative.split("/").pop()!;
+      const readableName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+
+      runConfig = {
+        name: pageData.name || readableName,
+        url: pageData.url,
+        debugUrl: pageData.debugUrl
+      };
+    } else if (meta.runConfig) {
+      // Fallback: support legacy runConfig export
+      runConfig = meta.runConfig;
+    }
+
     pages[relative].meta = {
-      runConfig: meta.runConfig ?? undefined,
-      title: meta.title ?? undefined,
-      description: meta.description ?? undefined,
+      runConfig,
+      title: meta.title ?? pageData?.name ?? undefined,
+      description: meta.description ?? pageData?.description ?? undefined,
     };
   }
 

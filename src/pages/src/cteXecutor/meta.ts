@@ -84,7 +84,7 @@ export const cteXecutorData: BasePageData & {
     icon: '⚡',
 
     // RunConfig
-    url: 'https://plugins.jetbrains.com/plugin/23812-ctexecutor',
+    url: 'https://plugins.jetbrains.com/plugin/27835-ctexecutor',
     debugUrl: 'https://github.com/ykoellmann/cteXecutor',
 
     // IDE Plugin specific

@@ -69,15 +69,3 @@ export const cryptborneData: BasePageData = {
 
 export type CryptborneData = typeof cryptborneData;
 
-// ============================================================================
-// Usage in component:
-// ============================================================================
-// const data = usePageData<typeof cryptborneData, CryptborneTranslations>(
-//     cryptborneData,
-//     'cryptborne',
-//     'projects'
-// );
-//
-// // RunConfig is automatically available:
-// const runConfig = getRunConfig(data);
-// // { name: "Cryptborne", url: "https://...", debugUrl: "https://..." }

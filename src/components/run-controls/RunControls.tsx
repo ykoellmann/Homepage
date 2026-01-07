@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import { HoverButton } from "../hover-button";
 import {ChevronDown} from "lucide-react";
 import { RunConfigDropdown } from "./RunConfigDropdown";
@@ -31,12 +31,30 @@ export function RunControls({
                                 onDebug,
                                 onStop,
                             }: RunControlsProps) {
-    const initial = configs.find((c) => c.name === currentConfig) || configs[0] || null;
+    // Default to "Current File"
+    const initial: RunConfig = {
+        name: "Current File",
+        url: currentPage?.meta?.runConfig?.url,
+        debugUrl: currentPage?.meta?.runConfig?.debugUrl,
+        type: "special"
+    };
     const [selected, setSelected] = useState<RunConfig | null>(initial);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const mainConfigs = configs.filter((c) => c.type !== "special");
     const specialConfigs = configs.filter((c) => c.type === "special");
+
+    // Update selected when currentPage changes (if "Current File" is selected)
+    useEffect(() => {
+        if (selected?.name === "Current File") {
+            setSelected({
+                name: "Current File",
+                url: currentPage?.meta?.runConfig?.url,
+                debugUrl: currentPage?.meta?.runConfig?.debugUrl,
+                type: "special"
+            });
+        }
+    }, [currentPage, selected?.name]);
 
     function handleSelect(cfg: RunConfig) {
         setSelected(cfg);

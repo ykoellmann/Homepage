@@ -25,7 +25,7 @@ export default function CteXecutorPage() {
             .filter(([key]) => key !== 'title' && key !== 'badge')
             .map(([key, value]: [string, any]) => ({
                 _searchableId: `cte-${key}`,
-                icon: '🎯',
+                icon: value.icon || '🎯',
                 title: value.title,
                 description: value.description,
             }))
@@ -37,7 +37,7 @@ export default function CteXecutorPage() {
             .filter(([key]) => key !== 'title' && key !== 'badge')
             .map(([key, value]: [string, any]) => ({
                 _searchableId: `exec-${key}`,
-                icon: '🚀',
+                icon: value.icon || '🚀',
                 title: value.title,
                 description: value.description,
             }))
@@ -49,7 +49,7 @@ export default function CteXecutorPage() {
             .filter(([key]) => key !== 'title' && key !== 'badge')
             .map(([key, value]: [string, any]) => ({
                 _searchableId: `prod-${key}`,
-                icon: '⚡',
+                icon: value.icon || '⚡',
                 title: value.title,
                 description: value.description,
             }))

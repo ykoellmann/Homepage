@@ -82,10 +82,10 @@
     "keywords": ["Unity", "Cesium", "Satellites", "3D", "Visualization", "Real-time", "GPS", "Orbit", "Space"],
     "about": {
       "title": "📝 About the Project",
-      "paragraph1": "SatTrak is an interactive 3D satellite visualization project developed as part of a university project at FSU Jena. With Unity and Cesium for Unity, it enables real-time tracking of over 5000 active satellites on a virtual globe.",
+      "paragraph1": "SatTrak is an interactive 3D satellite visualization project developed as part of a university project at FSU Jena. With Unity and Cesium for Unity, it enables real-time tracking of over 12000 active satellites on a virtual globe.",
       "paragraph2": "The project uses TLE data from CelesTrak and the SGP4 algorithm for precise orbit calculation. Users can switch between a space view and a first-person Earth view, visualize satellite orbits, and display satellite density through a GPU-based heatmap.",
       "badges": {
-        "satellites": "5000+ Satellites",
+        "satellites": "12000+ Satellites",
         "realtime": "Real-time Tracking",
         "unity": "Unity 2022 LTS",
         "university": "University Project"
@@ -95,7 +95,7 @@
       "title": "✨ Features",
       "realtimeTracking": {
         "title": "Real-time Satellite Tracking",
-        "description": "Visualization of over 5000 active satellites with TLE data from Celestrak",
+        "description": "Visualization of over 12000 active satellites with TLE data from Celestrak",
         "searchWeight": 10,
         "icon": "🛰️"
       },
@@ -169,8 +169,8 @@
   },
   "homepage": {
     "name": "Homepage / Portfolio",
-    "description": "A modern portfolio website with an IDE-like interface inspired by VS Code - Built with React, TypeScript and Vite",
-    "keywords": ["React", "TypeScript", "Vite", "Portfolio", "IDE", "VS Code", "Tab System", "Web Development"],
+    "description": "A modern portfolio website with an IDE-like interface inspired by JetBrains Rider - Built with React, TypeScript and Vite",
+    "keywords": ["React", "TypeScript", "Vite", "Portfolio", "IDE", "JetBrains Rider", "Tab System", "Web Development"],
     "about": {
       "title": "📝 About the Project",
       "paragraph1": "This homepage is a personal portfolio project that offers a unique IDE-like user interface inspired by Visual Studio Code. It combines the aesthetics of a development environment with the functionality of a modern website.",
@@ -187,7 +187,7 @@
       "title": "✨ Features",
       "ideInterface": {
         "title": "IDE-like User Interface",
-        "description": "VS Code-inspired interface with file explorer, tab system and breadcrumb navigation",
+        "description": "JetBrains Rider-inspired interface with file explorer, tab system and breadcrumb navigation",
         "searchWeight": 10,
         "icon": "🖥️"
       },

@@ -15,9 +15,9 @@
   "about": {
     "title": "Über mich",
     "paragraphs": [
-      "Ich bin ein leidenschaftlicher Softwareentwickler mit Fokus auf moderne Webtechnologien und Backend-Systeme.",
-      "Nach meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung studiere ich nun Informatik an der Friedrich-Schiller-Universität Jena.",
-      "Meine Expertise liegt in der Entwicklung skalierbarer Backend-Architekturen mit C# und ASP.NET Core sowie in modernen Frontend-Technologien."
+      "Als leidenschaftlicher Softwareentwickler verbinde ich praktische Erfahrung mit fundiertem akademischem Wissen. Mein Fokus liegt auf modernen Backend-Architekturen und leistungsfähigen Webtechnologien.",
+      "Nach meiner Ausbildung zum Fachinformatiker für Anwendungsentwicklung vertiefe ich mein Wissen im Informatikstudium an der Friedrich-Schiller-Universität Jena.",
+      "Meine Stärken liegen in der Entwicklung skalierbarer Lösungen mit C#, ASP.NET Core und modernen Frontend-Technologien sowie in der Arbeit mit komplexen Datenbanksystemen wie DB2 for IBM i und PostgreSQL."
     ]
   },
   "experience": {
@@ -48,10 +48,10 @@
   },
   "contact": {
     "title": "Lass uns reden",
-    "subtitle": "Ich freue mich von dir zu hören"
+    "subtitle": "Ich freue mich darauf, von dir zu hören"
   },
   "footer": {
-    "madeWith": "© 2025 Yannik Köllmann. Gemacht mit ❤️ und viel ☕",
+    "madeWith": "© 2025 Yannik Köllmann. Entwickelt mit ❤️ und viel ☕",
     "legalNotice": "Impressum"
   }
 }

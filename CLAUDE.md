@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a personal portfolio website (homepage) built with React, TypeScript, and Vite that features an IDE-like interface inspired by VS Code. The site showcases projects, experience, and contact information through a tabbed interface with file explorer navigation.
+This is a personal portfolio website (homepage) built with React, TypeScript, and Vite that features an IDE-like interface inspired by JetBrains Rider. The site showcases projects, experience, and contact information through a tabbed interface with file explorer navigation.
 
 ## Development Commands
 
@@ -23,7 +23,7 @@ This is a personal portfolio website (homepage) built with React, TypeScript, an
 ## Architecture Overview
 
 ### Tab-Based Navigation System
-The application uses a **hybrid routing approach** combining React Router with a custom tab system that mimics VS Code:
+The application uses a **hybrid routing approach** combining React Router with a custom tab system that mimics JetBrains Rider:
 
 1. **Dynamic Page Discovery**: Pages are auto-discovered from the file system using Vite's `import.meta.glob()` pattern in `src/lib/buildFileTree.ts`
 2. **Tab State Management**: Tab state persists in `sessionStorage` (key: `'tabs_state'`) to survive page reloads
@@ -37,7 +37,7 @@ The application uses a **hybrid routing approach** combining React Router with a
 - `Header.tsx`: Navigation controls (back/forward), project selector, run controls
 - `Sidebar.tsx`: Collapsible sidebar with explorer toggle
 - `Explorer.tsx`: File tree display with resizable width
-- `TabSystem.tsx`: VS Code-like tab interface with support for future split-pane layouts
+- `TabSystem.tsx`: JetBrains Rider-like tab interface with support for future split-pane layouts
 - `BreadcrumbFooter.tsx`: Shows current navigation path
 
 **Tab System** (`src/components/tabs/`):

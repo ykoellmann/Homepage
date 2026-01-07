@@ -48,8 +48,8 @@ export const contactPageData: BasePageData & {
             id: 'email',
             icon: 'Mail',
             label: 'Email',
-            value: 'yankoe@outlook.de',
-            href: 'mailto:yankoe@outlook.de',
+            value: 'contact@koellmann.dev',
+            href: 'mailto:contact@koellmann.dev',
         },
         {
             id: 'location',

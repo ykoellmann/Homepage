@@ -27,36 +27,38 @@ export default function AboutPage() {
         return (
             <div
                 key={exp._searchableId}
-                className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-xl transition-all duration-300 group"
+                className="relative bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-xl transition-all duration-300 group"
             >
                 {/* Gradient Overlay on Hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl pointer-events-none" />
 
                 <div className="relative z-10">
-                    {/* Header: Position & Company */}
-                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                        <div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                                {exp.position}
-                            </h3>
-                            <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                                {exp.company}
-                            </p>
-                            {exp.location && (
-                                <div className="flex items-center gap-1 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                    <span>📍</span>
-                                    <span>{exp.location}</span>
-                                </div>
-                            )}
-                        </div>
-                        <span className="font-semibold whitespace-nowrap px-4 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                    {/* Date Badge - Positioned Absolutely */}
+                    <div className="absolute top-0 right-0 max-w-[45%]">
+                        <span className="font-semibold whitespace-nowrap px-4 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-sm">
                             {exp.startMonth} - {endMonth}
                         </span>
                     </div>
 
+                    {/* Header: Position & Company - All Left Aligned */}
+                    <div className="flex flex-col gap-2 mb-4 pr-[48%]">
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white break-words">
+                            {exp.position}
+                        </h3>
+                        <p className="text-lg font-semibold text-gray-700 dark:text-gray-300 break-words">
+                            {exp.company}
+                        </p>
+                        {exp.location && (
+                            <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                                <span>📍</span>
+                                <span>{exp.location}</span>
+                            </div>
+                        )}
+                    </div>
+
                     {/* Description */}
                     {exp.description && (
-                        <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+                        <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed text-left break-words">
                             {exp.description}
                         </p>
                     )}
@@ -93,8 +95,9 @@ export default function AboutPage() {
 
             {/* Work Experience Section */}
             <section>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8 text-center">
-                    💼 {t.workExperience}
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8 flex items-center gap-3">
+                    <span>💼</span>
+                    <span>{t.workExperience}</span>
                 </h2>
                 <div className="space-y-6">
                     {workExperiences.map(renderExperience)}
@@ -103,8 +106,9 @@ export default function AboutPage() {
 
             {/* Education Section */}
             <section>
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8 text-center">
-                    🎓 {t.education}
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8 flex items-center gap-3">
+                    <span>🎓</span>
+                    <span>{t.education}</span>
                 </h2>
                 <div className="space-y-6">
                     {educationExperiences.map(renderExperience)}

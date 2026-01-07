@@ -58,8 +58,6 @@ export const ImpressumPage = () => {
                     <Section title={t('pages.impressum.provider')}>
                         <div className="space-y-2">
                             <p className="font-semibold text-slate-900 dark:text-white">Yannik Köllmann</p>
-                            <p>{'{STRASSE_UND_HAUSNUMMER}'}</p>
-                            <p>{'{PLZ_UND_ORT}'}</p>
                         </div>
                     </Section>
 
@@ -68,10 +66,10 @@ export const ImpressumPage = () => {
                         <div>
                             <span className="font-medium">{t('pages.impressum.email')}:</span>{' '}
                             <a
-                                href="mailto:ykoellmann@icloud.com"
+                                href="mailto:contact@koellmann.dev"
                                 className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors font-medium hover:underline decoration-2 underline-offset-2"
                             >
-                                ykoellmann@icloud.com
+                                contact@koellmann.dev
                             </a>
                         </div>
                     </Section>

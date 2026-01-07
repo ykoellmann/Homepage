@@ -5,8 +5,8 @@
     "keywords": ["Unity", "Dungeon Crawler", "Roguelike", "Top-Down", "Fantasy", "Procedural Generation", "Game Development"],
     "about": {
       "title": "📖 Über das Spiel",
-      "paragraph1": "Cryptborne ist ein Top-Down Dungeon Crawler im mittelalterlichen Fantasy-Setting, entwickelt mit Unity 6. Erkunde prozedural generierte Dungeons voller Feinde und Herausforderungen.",
-      "paragraph2": "Kämpfe dich durch Wellen von Gegnern mit verschiedenen Waffen, die jeweils einzigartige Schussmuster und Spielstile bieten. Das Spiel bietet flüssige Charakterbewegung, responsive Combat-Mechaniken und modulare Dungeon-Layouts, die sicherstellen, dass jeder Durchlauf anders ist."
+      "paragraph1": "Cryptborne ist ein Top-Down Dungeon Crawler im mittelalterlichen Fantasy-Setting, entwickelt mit Unity 6. Tauche ein in prozedural generierte Dungeons voller Gefahren und Herausforderungen.",
+      "paragraph2": "Stelle dich Wellen von Gegnern und nutze verschiedene Waffen mit einzigartigen Schussmustern und Spielstilen. Flüssige Charaktersteuerung, dynamisches Combat-System und modulare Dungeon-Layouts sorgen dafür, dass jeder Durchlauf ein neues Erlebnis ist."
     },
     "features": {
       "title": "✨ Features",
@@ -82,10 +82,10 @@
     "keywords": ["Unity", "Cesium", "Satelliten", "3D", "Visualisierung", "Echtzeit", "GPS", "Orbit", "Space"],
     "about": {
       "title": "📝 Über das Projekt",
-      "paragraph1": "SatTrak ist ein interaktives 3D-Satelliten-Visualisierungsprojekt, das im Rahmen eines Universitätsprojekts an der FSU Jena entwickelt wurde. Mit Unity und Cesium for Unity ermöglicht es die Echtzeit-Verfolgung von über 5000 aktiven Satelliten auf einem virtuellen Globus.",
-      "paragraph2": "Das Projekt nutzt TLE-Daten von CelesTrak und den SGP4-Algorithmus zur präzisen Orbit-Berechnung. Benutzer können zwischen einer Weltraumansicht und einer First-Person-Erdansicht wechseln, Satelliten-Orbits visualisieren, und die Satellitendichte über eine GPU-basierte Heatmap darstellen.",
+      "paragraph1": "SatTrak ist ein interaktives 3D-Visualisierungsprojekt für Satelliten, das im Rahmen eines Universitätsprojekts an der FSU Jena entstanden ist. Mit Unity und Cesium for Unity ermöglicht es die Echtzeit-Verfolgung von über 12000 aktiven Satelliten auf einem virtuellen Globus.",
+      "paragraph2": "Das Projekt nutzt TLE-Daten von CelesTrak und den SGP4-Algorithmus für präzise Orbit-Berechnungen. Wechsle nahtlos zwischen Weltraum- und First-Person-Erdansicht, visualisiere Satelliten-Orbits und erkunde die Satellitendichte über eine GPU-basierte Heatmap.",
       "badges": {
-        "satellites": "5000+ Satelliten",
+        "satellites": "12000+ Satelliten",
         "realtime": "Echtzeit-Tracking",
         "unity": "Unity 2022 LTS",
         "university": "Universitätsprojekt"
@@ -95,7 +95,7 @@
       "title": "✨ Features",
       "realtimeTracking": {
         "title": "Echtzeit-Satellitenverfolgung",
-        "description": "Visualisierung von über 5000 aktiven Satelliten mit TLE-Daten von Celestrak",
+        "description": "Visualisierung von über 12000 aktiven Satelliten mit TLE-Daten von Celestrak",
         "searchWeight": 10,
         "icon": "🛰️"
       },
@@ -169,19 +169,19 @@
   },
   "homepage": {
     "name": "Homepage / Portfolio",
-    "description": "Ein modernes Portfolio mit IDE-ähnlicher Oberfläche inspiriert von VS Code - Gebaut mit React, TypeScript und Vite",
-    "keywords": ["React", "TypeScript", "Vite", "Portfolio", "IDE", "VS Code", "Tab System", "Web Development"],
+    "description": "Ein modernes Portfolio mit IDE-ähnlicher Oberfläche inspiriert von JetBrains Rider - Gebaut mit React, TypeScript und Vite",
+    "keywords": ["React", "TypeScript", "Vite", "Portfolio", "IDE", "JetBrains Rider", "Tab System", "Web Development"],
     "about": {
       "title": "📝 Über das Projekt",
-      "paragraph1": "Diese Homepage ist ein persönliches Portfolio-Projekt, das eine einzigartige IDE-ähnliche Benutzeroberfläche bietet, inspiriert von Visual Studio Code. Es kombiniert die Ästhetik einer Entwicklungsumgebung mit der Funktionalität einer modernen Webseite.",
-      "paragraph2": "Das Projekt demonstriert fortgeschrittene React-Konzepte wie benutzerdefiniertes Routing, State-Management, und ein vollständig funktionales Tab-System. Es zeigt meine Fähigkeiten in Frontend-Entwicklung und UI/UX-Design."
+      "paragraph1": "Diese Homepage ist ein persönliches Portfolio-Projekt mit einer einzigartigen IDE-ähnlichen Benutzeroberfläche, inspiriert von JetBrains Rider. Es verbindet die Ästhetik einer Entwicklungsumgebung mit der Funktionalität einer modernen Webseite.",
+      "paragraph2": "Das Projekt demonstriert fortgeschrittene React-Konzepte wie benutzerdefiniertes Routing, State-Management und ein vollständig funktionales Tab-System."
     },
     "goals": {
       "title": "🎯 Projektziele",
       "goal1": "Eine interaktive und ansprechende Portfolio-Erfahrung schaffen",
-      "goal2": "Fortgeschrittene React- und TypeScript-Konzepte demonstrieren",
-      "goal3": "Eine wiederverwendbare IDE-Komponenten-Bibliothek aufbauen",
-      "goal4": "Best Practices in modernem Web-Development zeigen"
+      "goal2": "Fortgeschrittene React- und TypeScript-Konzepte in der Praxis zeigen",
+      "goal3": "Eine wiederverwendbare IDE-Komponenten-Bibliothek entwickeln",
+      "goal4": "Best Practices im modernen Web-Development demonstrieren"
     },
     "features": {
       "title": "✨ Features",
@@ -288,7 +288,7 @@
         "title": "🎯 CTE Management",
         "cteDetection": {
           "title": "Automatische CTE-Erkennung",
-          "description": "Erkennt alle CTEs in deiner SQL WITH-Klausel automatisch und zeigt sie in einem interaktiven Popup an.",
+          "description": "Erkennt automatisch alle CTEs in deiner SQL WITH-Klausel und zeigt sie in einem interaktiven Popup.",
           "searchWeight": 10,
           "icon": "▶️"
         },
@@ -300,7 +300,7 @@
         },
         "smartExecution": {
           "title": "Intelligente Ausführung",
-          "description": "Führt die gewählte SQL-Query direkt in der Datenbank-Konsole aus mit automatischer Bereinigung.",
+          "description": "Führt die gewählte Query direkt in der Datenbank-Konsole aus – mit automatischer Bereinigung.",
           "searchWeight": 9,
           "icon": "🌐"
         },
@@ -316,13 +316,13 @@
         "badge": "(v2.0.0)",
         "executeFromHere": {
           "title": "Execute from Here (NEU!)",
-          "description": "Führe SQL von überall aus - nicht nur CTEs! Funktioniert mit jedem Subselect in deinem SQL.",
+          "description": "Führe SQL von überall aus – nicht nur CTEs! Funktioniert mit jedem Subselect in deinem Code.",
           "searchWeight": 8,
           "icon": "⚙️"
         },
         "dependencyResolution": {
           "title": "Automatische Abhängigkeitsauflösung",
-          "description": "Inkludiert automatisch alle benötigten CTEs - erkennt Abhängigkeiten in CTEs, Subqueries und SELECT-Statements.",
+          "description": "Inkludiert automatisch alle benötigten CTEs – erkennt Abhängigkeiten in CTEs, Subqueries und SELECT-Statements.",
           "searchWeight": 6,
           "icon": "🚨"
         },
@@ -343,7 +343,7 @@
         },
         "minimalUi": {
           "title": "Minimales UI",
-          "description": "Bleibt aus dem Weg - stört nicht beim Arbeiten und integriert sich nahtlos in deine IDE.",
+          "description": "Bleibt diskret im Hintergrund – stört nicht beim Arbeiten und integriert sich nahtlos in deine IDE.",
           "searchWeight": 8,
           "icon": "⌨️"
         },
