@@ -221,7 +221,7 @@ export const ModernView: React.FC = () => {
       {/* Hero Section */}
       <HeroSection
         name="Yannik Köllmann"
-        title={i18n.language === 'de' ? 'Full-Stack Entwickler & Informatik-Student' : 'Full-Stack Developer & Computer Science Student'}
+        title={i18n.language === 'de' ? 'Backend Entwickler & Informatik-Student' : 'Backend Developer & Computer Science Student'}
         description={aboutPage.description}
         buttonText={i18n.language === 'de' ? 'Meine Projekte' : 'View My Work'}
         onNavigate={scrollToSection}
@@ -307,15 +307,15 @@ export const ModernView: React.FC = () => {
 
                 <div className="relative z-10">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                    <div>
+                    <span className="text-blue-600 dark:text-blue-400 font-semibold whitespace-nowrap bg-blue-100 dark:bg-blue-500/10 px-4 py-2 rounded-lg group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20 transition-colors md:order-2">
+                      {exp.startMonth} - {exp.endMonth}
+                    </span>
+                    <div className="md:order-1">
                       <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                         {exp.position}
                       </h3>
                       <p className="text-xl text-slate-700 dark:text-slate-300 mt-2 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{exp.company}</p>
                     </div>
-                    <span className="text-blue-600 dark:text-blue-400 font-semibold whitespace-nowrap bg-blue-100 dark:bg-blue-500/10 px-4 py-2 rounded-lg group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20 transition-colors">
-                      {exp.startMonth} - {exp.endMonth}
-                    </span>
                   </div>
                   {exp.description && (
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">{exp.description}</p>
