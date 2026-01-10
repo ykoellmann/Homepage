@@ -306,20 +306,23 @@ export const ModernView: React.FC = () => {
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-600 to-blue-500 rounded-l-2xl opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:w-3 shadow-lg shadow-blue-500/50" />
 
                 <div className="relative z-10">
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-                    <span className="text-blue-600 dark:text-blue-400 font-semibold whitespace-nowrap bg-blue-100 dark:bg-blue-500/10 px-4 py-2 rounded-lg group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20 transition-colors md:order-2">
+                  {/* Date - appears first on mobile, right side on desktop */}
+                  <div className="mb-4 md:mb-0 md:absolute md:top-0 md:right-0">
+                    <span className="inline-block text-blue-600 dark:text-blue-400 font-semibold whitespace-nowrap bg-blue-100 dark:bg-blue-500/10 px-4 py-2 rounded-lg group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20 transition-colors">
                       {exp.startMonth} - {exp.endMonth}
                     </span>
-                    <div className="md:order-1">
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-                        {exp.position}
-                      </h3>
-                      <p className="text-xl text-slate-700 dark:text-slate-300 mt-2 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{exp.company}</p>
-                    </div>
                   </div>
-                  {exp.description && (
-                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">{exp.description}</p>
-                  )}
+
+                  {/* Content - appears below date on mobile, takes full width on desktop with right padding */}
+                  <div className="md:pr-48">
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 mb-2">
+                      {exp.position}
+                    </h3>
+                    <p className="text-xl text-slate-700 dark:text-slate-300 mb-4 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors">{exp.company}</p>
+                    {exp.description && (
+                      <p className="text-slate-600 dark:text-slate-400 leading-relaxed group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">{exp.description}</p>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
