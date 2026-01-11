@@ -26,16 +26,24 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
                                                               }) => {
     return (
         <InteractiveCard className="w-full max-w-xl">
-            <div className="flex justify-between items-start mb-2">
-                <div className="flex items-center gap-3">
+            {/* Datum - nur auf Mobile sichtbar, oben */}
+            <div className="block md:hidden mb-2">
+                <span className="text-gray-400 text-sm">
+                    {startMonth} – {endMonth}
+                </span>
+            </div>
+
+            {/* Company Header */}
+            <div className="flex md:justify-between md:items-start items-start mb-2">
+                <div className="flex items-center gap-3 flex-1 md:flex-initial">
                     {logoUrl && (
                         <img
                             src={logoUrl}
                             alt={`${company} Logo`}
-                            className="w-10 h-10 object-contain rounded"
+                            className="w-10 h-10 object-contain rounded flex-shrink-0"
                         />
                     )}
-                    <div>
+                    <div className="min-w-0">
                         <h3 className="text-gray-200 font-semibold">{company}</h3>
                         <p className="text-gray-400 text-sm">
                             {position} {employmentType && `· ${employmentType}`}{" "}
@@ -43,9 +51,10 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
                         </p>
                     </div>
                 </div>
-                <span className="text-gray-400 text-sm">
-          {startMonth} – {endMonth}
-        </span>
+                {/* Datum - nur auf Desktop sichtbar, rechts */}
+                <span className="hidden md:inline-block text-gray-400 text-sm whitespace-nowrap ml-4 flex-shrink-0">
+                    {startMonth} – {endMonth}
+                </span>
             </div>
 
             {description && (

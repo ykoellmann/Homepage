@@ -15,7 +15,9 @@
       "Bash(findstr:*)",
       "Bash(dir /B /S \"C:\\Users\\Yannik\\WebstormProjects\\homepage\")",
       "Bash(dir /B \"C:\\Users\\Yannik\\WebstormProjects\\homepage\\src\\components\\LiquidGlass\")",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(tasklist:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

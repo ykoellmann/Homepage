@@ -357,10 +357,10 @@ export const ModernView: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 <div className="relative z-10">
-                  {/* Date Badge - Positioned Absolutely */}
-                  <div className="absolute top-0 right-0 max-w-[45%]">
+                  {/* Date Badge - Above on mobile, right on desktop */}
+                  <div className="mb-3 md:mb-0 md:absolute md:top-0 md:right-0">
                     <span
-                      className="font-semibold whitespace-nowrap px-4 py-2 rounded-lg transition-all"
+                      className="inline-block font-semibold whitespace-nowrap px-4 py-2 rounded-lg transition-all"
                       style={{
                         background: 'rgba(59, 130, 246, 0.15)',
                         color: 'var(--text-secondary)',
@@ -371,8 +371,8 @@ export const ModernView: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* Header: Position & Company - All Left Aligned */}
-                  <div className="flex flex-col gap-2 mb-4 pr-[48%]">
+                  {/* Header: Position & Company */}
+                  <div className="flex flex-col gap-2 mb-4 md:pr-[48%]">
                     <h3
                       className="text-2xl font-bold transition-colors duration-300 break-words"
                       style={{
